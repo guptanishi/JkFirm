@@ -1,0 +1,115 @@
+<template>
+
+<div class="columns container is-fluid">
+    <div class="column is-half "> 
+        <div class="field">
+            <label class="label">Product Code</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="product code" v-model="productCode">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Product Name</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" type="text" placeholder="Product Name" v-model="productName" >
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Unit</label>
+            <div class="control">
+                <div class="select">
+                <select v-model="unit">
+                    <option disabled value="">Select Value</option>
+                    <option>KG</option>
+                    <option>Per Piece</option>
+                </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Cost Price</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" type="Number" placeholder="Cost Price" v-model="costPrice">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Selling Price</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" type="Number" placeholder="Selling Price" v-model="sellingPrice">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Opening Stock</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" type="Number" placeholder="stock" v-model="quantityAvailable">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">GST %</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" type="text" v-model="gst">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">HSN Number</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" type="text" v-model="HSN">
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link" v-on:click="create">Submit</button>
+            </div>
+            <div class="control">
+                <button class="button is-link is-light">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</template>
+
+<script>
+import {createProduct }  from '../repository'
+export default {
+  name: 'createProduct',
+  data(){
+    return {
+      productCode: '',
+      productName: '',
+      unit: '',
+      costPrice: 0.00,
+      sellingPrice: 0.00,
+      quantityAvailable: 0,
+      gst: 0,
+      HSN: '',
+    }
+  },
+  methods: {
+    create(){
+        let data = { productCode: this.productCode, productName: this.productName , 
+            unit: this.unit, description: this.description, costPrice: this.costPrice, 
+            sellingPrice: this.sellingPrice,quantityAvailable: this.quantityAvailable,
+            gst: this.gst, HSN: this.HSN}
+    createProduct(data)
+        .then(data => {
+            this.$router.push('/');
+        })
+        .catch(err => alert(err.message));
+    },
+  },
+}
+</script>
+<style scoped>
+#preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
