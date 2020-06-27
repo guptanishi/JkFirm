@@ -28,10 +28,11 @@ db.mongoose
     process.exit();
   });
 
-  app.get("*", (req, res) => {
-    res.sendFile("./dist/index.html");
-  });  
+  // app.get("*", (req, res) => {
+  //   res.sendFile(__dirname + '/dist/index.html');
+  // });  
 
+  //note-taker/dist/index.html
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
@@ -41,6 +42,5 @@ require("./app/routes/product.routes")(app);
 
 const PORT = 5000;
 
-app.listen("admin.pharmasoftech.com", () => {
-  console.log(`Server running at http://admin.pharmasoftech.com/`);
-});
+app.listen(PORT);
+console.log('api runnging on port ' + PORT + ': ');
