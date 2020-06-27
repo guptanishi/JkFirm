@@ -32,7 +32,6 @@ db.mongoose
   //   res.sendFile(__dirname + '/dist/index.html');
   // });  
 
-  //note-taker/dist/index.html
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
