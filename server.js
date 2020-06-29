@@ -15,6 +15,7 @@ app.use(cors());
 
 
 const db = require("./app/models");
+console.log(db.url);
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
@@ -39,7 +40,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/product.routes")(app);
 
-const PORT = 15000;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT);
 console.log('api runnging on port ' + PORT + ': ');
