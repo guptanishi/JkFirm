@@ -43,6 +43,7 @@ exports.findAll = (req, res) => {
 
   Product.find(condition)
     .then(data => {
+      console.log(data)
       res.send(data);
     })
     .catch(err => {
