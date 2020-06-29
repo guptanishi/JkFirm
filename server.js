@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
-const path = require('path');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,17 +30,16 @@ db.mongoose
   });
 
 // simple route
-app.get("/",(req,res)=>{
-  let p= path.resolve(__dirname,'dist','index.html');
+app.get("/", (req, res) => {
+  var p=__dirname + '/dist/index.html';
   console.log("p",p);
-  res.sendFile(p);
-})
+  res.sendFile(__dirname + '/dist/index.html');
+}); 
 
 require("./app/routes/product.routes")(app);
 
 app.get("*", (req, res) => {
-  let p= path.resolve(__dirname,'dist','index.html');
-  res.sendFile(p);
+  res.sendFile(__dirname + '/dist/index.html');
 }); 
 
 const PORT = process.env.PORT || 3001;
