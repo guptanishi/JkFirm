@@ -29,16 +29,16 @@ db.mongoose
     process.exit();
   });
 
-  // app.get("*", (req, res) => {
-  //   res.sendFile(__dirname + '/dist/index.html');
-  // });  
-
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
 require("./app/routes/product.routes")(app);
+
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + '/dist/index.html');
+}); 
 
 const PORT = process.env.PORT || 3001;
 
