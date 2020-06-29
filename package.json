@@ -4,10 +4,8 @@
   "private": true,
   "scripts": {
     "start" : "node server.js",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "api": "node server.js"
+    "build": "vue-cli-service build"
+   
   },
   "dependencies": {
     "axios": "^0.18.1",
