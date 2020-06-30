@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import {createProduct }  from '../repository'
+import {createProduct, getLastProductCode }  from '../repository'
 export default {
   name: 'createProduct',
   data(){
@@ -91,18 +91,41 @@ export default {
       HSN: '',
     }
   },
+  mounted(){
+    getLastProductCode().then(data => {
+        if(data.length == 0){
+            this.productCode = this.generateProductCode(parseInt("0000"));
+        }else{
+           
+            let lastnumber= data[0].productCode;
+            let counter = Number(lastnumber.substring(4, lastnumber.length));
+            this.productCode = this.generateProductCode(parseInt(counter));   
+        }
+        })
+    .catch(err => alert(err.message));
+  },
+
   methods: {
+
     create(){
+        if(this.productCode != "" && this.productName != ""){
         let data = { productCode: this.productCode, productName: this.productName , 
             unit: this.unit, description: this.description, costPrice: this.costPrice, 
             sellingPrice: this.sellingPrice,quantityAvailable: this.quantityAvailable,
             gst: this.gst, HSN: this.HSN}
-    createProduct(data)
-        .then(data => {
-            this.$router.push('/');
-        })
-        .catch(err => alert(err.message));
+
+            createProduct(data)
+                .then(data => {
+                    this.$router.push('/');
+                })
+                .catch(err => alert(err.message));
+        }
     },
+
+    generateProductCode(counter){
+        const prefix = 'LSF';
+        return prefix + '-'+ ++counter;
+    },    
   },
 }
 </script>

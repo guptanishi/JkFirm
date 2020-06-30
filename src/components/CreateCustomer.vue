@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { createCustomer }  from '../repository'
+import { createCustomer, getLastCustomerId }  from '../repository'
 export default {
   name: 'createCustomer',
   data(){
@@ -105,18 +105,37 @@ export default {
         gstNumber: ''
     }
   },
-  methods: {
-    create(){
-        let data = { customerId: this.customerId, customerName: this.customerName , 
-            gender: this.gender, address: this.address, city: this.city, 
-            state: this.state,
-            pincode: this.pincode, contact: this.contact, emailId: this.emailId, gstNumber: this.gstNumber}
-    createCustomer(data)
-        .then(data => {
-            this.$router.push('/getCustomers');
+  mounted(){
+    getLastCustomerId().then(data => {
+        if(data.length == 0){
+            this.customerId = this.generateCustomerId(0);
+        }else{
+            let lastnumber= data[0].customerId;
+            
+            this.customerId = this.generateCustomerId(parseInt(lastnumber));   
+        }
         })
-        .catch(err => alert(err.message));
+    .catch(err => alert(err.message));
+  },
+  methods: {
+      
+    create(){
+        if(this.customerId!= "" && this.customerName != ""){
+            let data = { customerId: this.customerId, customerName: this.customerName , 
+                gender: this.gender, address: this.address, city: this.city, 
+                state: this.state,
+                pincode: this.pincode, contact: this.contact, emailId: this.emailId, gstNumber: this.gstNumber}
+        createCustomer(data)
+            .then(data => {
+                this.$router.push('/getCustomers');
+            })
+            .catch(err => alert(err.message));
+        }
     },
+
+    generateCustomerId(counter){
+        return ++counter;
+    },    
   },
 }
 </script>

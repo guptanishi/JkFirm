@@ -148,3 +148,15 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+exports.findLastRecord = (req, res) => {
+  Product.find().sort({"_id" : -1}).limit(1).then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving products."
+    });
+  });
+};

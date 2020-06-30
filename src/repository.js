@@ -34,6 +34,15 @@ export function getOneProduct(id) {
 		.then(response => response.data);
 }
 
+export function getLastProductCode() {
+	return axios.get(`${BASE_URL}/api/products/lastRecord`)
+		.then(response => {
+			return response.data
+		})
+		.catch(err => Promise.reject(err.message));
+		
+}
+
 
 // custome API
 
@@ -75,6 +84,15 @@ export function updateCustomer(data, id) {
 			return response.data
 		})
 		.catch(err => Promise.reject(err.message));
+}
+
+export function getLastCustomerId() {
+	return axios.get(`${BASE_URL}/api/customers/lastRecord`)
+		.then(response => {
+			return response.data
+		})
+		.catch(err => Promise.reject(err.message));
+		
 }
 
 // Invoice APIs

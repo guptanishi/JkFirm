@@ -22,6 +22,9 @@ module.exports = app => {
   // Delete a Product with id
   router.delete("/products/:id", products.delete);
 
+  // get a Product with id
+  router.get("/products/lastRecord", products.findLastRecord);
+
   router.post("/customers/create", customers.create);
   
   // Retrieve all customers
@@ -33,12 +36,16 @@ module.exports = app => {
   // Delete a customer with id
   router.delete("/customers/:id", customers.delete);
 
+  // Retrieve all customers
+  router.get("/customers/lastRecord", customers.findLastRecord);
+
   // Retrieve all invoices
   router.get("/invoices/", invoices.findAll);
 
   router.post("/invoices/create", invoices.create);
 
   router.get("/invoices/lastRecord", invoices.findLastIdRowInvoiceNumber);
+  
   app.use("/api", router);
 
 
