@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://fathomless-springs-05930.herokuapp.com';
+const BASE_URL = 'https://jkfirm.herokuapp.com';
 
 export function getProducts() {
 	return axios.get(`${BASE_URL}/api/products`)

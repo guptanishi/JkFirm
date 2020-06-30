@@ -30,17 +30,17 @@ db.mongoose
   });
 
 // simple route
-app.get("/", (req, res) => {
-  var p=__dirname + '/dist/index.html';
-  console.log("p",p);
-  res.sendFile(__dirname + '/dist/index.html');
-}); 
+// app.get("/", (req, res) => {
+//   var p=__dirname + '/dist/index.html';
+//   console.log("p",p);
+//   res.sendFile(__dirname + '/dist/index.html');
+// }); 
 
 require("./app/routes/product.routes")(app);
 
-app.get("*", (req, res) => {
-  res.sendFile(__dirname + '/dist/index.html');
-}); 
+// app.get("*", (req, res) => {
+//   res.sendFile(__dirname + '/dist/index.html');
+// }); 
 
 const PORT = process.env.PORT || 3001;
 
