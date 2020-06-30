@@ -7,12 +7,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+var serveStatic = require('serve-static');
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-
+app.use(serveStatic(__dirname + "/dist"));
 
 const db = require("./app/models");
 console.log(db.url);
