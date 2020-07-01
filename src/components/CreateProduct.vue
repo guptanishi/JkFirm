@@ -94,12 +94,13 @@ export default {
   mounted(){
     getLastProductCode().then(data => {
         if(data.length == 0){
-            this.productCode = this.generateProductCode(parseInt("0000"));
+            this.productCode = this.generateProductCode(0);
         }else{
-           
+        
             let lastnumber= data[0].productCode;
             let counter = Number(lastnumber.substring(4, lastnumber.length));
-            this.productCode = this.generateProductCode(parseInt(counter));   
+            counter ++; 
+            this.productCode = this.generateProductCode(counter);   
         }
         })
     .catch(err => alert(err.message));
@@ -124,7 +125,8 @@ export default {
 
     generateProductCode(counter){
         const prefix = 'LSF';
-        return prefix + '-'+ ++counter;
+        let b  = String(counter).padStart(4, '0')
+        return prefix + '-'+ b;
     },    
   },
 }

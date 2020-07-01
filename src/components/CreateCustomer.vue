@@ -111,14 +111,13 @@ export default {
             this.customerId = this.generateCustomerId(0);
         }else{
             let lastnumber= data[0].customerId;
-            
             this.customerId = this.generateCustomerId(parseInt(lastnumber));   
         }
         })
     .catch(err => alert(err.message));
   },
   methods: {
-      
+
     create(){
         if(this.customerId!= "" && this.customerName != ""){
             let data = { customerId: this.customerId, customerName: this.customerName , 
@@ -134,7 +133,9 @@ export default {
     },
 
     generateCustomerId(counter){
-        return ++counter;
+        counter++ ;
+        let b  = String(counter).padStart(3, '0')
+        return b;
     },    
   },
 }

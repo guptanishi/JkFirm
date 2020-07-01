@@ -413,11 +413,12 @@ export default {
     },
     mounted(){
         getLastInvoiceNumber().then(data => {
-            if(data.length == 0  || (state.date.getMonth() + 1 && state.date.getDate() == 1)){
+            if(data.length == 0  || (state.date.getMonth() + 1 == 4 && state.date.getDate() == 1)){
                 this.invoiceNumber = this.generateInvoiceNumber(0);
             }else{
                 let lastnumber= data[0].invoiceNumber;
                 let counter = Number(lastnumber.substring(7, lastnumber.length));
+                counter++ ;
                 this.invoiceNumber = this.generateInvoiceNumber(counter);   
             }
         })
@@ -430,7 +431,8 @@ export default {
     generateInvoiceNumber(counter){
         const prefix = 'PB';
         let fullYear = state.date.getFullYear();
-        return prefix + '-'+fullYear + ++counter;
+        let b  = String(counter).padStart(2, '0')
+        return prefix + '-'+fullYear + b;
     },    
     customFormatter(date) {
         return moment(date).format('DD/MM/YYYY');
@@ -443,7 +445,6 @@ export default {
         this.productCode = data.productCode;
         this.productName = data.productName;
         this.price = data.price;
-        this.quantity = data.qtyAvailable;
         this.unit = data.unit;
         this.amount = data.price;
         this.vat = data.vat;
@@ -466,14 +467,12 @@ export default {
     },
 
     updatePr(){
-        //alert('sdasd');
         let data  =  {
             qtyAvailable: this.quantity, 
         }
 
         updateProduct(data, this.productId)
         .then(data => {
-           // this.$router.push('/');
            alert('product is successfully updated');
         })
         .catch(err => alert(err.message));
@@ -531,9 +530,7 @@ export default {
         }
         createInvoice(invoiceData)
         .then(data => {
-           // this.$router.push('/');
            alert('Invoice is successfully created');
-           console.log(data);
         })
         .catch(err => alert(err.message));
     },
