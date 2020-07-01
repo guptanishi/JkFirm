@@ -1,7 +1,7 @@
 
 # Project setup
 ```
-sudo npm install --unsafe-permnpm run serve
+sudo npm install --unsafe-perm
 
 ```
 ### Compiles and hot-reloads for development
