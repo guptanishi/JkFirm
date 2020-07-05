@@ -9,20 +9,20 @@ exports.create = (req, res) => {
     return;
   }
 
-   // Create a Tutorial
-    const invoice = new Invoice({
-        invoiceNumber: req.body.invoiceNumber,
-        invoiceDate: req.body.invoiceDate,
-        userName: req.body.userName,
-        products: req.body.products,
-        customerId: req.body.customerId,
-        customerName: req.body.customerName,
-        totalAmount: req.body.totalAmount,
-        paymentMode: req.body.paymentMode,
-        payment: req.body.payment,
-        paymentDate: req.body.paymentDate,
-    });
-
+  // Create a Tutorial
+  const invoice = new Invoice({
+    invoiceNumber: req.body.invoiceNumber,
+    invoiceDate: req.body.invoiceDate,
+    delMode: req.body.delMode,
+    userName: req.body.userName,
+    products: req.body.products,
+    customerId: req.body.customer.customerId,
+    customerName: req.body.customer.customerName,
+    totalAmount: req.body.totalAmount,
+    paymentMode: req.body.paymentMode,
+    payment: req.body.payment,
+    paymentDate: req.body.paymentDate
+  });
   // Save product in the database
   invoice
     .save(invoice)
@@ -55,11 +55,10 @@ exports.findAll = (req, res) => {
 };
 
 exports.findLastIdRowInvoiceNumber = (req, res) => {
-    //console.log(Invoice.find().sort({"_id" : -1}).limit(1))
-    Invoice.find().sort({"_id" : -1}).limit(1).then(data => {
-        res.send(data);
-   })
-   .catch(err => {
+  Invoice.find().sort({ "_id": -1 }).limit(1).then(data => {
+    res.send(data);
+  })
+    .catch(err => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving invoice."
