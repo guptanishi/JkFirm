@@ -299,18 +299,34 @@
 
           <div class="field is-grouped">
             <div class="control">
-              <button class="button is-link" @click="saveInvoice">Save</button>
+              <button class="button btn-primary" @click="saveInvoice">Save</button>
             </div>
             <div class="control">
-              <button class="button is-link is-light" @click="generateFirstCopy">Cancel</button>
+              <button class="button btn-primary">Cancel</button>
+            </div>
+            <div class="control">
+              <button
+                :class="['button', 'btn-info', this.isInvoiceSaved? '':'disabled' ]"
+                @click="generatePdf('')"
+              >First Copy</button>
+            </div>
+            <div class="control">
+              <button
+                :class="['button', 'btn-info', this.isInvoiceSaved? '':'disabled' ]"
+                @click="generatePdf('Duplicate')"
+              >Duplicate</button>
+            </div>
+            <div class="control">
+              <button
+                :class="['button', 'btn-info', this.isInvoiceSaved? '':'disabled' ]"
+                @click="generatePdf('Triplicate')"
+              >Triplicate</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div v-if="generatePdf">
-      <PdfGenerator :info="invoiceData" />
-    </div>
+    <component v-bind:is="componentName" :info="invoiceData" :invoiceType="invoiceType"></component>
   </div>
 </template>
 
@@ -423,9 +439,11 @@ export default {
       grandTotal: 0,
       paymentDue: 0,
       del: "within state",
-      generatePdf: false,
       invoiceData: {},
-      customerDetails: []
+      customerDetails: [],
+      isInvoiceSaved: false,
+      componentName: "",
+      invoiceType: ""
     };
   },
   computed: {
@@ -583,10 +601,11 @@ export default {
           .then(data => {
             alert("Invoice is successfully created");
             this.invoiceData = invoiceData;
-            console.log(this.invoiceData);
+            // console.log(this.invoiceData);
 
             this.$nextTick(() => {
-              this.generatePdf = true;
+              //this.generatePdf = true;
+              this.isInvoiceSaved = true;
             });
           })
           .catch(err => alert(err.message));
@@ -595,12 +614,12 @@ export default {
     getList() {
       this.$router.push("/getCustomers");
     },
-    generateFirstCopy() {
-      this.generatePdf = true;
+    generatePdf(type) {
+      if (this.isInvoiceSaved) {
+        this.componentName = "PdfGenerator";
+        this.invoiceType = type;
+      }
     }
-  },
-  onDestroy() {
-    this.generatePdf = false;
   }
 };
 </script>

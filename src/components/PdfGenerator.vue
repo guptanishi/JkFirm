@@ -2,11 +2,16 @@
   <div id="content" class="container" style="border: solid 4px #000; position: relative">
     <div class="row justify-content-end">
       <div class="col-4">
-        <img src="../../public/download.png" alt="..." class="img-thumbnail imageStyle" />
+        <img src="../../public/JK-Logo.png" alt="..." class="img-thumbnail imageStyle" />
       </div>
-      <div class="col-8">
-        <div class="row justify-content-center text-danger">
-          <h5>Tax Invoice</h5>
+      <div class="col-8" style="margin-top:20px">
+        <div class="row">
+          <div class="col-9 text-center text-danger">
+            <h5>Tax Invoice</h5>
+          </div>
+          <div class="col-3 justify-content-start">
+            <h5>{{invoiceType}}</h5>
+          </div>
         </div>
         <div class="row justify-content-center text-danger">
           <h4>JAGDISH KRISHI YANTRA UDYOG</h4>
@@ -14,13 +19,10 @@
         <div class="row justify-content-center text-danger">
           <h5>G-35, Industrial Area, Panki III, Kanpur</h5>
         </div>
+        <div class="row justify-content-start">Contact No. : 09415926676</div>
+        <div class="row justify-content-start">Email: jagdishkrishiyantraudyog@gmail.com</div>
         <div class="row justify-content-start">
-          <span>Contact No. : 09415926676</span>
-          <br />
-          <span>Email: jagdishkrishiyantraudyog@gmail.com</span>
-          <span>
-            <b>GST No : 09AHKPG1772G1ZA</b>
-          </span>
+          <b>GST No : 09AHKPG1772G1ZA</b>
         </div>
       </div>
     </div>
@@ -67,7 +69,7 @@
             <td>&nbsp;</td>
             <td v-if="invoiceData.delMode == 'outside state'">Per%</td>
             <td v-if="invoiceData.delMode == 'outside state'">Amt</td>
-            <td v-else>>&nbsp;</td>
+            <td v-else>&nbsp;</td>
             <td v-if="invoiceData.delMode == 'outside state'">Per%</td>
             <td v-if="invoiceData.delMode == 'outside state'">Amt</td>
             <td>&nbsp;</td>
@@ -138,9 +140,14 @@ import html2canvas from "html2canvas";
 import html2pdf from "html2pdf.js";
 import moment from "moment";
 
+var state = {
+  date: new Date()
+};
+
 export default {
-  name: "pdfGenerator",
-  props: ["info"],
+  name: "PdfGenerator",
+  props: ["info", "invoiceType"],
+
   data() {
     return {
       invoiceData: {}
@@ -154,14 +161,20 @@ export default {
     var height = doc.internal.pageSize.getHeight();
     var opt = {
       margin: 2,
-      filename: "myfile.pdf",
+      fileName: `invoice${state.date}.pdf`,
       html2canvas: {
         scale: 1
       },
       jsPDF: doc
     };
-
-    html2pdf(element, opt);
+    html2pdf()
+      .from(element)
+      .toPdf()
+      .get("pdf")
+      .then(function(pdf) {
+        window.open(pdf.output("bloburl"), "_blank");
+      });
+    //html2pdf(element, opt);
   },
   methods: {
     customFormatter(date) {
@@ -176,6 +189,7 @@ export default {
   border: solid 4px #000;
 }
 .imageStyle {
+  margin-top: 50px;
   padding: 10px;
 }
 .top-buffer {

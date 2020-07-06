@@ -77,7 +77,6 @@ export default {
   mounted() {
     getInvoices()
       .then(data => {
-        console.log(data);
         this.invoices = data;
       })
       .catch(err => alert(err));
