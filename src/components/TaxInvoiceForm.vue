@@ -306,19 +306,22 @@
             </div>
             <div class="control">
               <button
-                :class="['button', 'btn-info', this.isInvoiceSaved? '':'disabled' ]"
+                class="button btn-secondary"
+                :disabled="!this.isInvoiceSaved"
                 @click="generatePdf('')"
               >First Copy</button>
             </div>
             <div class="control">
               <button
-                :class="['button', 'btn-info', this.isInvoiceSaved? '':'disabled' ]"
+                class="button btn-secondary"
+                :disabled="!this.isInvoiceSaved"
                 @click="generatePdf('Duplicate')"
               >Duplicate</button>
             </div>
             <div class="control">
               <button
-                :class="['button', 'btn-info', this.isInvoiceSaved? '':'disabled' ]"
+                class="button btn-secondary"
+                :disabled="!this.isInvoiceSaved"
                 @click="generatePdf('Triplicate')"
               >Triplicate</button>
             </div>
