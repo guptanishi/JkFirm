@@ -5,7 +5,12 @@
         <b>Invoices List</b>
       </h1>
     </center>
-    <vue-good-table :columns="columns" :rows="invoices" :search-options="{ enabled: true }">
+    <vue-good-table
+      :columns="columns"
+      :rows="invoices"
+      :search-options="{ enabled: true }"
+      @on-row-click="onRowClick"
+    >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'products'">
           <li
@@ -27,7 +32,7 @@
 
 <script>
 import { VueGoodTable } from "vue-good-table";
-import { getInvoices, getOneProduct } from "../repository";
+import { getInvoices, getOneProduct, deleteInvoice } from "../repository";
 export default {
   name: "taxInvoiceList",
   components: { VueGoodTable },
@@ -84,7 +89,7 @@ export default {
   methods: {
     deleteRow(event, id) {
       if (confirm("Are you sure you want to delete this invoice?")) {
-        deleteProducts(id)
+        deleteInvoice(id)
           .then(() => {
             this.$nextTick(() => {
               getInvoices()
@@ -94,6 +99,12 @@ export default {
           })
           .catch(err => alert(err));
       }
+    },
+    onRowClick(params) {
+      this.$router.push({
+        name: "taxInvoice",
+        params: { data: params.row }
+      });
     }
   }
 };

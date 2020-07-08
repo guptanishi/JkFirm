@@ -26,7 +26,7 @@ module.exports = app => {
   router.get("/products/lastRecord", products.findLastRecord);
 
   router.post("/customers/create", customers.create);
-  
+
   // Retrieve all customers
   router.get("/customers/", customers.findAll);
 
@@ -45,7 +45,9 @@ module.exports = app => {
   router.post("/invoices/create", invoices.create);
 
   router.get("/invoices/lastRecord", invoices.findLastIdRowInvoiceNumber);
-  
+
+  router.delete("/invoices/:id", invoices.delete);
+
   app.use("/api", router);
 
 

@@ -52,7 +52,8 @@ export default new Router({
         {
             path: '/taxInvoice',
             name: 'taxInvoice',
-            component: TaxInvoiceForm
+            component: TaxInvoiceForm,
+            props: true
         },
         {
             path: '/getInvoices',

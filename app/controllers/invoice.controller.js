@@ -108,28 +108,28 @@ exports.findLastIdRowInvoiceNumber = (req, res) => {
 //     });
 // };
 
-// // Delete a Tutorial with the specified id in the request
-// exports.delete = (req, res) => {
-//   const id = req.params.id;
+// Delete a Tutorial with the specified id in the request
+exports.delete = (req, res) => {
+  const id = req.params.id;
 
-//   Customer.findByIdAndRemove(id, { useFindAndModify: false })
-//     .then(data => {
-//       if (!data) {
-//         res.status(404).send({
-//           message: `Cannot delete Customer with id=${id}. Maybe Customer was not found!`
-//         });
-//       } else {
-//         res.send({
-//           message: "Customer was deleted successfully!"
-//         });
-//       }
-//     })
-//     .catch(err => {
-//       res.status(500).send({
-//         message: "Could not delete Customer with id=" + id
-//       });
-//     });
-// };
+  Invoice.findByIdAndRemove(id, { useFindAndModify: false })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot delete Customer with id=${id}. Maybe invoice was not found!`
+        });
+      } else {
+        res.send({
+          message: "invoice was deleted successfully!"
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Could not delete invoice with id=" + id
+      });
+    });
+};
 
 // // Delete all Tutorials from the database.
 // exports.deleteAll = (req, res) => {

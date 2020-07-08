@@ -6,15 +6,17 @@ export function getProducts() {
 		.then(response => response.data);
 }
 
-export function deleteProducts(id){
+export function deleteProducts(id) {
 	return axios.delete(`${BASE_URL}/api/products/${id}`)
 		.then(response => response.data)
 		.catch(err => Promise.reject(err.message));
 }
 export function createProduct(data) {
-	return axios.post(`${BASE_URL}/api/products/create`, {productCode: data.productCode, productName: data.productName , 
-		costPrice: data.costPrice, 
-		price: data.sellingPrice, vat: data.gst, HSN: data.HSN , qtyAvailable: data.quantityAvailable, unit: data.unit})
+	return axios.post(`${BASE_URL}/api/products/create`, {
+		productCode: data.productCode, productName: data.productName,
+		costPrice: data.costPrice,
+		price: data.sellingPrice, vat: data.gst, HSN: data.HSN, qtyAvailable: data.quantityAvailable, unit: data.unit
+	})
 		.then(response => {
 			return response.data
 		})
@@ -40,7 +42,7 @@ export function getLastProductCode() {
 			return response.data
 		})
 		.catch(err => Promise.reject(err.message));
-		
+
 }
 
 
@@ -51,20 +53,22 @@ export function getCustomers() {
 		.then(response => response.data);
 }
 
-export function deleteCustomer(id){
+export function deleteCustomer(id) {
 	return axios.delete(`${BASE_URL}/api/customers/${id}`)
 		.then(response => response.data)
 		.catch(err => Promise.reject(err.message));
 }
 export function createCustomer(data) {
-	return axios.post(`${BASE_URL}/api/customers/create`, {customerId: data.customerId, 
-		customerName: data.customerName , 
-		gender: data.gender, 
-		address:data.address,
-		city: data.city, 
-		state: data.state, pincode: data.pincode, 
-		contact: data.contact , emailId: data.emailId,
-		gstNumber: data.gstNumber})
+	return axios.post(`${BASE_URL}/api/customers/create`, {
+		customerId: data.customerId,
+		customerName: data.customerName,
+		gender: data.gender,
+		address: data.address,
+		city: data.city,
+		state: data.state, pincode: data.pincode,
+		contact: data.contact, emailId: data.emailId,
+		gstNumber: data.gstNumber
+	})
 		.then(response => {
 			return response.data
 		})
@@ -72,14 +76,16 @@ export function createCustomer(data) {
 }
 
 export function updateCustomer(data, id) {
-	return axios.post(`${BASE_URL}/api/customers/${id}`, {customerId: data.customerId, 
-		customerName: data.customerName , 
-		gender: data.gender, 
+	return axios.post(`${BASE_URL}/api/customers/${id}`, {
+		customerId: data.customerId,
+		customerName: data.customerName,
+		gender: data.gender,
 		address: data.address,
-		city: data.city, 
-		state: data.state, pincode: data.pincode, 
-		contact: data.contact , emailId: data.emailId,
-		gstNumber: data.gstNumber})
+		city: data.city,
+		state: data.state, pincode: data.pincode,
+		contact: data.contact, emailId: data.emailId,
+		gstNumber: data.gstNumber
+	})
 		.then(response => {
 			return response.data
 		})
@@ -92,7 +98,7 @@ export function getLastCustomerId() {
 			return response.data
 		})
 		.catch(err => Promise.reject(err.message));
-		
+
 }
 
 // Invoice APIs
@@ -112,10 +118,16 @@ export function getLastInvoiceNumber() {
 			return response.data
 		})
 		.catch(err => Promise.reject(err.message));
-		
+
 }
 
 export function getInvoices() {
 	return axios.get(`${BASE_URL}/api/invoices`)
 		.then(response => response.data);
+}
+
+export function deleteInvoice(invoiceNumber) {
+	return axios.delete(`${BASE_URL}/api/invoices/${invoiceNumber}`)
+		.then(response => response.data)
+		.catch(err => Promise.reject(err.message));
 }
