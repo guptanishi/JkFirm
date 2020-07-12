@@ -1,5 +1,5 @@
 const db = require("../models");
-const Customer= db.customers;
+const Customer = db.customers;
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
@@ -10,21 +10,20 @@ exports.create = (req, res) => {
   }
 
   // Create a Tutorial
-    const customer = new Customer({
-        customerId: req.body.customerId,
-        customerName: req.body.customerName,
-        gender: req.body.gender,
-        address: req.body.address,
-        city: req.body.city,
-        state: req.body.state,
-        pincode: req.body.pincode,
-        contact: req.body.contact,
-        emailId: req.body.emailId,
-        gstNumber: req.body.gstNumber
-    });
+  const customer = new Customer({
+    customerId: req.body.customerId,
+    customerName: req.body.customerName,
+    address: req.body.address,
+    city: req.body.city,
+    state: req.body.state,
+    pincode: req.body.pincode,
+    contact: req.body.contact,
+    emailId: req.body.emailId,
+    gstNumber: req.body.gstNumber
+  });
 
   // Save product in the database
-customer
+  customer
     .save(customer)
     .then(data => {
       res.send(data);
@@ -121,7 +120,7 @@ exports.delete = (req, res) => {
 
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
-    Customer.deleteMany({})
+  Customer.deleteMany({})
     .then(data => {
       res.send({
         message: `${data.deletedCount} Customer were deleted successfully!`
@@ -137,7 +136,7 @@ exports.deleteAll = (req, res) => {
 
 // Find all published Tutorials
 exports.findAllPublished = (req, res) => {
-    Customer.find({ published: true })
+  Customer.find({ published: true })
     .then(data => {
       res.send(data);
     })
@@ -151,13 +150,13 @@ exports.findAllPublished = (req, res) => {
 
 
 exports.findLastRecord = (req, res) => {
-  Customer.find().sort({"_id" : -1}).limit(1).then(data => {
+  Customer.find().sort({ "_id": -1 }).limit(1).then(data => {
     res.send(data);
   })
-  .catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving customer."
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving customer."
+      });
     });
-  });
 };
