@@ -261,8 +261,7 @@
         </div>
         <footer class="card-footer">
           <a @click="addCustomerDetail" class="card-footer-item">Add</a>
-          <a href="#" class="card-footer-item">Update</a>
-          <a href="#" class="card-footer-item">Delete</a>
+          <a @click="resetPaymentDetails" class="card-footer-item">Reset</a>
         </footer>
       </div>
 
@@ -345,6 +344,7 @@ import moment from "moment";
 import ModalForProducts from "./ModalForProducts.vue";
 import ModalForCustomers from "./ModalForCustomers.vue";
 import PdfGenerator from "./PdfGenerator.vue";
+import { EventBus } from "../../event-bus.js";
 
 var state = {
   date: new Date()
@@ -477,6 +477,9 @@ export default {
     }
   },
   mounted() {
+    EventBus.$on("hideContent", () => {
+      document.getElementById("content").style.display = "none";
+    });
     this.rowData = this.data;
     if (this.rowData == undefined) {
       getLastInvoiceNumber()
@@ -588,6 +591,13 @@ export default {
       this.unit = "";
       this.total = 0;
     },
+
+    resetPaymentDetails() {
+      this.delMode = "within india";
+      this.mode = "";
+      this.payment = 0;
+      this.paymentDate = state.date;
+    },
     onCustomerIdClick() {
       this.showCustomerModal = !this.showCustomerModal;
     },
@@ -638,10 +648,7 @@ export default {
           .then(data => {
             alert("Invoice is successfully created");
             this.invoiceData = invoiceData;
-            // console.log(this.invoiceData);
-
             this.$nextTick(() => {
-              //this.generatePdf = true;
               this.isInvoiceSaved = true;
             });
           })
@@ -652,10 +659,9 @@ export default {
       this.$router.push("/getCustomers");
     },
     generatePdf(type) {
-      if (this.isInvoiceSaved) {
-        this.componentName = "PdfGenerator";
-        this.invoiceType = type;
-      }
+      this.componentName = "PdfGenerator";
+      this.invoiceType = type;
+      EventBus.$emit("showContent");
     }
   }
 };

@@ -145,6 +145,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import html2pdf from "html2pdf.js";
 import moment from "moment";
+import { EventBus } from "../../event-bus.js";
 
 var state = {
   date: new Date()
@@ -159,30 +160,46 @@ export default {
       invoiceData: {}
     };
   },
-  mounted() {
-    this.invoiceData = this.info;
-    var element = document.getElementById("content");
-    var doc = new jsPDF("p", "mm", "a4");
-    var width = doc.internal.pageSize.getWidth();
-    var height = doc.internal.pageSize.getHeight();
-    var opt = {
-      fileName: `invoice${state.date}.pdf`,
-      html2canvas: {
-        scale: 1
-      },
-      jsPDF: doc
-    };
-    html2pdf()
-      .from(element)
-      .toPdf()
-      .get("pdf")
-      .then(function(pdf) {
-        window.open(pdf.output("bloburl"), "_blank");
-      });
+  watch: {
+    invoiceType(newValue, oldValue) {
+      if (newValue != oldValue) {
+        this.openNewTab();
+      }
+    }
   },
+  mounted() {
+    EventBus.$on("showContent", () => {
+      document.getElementById("content").style.display = "block";
+    });
+    this.openNewTab();
+  },
+
   methods: {
     customFormatter(date) {
       return moment(date).format("DD/MM/YYYY");
+    },
+
+    openNewTab() {
+      this.invoiceData = this.info;
+      var element = document.getElementById("content");
+      var doc = new jsPDF("p", "mm", "a4");
+      var width = doc.internal.pageSize.getWidth();
+      var height = doc.internal.pageSize.getHeight();
+      var opt = {
+        fileName: `invoice${state.date}.pdf`,
+        html2canvas: {
+          scale: 1
+        },
+        jsPDF: doc
+      };
+      html2pdf()
+        .from(element)
+        .toPdf()
+        .get("pdf")
+        .then(function(pdf) {
+          window.open(pdf.output("bloburl"), "_blank");
+          EventBus.$emit("hideContent");
+        });
     },
 
     numberToEnglish(amount) {
