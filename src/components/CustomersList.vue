@@ -11,12 +11,13 @@
     <vue-good-table
       :columns="columns"
       :rows="customers"
+      @on-row-click="onRowClick"
       :search-options="{ enabled: true, placeholder: 'Search customers' }"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'last'">
           <button @click.stop="deleteRow(this, props.row.id)">Delete</button>
-          <button @click.stop="onRowClick(props.row)" style="margin-left:10px">Update</button>
+          <button @click.stop="onRowClick(props)" style="margin-left:10px">Update</button>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>
@@ -89,10 +90,10 @@ export default {
       if (!this.onModal)
         this.$router.push({
           name: "updateCustomer",
-          params: { data: params }
+          params: { data: params.row }
         });
       else {
-        this.$emit("customerRowClicked", params);
+        this.$emit("customerRowClicked", params.row);
       }
     },
     deleteRow(event, id) {
