@@ -1,126 +1,137 @@
 <template>
-<div class="columns container is-fluid">
-    <div class="column is-half "> 
-        <div class="field">
-            <label class="label">Customer Id</label>
-            <div class="control">
-                <input class="input" type="text" placeholder="customer id" v-model="row.customerId">
-            </div>
+  <div class="columns container is-fluid">
+    <div class="column is-half">
+      <div class="field">
+        <label class="label">Customer Id</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="customer id" v-model="row.customerId" />
         </div>
+      </div>
 
-        <div class="field">
-            <label class="label">Customer Name</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="customerName" v-model="row.customerName" >
-            </div>
+      <div class="field">
+        <label class="label">Customer Name</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="text" placeholder="customerName" v-model="row.customerName" />
         </div>
+      </div>
 
-        <div class="field">
-            <label class="label">Gender</label>
-            <div class="control">
-                <label class="radio">
-                    <input type="radio" name="gender" v-model="row.gender" value="male"> Male
-                </label>
-                 <label class="radio">
-                    <input type="radio"  name="gender" v-model="row.gender" value="female"> Female
-                </label>
-            </div>
+      <div class="field">
+        <label class="label">Gender</label>
+        <div class="control">
+          <label class="radio">
+            <input type="radio" name="gender" v-model="row.gender" value="male" /> Male
+          </label>
+          <label class="radio">
+            <input type="radio" name="gender" v-model="row.gender" value="female" /> Female
+          </label>
         </div>
-        <div class="field">
-            <label class="label">Address</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="Address" v-model="row.address">
-            </div>
+      </div>
+      <div class="field">
+        <label class="label">Address</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="text" placeholder="Address" v-model="row.address" />
         </div>
+      </div>
 
-        <div class="field">
-            <label class="label">City</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="city" v-model="row.city">
-            </div>
+      <div class="field">
+        <label class="label">City</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="text" placeholder="city" v-model="row.city" />
         </div>
+      </div>
 
-        <div class="field">
-            <label class="label">State</label>
-            <div class="control has-icons-left has-icons-right" >
-                <input class="input" type="text" v-model="row.state">
-            </div>
+      <div class="field">
+        <label class="label">State</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="text" v-model="row.state" />
         </div>
+      </div>
 
+      <div class="field">
+        <label class="label">Pincode</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="text" v-model="row.pincode" />
+        </div>
+      </div>
 
-        <div class="field">
-            <label class="label">Pincode</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="row.pincode">
-            </div>
+      <div class="field">
+        <label class="label">Contact Number</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="text" v-model="row.contact" />
         </div>
+      </div>
+      <div class="field">
+        <label class="label">EmailId</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="email" v-model="row.emailId" />
+        </div>
+      </div>
 
-        <div class="field">
-            <label class="label">Contact Number</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="row.contact">
-            </div>
+      <div class="field">
+        <label class="label">GST no.</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="text" v-model="row.gstNumber" />
         </div>
-        <div class="field">
-            <label class="label">EmailId</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" type="email" v-model="row.emailId">
-            </div>
-        </div>
+      </div>
 
-        <div class="field">
-            <label class="label">GST no.</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="row.gstNumber">
-            </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-link" v-on:click="update">Update</button>
         </div>
-
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-link" v-on:click="update">Submit</button>
-            </div>
-            <div class="control">
-                <button class="button is-link is-light">Cancel</button>
-            </div>
+        <div class="control">
+          <button class="button is-link is-light" v-on:click="reset">Cancel</button>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
-import { updateCustomer }  from '../repository'
+import { updateCustomer } from "../repository";
 export default {
-    name: 'updateCustomer',
-    props: ['data'],
-    data(){
+  name: "updateCustomer",
+  props: ["data"],
+  data() {
     return {
-      row:''
-    }
-    },
-    mounted(){
-      this.row = this.data;
-      
-    },
-    methods: {
-    update(){
-        let data = { customerId: this.row.customerId, 
-            customerName: this.row.customerName , 
-            gender: this.row.gender, 
-            address: this.row.address, city: this.row.city, 
-            state: this.row.state,
-            pincode: this.row.pincode, contact: this.row.contact, 
-            emailId: this.row.emailId, gstNumber: this.row.gstNumber}
+      row: ""
+    };
+  },
+  mounted() {
+    this.row = this.data;
+  },
+  methods: {
+    update() {
+      let data = {
+        customerId: this.row.customerId,
+        customerName: this.row.customerName,
+        address: this.row.address,
+        city: this.row.city,
+        state: this.row.state,
+        pincode: this.row.pincode,
+        contact: this.row.contact,
+        emailId: this.row.emailId,
+        gstNumber: this.row.gstNumber
+      };
 
-            console.log(data);
-
-    updateCustomer(data, this.row.id)
+      updateCustomer(data, this.row.id)
         .then(data => {
-            this.$router.push('/getCustomers');
+          this.$router.push("/getCustomers");
         })
         .catch(err => alert(err.message));
     },
-  },
-}
+    reset() {
+      this.row.customerId = "";
+      this.row.customerName = "";
+      this.row.address = "";
+      this.row.city = "";
+      this.row.state = "";
+      this.row.pincode = "";
+      this.row.contact = "";
+      this.row.emailId = "";
+      this.row.gstNumber = "";
+    }
+  }
+};
 </script>
 <style scoped>
 #preview {

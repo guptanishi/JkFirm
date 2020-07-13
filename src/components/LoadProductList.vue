@@ -11,12 +11,12 @@
     <vue-good-table
       :columns="columns"
       :rows="products"
-      @on-row-click="onRowClick"
       :search-options="{ enabled: true, placeholder: 'Search products', }"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'last'">
           <button @click.stop="deleteRow(this, props.row.id)">Delete</button>
+          <button @click.stop="onRowClick(props.row)" style="margin-left:20px">Update</button>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>
@@ -84,10 +84,10 @@ export default {
       if (!this.onModal)
         this.$router.push({
           name: "updateProduct",
-          params: { data: params.row }
+          params: { data: params }
         });
       else {
-        this.$emit("productRowClicked", params.row);
+        this.$emit("productRowClicked", params);
       }
     },
     deleteRow(event, id) {
