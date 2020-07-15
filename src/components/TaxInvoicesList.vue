@@ -5,11 +5,13 @@
         <b>Invoices List</b>
       </h1>
     </center>
+    <div style="margin-left: 20px">
+      <h4>Search invoices</h4>
+    </div>
     <vue-good-table
       :columns="columns"
       :rows="invoices"
-      :search-options="{ enabled: true }"
-      @on-row-click="onRowClick"
+      :search-options="{ enabled: true, placeholder:'search invoices' }"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'products'">
@@ -22,7 +24,12 @@
           v-else-if="props.column.field == 'paymentDue'"
         >{{props.row.totalAmount - props.row.payment}}</span>
         <span v-else-if="props.column.field == 'last'">
-          <button @click.stop="deleteRow(this, props.row.id)">Delete</button>
+          <button @click.stop="deleteRow(this, props.row.id)">
+            <i class="fa fa-trash-o"></i>
+          </button>
+          <button style="margin-left:20px" @click.stop="onRowClick(props)">
+            <i class="fa fa-pencil"></i>
+          </button>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>

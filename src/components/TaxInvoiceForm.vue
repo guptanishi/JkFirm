@@ -140,14 +140,26 @@
         </div>
         <footer class="card-footer">
           <a @click="addProducts" class="card-footer-item">Add</a>
-          <a @click="updatePr" class="card-footer-item">Update</a>
+          <!-- <a @click="updatePr" class="card-footer-item">Update</a> -->
           <a @click="resetproduct" class="card-footer-item">Reset</a>
         </footer>
       </div>
       <div class="card">
         <div class="card-content">
           <div class="content">
-            <vue-good-table :columns="productColumns" :rows="products"></vue-good-table>
+            <vue-good-table :columns="productColumns" :rows="products">
+              <template slot="table-row" slot-scope="props">
+                <span v-if="props.column.field == 'last'">
+                  <button style="margin-left:10px" @click.stop="deleteRow(props.row.id)">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                  <button @click.stop="edit(props.row)">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                </span>
+                <span v-else>{{props.formattedRow[props.column.field]}}</span>
+              </template>
+            </vue-good-table>
           </div>
         </div>
       </div>
@@ -268,7 +280,19 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
-            <vue-good-table :columns="paymentColumns" :rows="customerDetails"></vue-good-table>
+            <vue-good-table :columns="paymentColumns" :rows="customerDetails">
+              <template slot="table-row" slot-scope="props">
+                <span v-if="props.column.field == 'last'">
+                  <button style="margin-left:10px" @click.stop="deletePaymentRow(props.row.id)">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                  <button @click.stop="editPaymentRow(props.row)">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                </span>
+                <span v-else>{{props.formattedRow[props.column.field]}}</span>
+              </template>
+            </vue-good-table>
           </div>
         </div>
       </div>
@@ -383,6 +407,10 @@ export default {
         {
           label: "Payment Date",
           field: "paymentDate"
+        },
+        {
+          label: "Options",
+          field: "last"
         }
       ],
       productColumns: [
@@ -413,6 +441,10 @@ export default {
         {
           label: "Total",
           field: "total"
+        },
+        {
+          label: "Options",
+          field: "last"
         }
       ],
       products: [],
@@ -554,20 +586,22 @@ export default {
       this.productId = data.id;
     },
     addProducts() {
-      const found = this.products.some(
-        el => el.productCode === this.productCode
-      );
-      if (!found) {
-        let data = {
-          productCode: this.productCode,
-          productName: this.productName,
-          price: this.price,
-          vat: this.vat,
-          quantity: this.quantity,
-          unit: this.unit,
-          total: this.total
-        };
-        this.products.push(data);
+      if (this.productCode != "" && this.productCode != undefined) {
+        const found = this.products.some(
+          el => el.productCode === this.productCode
+        );
+        if (!found) {
+          let data = {
+            productCode: this.productCode,
+            productName: this.productName,
+            price: this.price,
+            vat: this.vat,
+            quantity: this.quantity,
+            unit: this.unit,
+            total: this.total
+          };
+          this.products.push(data);
+        }
       }
     },
 
@@ -612,18 +646,23 @@ export default {
     },
     addCustomerDetail() {
       if (this.customerId !== undefined && this.customerId != "") {
-        let data = {
-          customerId: this.customerId,
-          customerName: this.customerName,
-          state: this.state,
-          address: this.address,
-          contact: this.contact,
-          gstNumber: this.gstNumber,
-          mode: this.mode,
-          payment: this.payment,
-          paymentDate: this.customFormatter(this.paymentDate)
-        };
-        this.customerDetails.push(data);
+        const found = this.customerDetails.some(
+          el => el.customerId === this.customerId
+        );
+        if (!found) {
+          let data = {
+            customerId: this.customerId,
+            customerName: this.customerName,
+            state: this.state,
+            address: this.address,
+            contact: this.contact,
+            gstNumber: this.gstNumber,
+            mode: this.mode,
+            payment: this.payment,
+            paymentDate: this.customFormatter(this.paymentDate)
+          };
+          this.customerDetails.push(data);
+        }
       }
     },
     saveInvoice() {
@@ -662,6 +701,32 @@ export default {
       this.componentName = "PdfGenerator";
       this.invoiceType = type;
       EventBus.$emit("showContent");
+    },
+    deleteRow(id) {
+      this.products = this.products.filter(el => el.id != id);
+    },
+    edit(row) {
+      this.productCode = row.productCode;
+      this.productName = row.productName;
+      this.price = row.price;
+      this.vat = row.vat;
+      this.quantity = row.quantity;
+      this.unit = row.unit;
+    },
+    deletePaymentRow(id) {
+      this.customerDetails = this.customerDetails.filter(el => el.id != id);
+    },
+    editPaymentRow(row) {
+      this.customerId = row.customerId;
+      this.customerName = row.customerName;
+      this.state = row.state;
+      this.address = row.address;
+      this.contact = row.contact;
+      this.gstNumber = row.gstNumber;
+      this.delMode = row.delMode;
+      this.mode = row.mode;
+      this.paymentDate = this.customFormatter(new Date(row.paymentDate));
+      this.payment = row.payment;
     }
   }
 };
