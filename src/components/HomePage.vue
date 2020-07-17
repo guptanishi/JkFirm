@@ -1,49 +1,68 @@
 <template>
   <div class="container">
-    <div class="row align-self-center" style="margin-top: 150px">
-      <div class="col-4"></div>
-      <div class="col-4">
-        <form>
-          <div class="form-group">
-            <label for="exampleInputEmail1">UserName</label>
-            <input type="text" class="form-control" v-model="username" placeholder="Enter email" />
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" v-model="password" placeholder="Password" />
-          </div>
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-            <label class="form-check-label" for="exampleCheck1">Remember Password</label>
-          </div>
-          <button type="submit" class="btn btn-primary" @click="submit">Submit</button>
-        </form>
+    <div class="row">
+      <div class="col-6 text-center">
+        <router-link :to="{ name: 'loadproductList' }" class="nav-link">
+          <img src="../../public/product.png" width="150px" height="150px" />
+          <br />
+          <span class="textStyle">Product List</span>
+        </router-link>
       </div>
-      <div class="col-4"></div>
+      <div class="col-6 text-center">
+        <router-link to="/createProduct" class="nav-link">
+          <img src="../../public/buy.png" width="150px" height="150px" />
+          <br />
+          <span class="textStyle">Create Products</span>
+        </router-link>
+      </div>
+    </div>
+    <div class="row top-margin">
+      <div class="col-6 text-center">
+        <router-link to="/getCustomers" class="nav-link">
+          <img src="../../public/customer.png" width="150px" height="150px" />
+          <br />
+          <span class="textStyle">Customers List</span>
+        </router-link>
+      </div>
+      <div class="col-6 text-center">
+        <router-link to="/createCustomer" class="nav-link">
+          <img src="../../public/add.png" width="150px" height="150px" />
+          <br />
+          <span class="textStyle">Create Customers</span>
+        </router-link>
+      </div>
+    </div>
+    <div class="row top-margin">
+      <div class="col-6 text-center">
+        <router-link to="/taxInvoice" class="nav-link">
+          <img src="../../public/form.png" width="150px" height="150px" />
+          <br />
+          <span class="textStyle">Tax Invoice</span>
+        </router-link>
+      </div>
+      <div class="col-6 text-center">
+        <router-link to="/getInvoices" class="nav-link">
+          <img src="../../public/bill.png" width="150px" height="150px" />
+          <br />
+          <span class="textStyle">Invoices List</span>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
+
 <script>
 export default {
-  name: "homePage",
-  data() {
-    return {
-      username: "",
-      password: ""
-    };
-  },
-  methods: {
-    submit() {
-      if (this.username == "admin" && this.password == "1234") {
-        localStorage.username = this.username;
-        localStorage.password = this.password;
-        //alert(localStorage.username);
-      } else {
-        localStorage.username = "";
-        localStorage.password = "";
-        alert(localStorage.username);
-      }
-    }
-  }
+  name: "homePage"
 };
 </script>
+<style>
+.textStyle {
+  margin-top: 20px;
+  font-size: 32px;
+  font-weight: bold;
+}
+.top-margin {
+  margin-top: 20px;
+}
+</style>

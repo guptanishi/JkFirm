@@ -1,10 +1,12 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-light navbar-expand-lg bg-light justify-content-between">
-      <a class="navbar-brand" href="#">
-        <h1>JKFIRM</h1>
+      <a class="navbar-brand">
+        <router-link :to="{ name: 'homePage' }" class="nav-link">
+          <h1>JKFIRM</h1>
+        </router-link>
       </a>
-      <div id="navbarNavDropdown">
+      <div id="navbarNavDropdown" v-if="isAuthenticated">
         <ul class="navbar-nav">
           <li class="nav-item">
             <router-link :to="{ name: 'loadproductList' }" class="nav-link">
@@ -57,6 +59,21 @@
 
 <script>
 export default {
-  name: "app"
+  name: "app",
+
+  data() {
+    return {
+      isAuthenticated: ""
+    };
+  },
+  watch: {
+    "$route.name": function(value) {
+      if (value == "login" || value == "homePage") {
+        this.isAuthenticated = false;
+      } else {
+        this.isAuthenticated = true;
+      }
+    }
+  }
 };
 </script>
