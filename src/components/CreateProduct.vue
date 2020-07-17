@@ -93,18 +93,24 @@ export default {
     };
   },
   mounted() {
-    getLastProductCode()
-      .then(data => {
-        if (data.length == 0) {
-          this.productCode = this.generateProductCode(0);
-        } else {
-          let lastnumber = data[0].productCode;
-          let counter = Number(lastnumber.substring(4, lastnumber.length));
-          counter++;
-          this.productCode = this.generateProductCode(counter);
-        }
-      })
-      .catch(err => alert(err.message));
+    if (localStorage.username == "admin") {
+      getLastProductCode()
+        .then(data => {
+          if (data.length == 0) {
+            this.productCode = this.generateProductCode(0);
+          } else {
+            let lastnumber = data[0].productCode;
+            let counter = Number(lastnumber.substring(4, lastnumber.length));
+            counter++;
+            this.productCode = this.generateProductCode(counter);
+          }
+        })
+        .catch(err => alert(err.message));
+    } else {
+      this.$router.push({
+        name: "homePage"
+      });
+    }
   },
 
   methods: {

@@ -85,9 +85,15 @@ export default {
     };
   },
   mounted() {
-    getCustomers()
-      .then(data => (this.customers = data))
-      .catch(err => alert(err));
+    if (localStorage.username == "admin") {
+      getCustomers()
+        .then(data => (this.customers = data))
+        .catch(err => alert(err));
+    } else {
+      this.$router.push({
+        name: "homePage"
+      });
+    }
   },
   methods: {
     onRowClick(params) {

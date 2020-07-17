@@ -512,54 +512,61 @@ export default {
     EventBus.$on("hideContent", () => {
       document.getElementById("content").style.display = "none";
     });
-    this.rowData = this.data;
-    if (this.rowData == undefined) {
-      getLastInvoiceNumber()
-        .then(data => {
-          if (
-            data.length == 0 ||
-            (state.date.getMonth() + 1 == 4 && state.date.getDate() == 1)
-          ) {
-            this.invoiceNumber = this.generateInvoiceNumber(1);
-          } else {
-            let lastnumber = data[0].invoiceNumber;
-            let counter = Number(lastnumber.substring(7, lastnumber.length));
-            counter++;
-            this.invoiceNumber = this.generateInvoiceNumber(counter);
-          }
-        })
-        .catch(err => alert(err.message));
-      this.invoiceDate = state.date;
-      this.paymentDate = state.date;
-    } else {
-      this.invoiceNumber = this.rowData.invoiceNumber;
-      this.invoiceDate = this.customFormatter(this.rowData.invoiceDate);
-      this.products = this.rowData.products;
-      this.del = this.rowData.delMode;
-      let data = {
-        customerId: this.rowData.customerId,
-        customerName: this.rowData.customerName,
-        mode: this.rowData.paymentMode,
-        payment: this.rowData.payment,
-        paymentDate: this.customFormatter(this.rowData.paymentDate)
-      };
-      this.grandTotal = this.rowData.totalAmount;
-      this.payment = this.rowData.payment;
-      this.customerDetails.push(data);
 
-      this.invoiceData = {
-        invoiceNumber: this.invoiceNumber,
-        invoiceDate: this.invoiceDate,
-        delMode: this.del,
-        username: this.username,
-        products: this.products,
-        customer: this.customerDetails[0],
-        paymentMode: this.mode,
-        totalAmount: this.grandTotal,
-        payment: this.payment,
-        paymentDate: this.customFormatter(this.paymentDate)
-      };
-      this.isInvoiceSaved = true;
+    if (localStorage.username == "admin") {
+      this.rowData = this.data;
+      if (this.rowData == undefined) {
+        getLastInvoiceNumber()
+          .then(data => {
+            if (
+              data.length == 0 ||
+              (state.date.getMonth() + 1 == 4 && state.date.getDate() == 1)
+            ) {
+              this.invoiceNumber = this.generateInvoiceNumber(1);
+            } else {
+              let lastnumber = data[0].invoiceNumber;
+              let counter = Number(lastnumber.substring(7, lastnumber.length));
+              counter++;
+              this.invoiceNumber = this.generateInvoiceNumber(counter);
+            }
+          })
+          .catch(err => alert(err.message));
+        this.invoiceDate = state.date;
+        this.paymentDate = state.date;
+      } else {
+        this.invoiceNumber = this.rowData.invoiceNumber;
+        this.invoiceDate = this.customFormatter(this.rowData.invoiceDate);
+        this.products = this.rowData.products;
+        this.del = this.rowData.delMode;
+        let data = {
+          customerId: this.rowData.customerId,
+          customerName: this.rowData.customerName,
+          mode: this.rowData.paymentMode,
+          payment: this.rowData.payment,
+          paymentDate: this.customFormatter(this.rowData.paymentDate)
+        };
+        this.grandTotal = this.rowData.totalAmount;
+        this.payment = this.rowData.payment;
+        this.customerDetails.push(data);
+
+        this.invoiceData = {
+          invoiceNumber: this.invoiceNumber,
+          invoiceDate: this.invoiceDate,
+          delMode: this.del,
+          username: this.username,
+          products: this.products,
+          customer: this.customerDetails[0],
+          paymentMode: this.mode,
+          totalAmount: this.grandTotal,
+          payment: this.payment,
+          paymentDate: this.customFormatter(this.paymentDate)
+        };
+        this.isInvoiceSaved = true;
+      }
+    } else {
+      this.$router.push({
+        name: "homePage"
+      });
     }
   },
   methods: {
@@ -745,5 +752,8 @@ export default {
   box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   max-width: 100%;
   width: 100%;
+}
+.fa-angle-down {
+  display: none;
 }
 </style>

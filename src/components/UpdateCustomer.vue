@@ -97,7 +97,13 @@ export default {
     };
   },
   mounted() {
-    this.row = this.data;
+    if (localStorage.username == "admin") {
+      this.row = this.data;
+    } else {
+      this.$router.push({
+        name: "homePage"
+      });
+    }
   },
   methods: {
     update() {

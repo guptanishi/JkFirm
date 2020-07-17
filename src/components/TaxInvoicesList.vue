@@ -87,11 +87,17 @@ export default {
     };
   },
   mounted() {
-    getInvoices()
-      .then(data => {
-        this.invoices = data;
-      })
-      .catch(err => alert(err));
+    if (localStorage.username == "admin") {
+      getInvoices()
+        .then(data => {
+          this.invoices = data;
+        })
+        .catch(err => alert(err));
+    } else {
+      this.$router.push({
+        name: "homePage"
+      });
+    }
   },
   methods: {
     deleteRow(event, id) {

@@ -80,9 +80,15 @@ export default {
     };
   },
   mounted() {
-    getProducts()
-      .then(data => (this.products = data))
-      .catch(err => alert(err));
+    if (localStorage.username == "admin") {
+      getProducts()
+        .then(data => (this.products = data))
+        .catch(err => alert(err));
+    } else {
+      this.$router.push({
+        name: "homePage"
+      });
+    }
   },
   methods: {
     onRowClick(params) {

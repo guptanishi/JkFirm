@@ -9,13 +9,20 @@ import UpdateCustomer from './components/UpdateCustomer';
 import TaxInvoiceForm from './components/TaxInvoiceForm';
 import TaxInvoicesList from './components/TaxInvoicesList';
 import PdfGenerator from './components/PdfGenerator';
+import HomePage from './components/HomePage';
 
 Vue.use(Router)
 
 export default new Router({
     routes: [
+
         {
             path: '/',
+            name: 'homePage',
+            component: HomePage
+        },
+        {
+            path: '/loadProducts',
             name: 'loadproductList',
             component: LoadProductList
         },

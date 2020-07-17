@@ -94,16 +94,22 @@ export default {
     };
   },
   mounted() {
-    getLastCustomerId()
-      .then(data => {
-        if (data.length == 0) {
-          this.customerId = this.generateCustomerId(0);
-        } else {
-          let lastnumber = data[0].customerId;
-          this.customerId = this.generateCustomerId(parseInt(lastnumber));
-        }
-      })
-      .catch(err => alert(err.message));
+    if (localStorage.username == "admin") {
+      getLastCustomerId()
+        .then(data => {
+          if (data.length == 0) {
+            this.customerId = this.generateCustomerId(0);
+          } else {
+            let lastnumber = data[0].customerId;
+            this.customerId = this.generateCustomerId(parseInt(lastnumber));
+          }
+        })
+        .catch(err => alert(err.message));
+    } else {
+      this.$router.push({
+        name: "homePage"
+      });
+    }
   },
   methods: {
     create() {
