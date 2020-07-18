@@ -139,7 +139,7 @@
           </div>
         </div>
         <footer class="card-footer">
-          <a @click="addProducts" class="card-footer-item">Add</a>
+          <a @click="addProducts" class="card-footer-item">{{operation}}</a>
           <!-- <a @click="updatePr" class="card-footer-item">Update</a> -->
           <a @click="resetproduct" class="card-footer-item">Reset</a>
         </footer>
@@ -150,7 +150,7 @@
             <vue-good-table :columns="productColumns" :rows="products">
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'last'">
-                  <button style="margin-left:10px" @click.stop="deleteRow(props.row.id)">
+                  <button style="margin-left:10px" @click.stop="deleteRow(props.row.productCode)">
                     <i class="fa fa-trash-o"></i>
                   </button>
                   <button @click.stop="edit(props.row)">
@@ -272,7 +272,7 @@
           </div>
         </div>
         <footer class="card-footer">
-          <a @click="addCustomerDetail" class="card-footer-item">Add</a>
+          <a @click="addCustomerDetail" class="card-footer-item">{{paymentOperation}}</a>
           <a @click="resetPaymentDetails" class="card-footer-item">Reset</a>
         </footer>
       </div>
@@ -480,7 +480,9 @@ export default {
       isInvoiceSaved: false,
       componentName: "",
       invoiceType: "",
-      rowData: {}
+      rowData: {},
+      operation: "Add",
+      paymentOperation: "Add"
     };
   },
   computed: {
@@ -597,19 +599,27 @@ export default {
         const found = this.products.some(
           el => el.productCode === this.productCode
         );
+        let data = {
+          productCode: this.productCode,
+          productName: this.productName,
+          price: this.price,
+          vat: this.vat,
+          quantity: this.quantity,
+          unit: this.unit,
+          total: this.total
+        };
         if (!found) {
-          let data = {
-            productCode: this.productCode,
-            productName: this.productName,
-            price: this.price,
-            vat: this.vat,
-            quantity: this.quantity,
-            unit: this.unit,
-            total: this.total
-          };
+          this.products.push(data);
+        } else {
+          this.products = this.products.filter(
+            el => el.productCode != this.productCode
+          );
           this.products.push(data);
         }
+
+        this.operation = "Add";
       }
+      this.resetproduct();
     },
 
     updatePr() {
@@ -617,17 +627,17 @@ export default {
         qtyAvailable: this.quantity
       };
 
-      updateProduct(data, this.productId)
-        .then(data => {
-          alert("product is successfully updated");
-        })
-        .catch(err => alert(err.message));
+      // updateProduct(data, this.productId)
+      //   .then(data => {
+      //     alert("product is successfully updated");
+      //   })
+      //   .catch(err => alert(err.message));
     },
     resetproduct() {
       this.productCode = "";
       this.productName = "";
-      this.price = 0;
-      this.vat = 0;
+      this.price = "";
+      this.vat = "";
       this.quantity = 0;
       this.unit = "";
       this.total = 0;
@@ -637,7 +647,7 @@ export default {
       this.delMode = "within india";
       this.mode = "";
       this.payment = 0;
-      this.paymentDate = state.date;
+      this.paymentDate = this.customFormatter(state.date);
     },
     onCustomerIdClick() {
       this.showCustomerModal = !this.showCustomerModal;
@@ -656,21 +666,27 @@ export default {
         const found = this.customerDetails.some(
           el => el.customerId === this.customerId
         );
+        let data = {
+          customerId: this.customerId,
+          customerName: this.customerName,
+          state: this.state,
+          address: this.address,
+          contact: this.contact,
+          gstNumber: this.gstNumber,
+          mode: this.mode,
+          payment: this.payment,
+          paymentDate: this.customFormatter(this.paymentDate)
+        };
         if (!found) {
-          let data = {
-            customerId: this.customerId,
-            customerName: this.customerName,
-            state: this.state,
-            address: this.address,
-            contact: this.contact,
-            gstNumber: this.gstNumber,
-            mode: this.mode,
-            payment: this.payment,
-            paymentDate: this.customFormatter(this.paymentDate)
-          };
+          this.customerDetails.push(data);
+        } else {
+          this.customerDetails = this.customerDetails.filter(
+            el => el.customerId != this.customerId
+          );
           this.customerDetails.push(data);
         }
       }
+      this.paymentOperation = "Add";
     },
     saveInvoice() {
       if (
@@ -709,10 +725,12 @@ export default {
       this.invoiceType = type;
       EventBus.$emit("showContent");
     },
-    deleteRow(id) {
-      this.products = this.products.filter(el => el.id != id);
+    deleteRow(code) {
+      alert(code);
+      this.products = this.products.filter(el => el.productCode != code);
     },
     edit(row) {
+      this.operation = "Update";
       this.productCode = row.productCode;
       this.productName = row.productName;
       this.price = row.price;
@@ -721,9 +739,10 @@ export default {
       this.unit = row.unit;
     },
     deletePaymentRow(id) {
-      this.customerDetails = this.customerDetails.filter(el => el.id != id);
+      this.customerDetails = this.customerDetails.filter(el => el._id != id);
     },
     editPaymentRow(row) {
+      this.paymentOperation = "update";
       this.customerId = row.customerId;
       this.customerName = row.customerName;
       this.state = row.state;
@@ -732,8 +751,9 @@ export default {
       this.gstNumber = row.gstNumber;
       this.delMode = row.delMode;
       this.mode = row.mode;
-      this.paymentDate = this.customFormatter(new Date(row.paymentDate));
+      this.paymentDate = state.date;
       this.payment = row.payment;
+      console.log(state.date);
     }
   }
 };
