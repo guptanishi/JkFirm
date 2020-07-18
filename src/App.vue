@@ -52,27 +52,59 @@
           </li>
         </ul>
       </div>
+      <div class="nav-item dropdown" v-if="showName" style="margin-right: 30px">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdownMenuLink"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >{{name}}</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" @click="logout">Logout</a>
+        </div>
+      </div>
     </nav>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import { EventBus } from "../event-bus";
 export default {
   name: "app",
 
   data() {
     return {
-      isAuthenticated: ""
+      isAuthenticated: "",
+      name: localStorage.username != undefined ? localStorage.username : "",
+      showName: false
     };
   },
   watch: {
-    "$route.name": function(value) {
-      if (value == "login" || value == "homePage") {
+    $route(to, from) {
+      if (to != from) {
+        this.name = localStorage.username;
+      }
+      if (to.name == "login" || to.name == "homePage") {
         this.isAuthenticated = false;
       } else {
         this.isAuthenticated = true;
       }
+
+      if (to.name != "login" && from.name != "login") {
+        this.showName = true;
+      }
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.username = "";
+      localStorage.password = "";
+      this.$router.push({
+        name: "login"
+      });
     }
   }
 };
