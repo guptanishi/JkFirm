@@ -565,7 +565,7 @@ export default {
       }
     } else {
       this.$router.push({
-        name: "homePage"
+        name: "login"
       });
     }
   },

@@ -107,7 +107,7 @@ export default {
         .catch(err => alert(err.message));
     } else {
       this.$router.push({
-        name: "homePage"
+        name: "login"
       });
     }
   },
