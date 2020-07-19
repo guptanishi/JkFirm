@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { createProduct, getLastProductCode } from "../repository";
+import { createProduct, getLastProductCode, getProducts } from "../repository";
 export default {
   name: "createProduct",
   data() {
@@ -89,7 +89,8 @@ export default {
       sellingPrice: 0.0,
       quantityAvailable: 0,
       gst: 0,
-      HSN: ""
+      HSN: "",
+      products: []
     };
   },
   mounted() {
@@ -116,23 +117,33 @@ export default {
   methods: {
     create() {
       if (this.productCode != "" && this.productName != "") {
-        let data = {
-          productCode: this.productCode,
-          productName: this.productName,
-          unit: this.unit,
-          description: this.description,
-          costPrice: this.costPrice,
-          sellingPrice: this.sellingPrice,
-          quantityAvailable: this.quantityAvailable,
-          gst: this.gst,
-          HSN: this.HSN
-        };
-
-        createProduct(data)
+        getProducts()
           .then(data => {
-            this.$router.push("/");
+            this.products = data;
+
+            const found = this.products.some(
+              el => el.productCode === this.productCode
+            );
+            if (!found) {
+              let data = {
+                productCode: this.productCode,
+                productName: this.productName,
+                unit: this.unit,
+                description: this.description,
+                costPrice: this.costPrice,
+                sellingPrice: this.sellingPrice,
+                quantityAvailable: this.quantityAvailable,
+                gst: this.gst,
+                HSN: this.HSN
+              };
+              createProduct(data)
+                .then(data => {
+                  this.$router.push("/loadProducts");
+                })
+                .catch(err => alert(err.message));
+            }
           })
-          .catch(err => alert(err.message));
+          .catch(err => alert(err));
       }
     },
 

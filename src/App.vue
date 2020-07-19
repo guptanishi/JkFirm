@@ -77,23 +77,24 @@ export default {
 
   data() {
     return {
-      isAuthenticated: "",
+      isAuthenticated: false,
       name: localStorage.username != undefined ? localStorage.username : "",
       showName: false
     };
   },
   watch: {
     $route(to, from) {
+      alert(to.name);
       if (to != from) {
         this.name = localStorage.username;
       }
-      if (to.name == "login" || to.name == "homePage") {
-        this.isAuthenticated = false;
-      } else {
+      if (to.name != "login" && to.name != "homePage") {
         this.isAuthenticated = true;
+      } else {
+        this.isAuthenticated = false;
       }
 
-      if (to.name != "login" && from.name != "login") {
+      if (to.name != "login") {
         this.showName = true;
       }
     }

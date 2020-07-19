@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { createCustomer, getLastCustomerId } from "../repository";
+import { createCustomer, getLastCustomerId, getCustomers } from "../repository";
 export default {
   name: "createCustomer",
   data() {
@@ -90,7 +90,8 @@ export default {
       contact: "",
       emailId: "",
       gstNumber: "",
-      errors: []
+      errors: [],
+      customers: []
     };
   },
   mounted() {
@@ -116,22 +117,32 @@ export default {
       if (this.gstNumber == "") {
         this.errors.push("Please enter GST No/Adhar NO");
       } else {
-        let data = {
-          customerId: this.customerId,
-          customerName: this.customerName,
-          address: this.address,
-          city: this.city,
-          state: this.state,
-          pincode: this.pincode,
-          contact: this.contact,
-          emailId: this.emailId,
-          gstNumber: this.gstNumber
-        };
-        createCustomer(data)
-          .then(data => {
-            this.$router.push("/getCustomers");
-          })
-          .catch(err => alert(err.message));
+        if (this.customerId != "" && this.customerName != "") {
+          getCustomers().then(data => {
+            this.customers = data;
+            const found = this.customers.some(
+              el => el.customerId === this.customerId
+            );
+            if (!found) {
+              let data = {
+                customerId: this.customerId,
+                customerName: this.customerName,
+                address: this.address,
+                city: this.city,
+                state: this.state,
+                pincode: this.pincode,
+                contact: this.contact,
+                emailId: this.emailId,
+                gstNumber: this.gstNumber
+              };
+              createCustomer(data)
+                .then(data => {
+                  this.$router.push("/getCustomers");
+                })
+                .catch(err => alert(err.message));
+            }
+          });
+        }
       }
     },
 

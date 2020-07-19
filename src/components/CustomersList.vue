@@ -23,7 +23,7 @@
             <i class="fa fa-pencil"></i>
           </button>
         </span>
-        <span v-else>{{props.formattedRow[props.column.field]}}</span>
+        <span v-else style="width: 50px">{{props.formattedRow[props.column.field]}}</span>
       </template>
     </vue-good-table>
   </div>

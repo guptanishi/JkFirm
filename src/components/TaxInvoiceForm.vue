@@ -32,7 +32,7 @@
             <div class="field">
               <label class="label">Salesman Name</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="userName" v-model="userName" />
+                <input class="input" type="text" placeholder="userName" v-model="userName" disabled />
               </div>
             </div>
           </div>
@@ -123,7 +123,13 @@
             <div class="field">
               <label class="label">TotalAmount</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="number" placeholder="Total" v-model="calculateTotal" />
+                <input
+                  class="input"
+                  type="number"
+                  placeholder="Total"
+                  v-model="calculateTotal"
+                  disabled
+                />
               </div>
             </div>
             <div class="field">
@@ -150,7 +156,7 @@
             <vue-good-table :columns="productColumns" :rows="products">
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'last'">
-                  <button style="margin-left:10px" @click.stop="deleteRow(props.row.productCode)">
+                  <button style="margin-left:10px" @click.stop="deleteRow(props.row)">
                     <i class="fa fa-trash-o"></i>
                   </button>
                   <button @click.stop="edit(props.row)">
@@ -191,19 +197,19 @@
             <div class="field">
               <label class="label">Customer Name</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="customerName" />
+                <input class="input" type="text" v-model="customerName" disabled />
               </div>
             </div>
             <div class="field">
               <label class="label">State</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="state" />
+                <input class="input" type="text" v-model="state" disabled />
               </div>
             </div>
             <div class="field">
               <label class="label">Address</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="address" />
+                <input class="input" type="text" v-model="address" disabled />
               </div>
             </div>
             <div class="field">
@@ -361,7 +367,8 @@ import {
   createCustomer,
   updateProduct,
   createInvoice,
-  getLastInvoiceNumber
+  getLastInvoiceNumber,
+  getInvoices
 } from "../repository";
 import Datepicker from "vuejs-datepicker";
 import moment from "moment";
@@ -482,7 +489,9 @@ export default {
       invoiceType: "",
       rowData: {},
       operation: "Add",
-      paymentOperation: "Add"
+      paymentOperation: "Add",
+      stockAvailable: "",
+      invoiceList: []
     };
   },
   computed: {
@@ -593,6 +602,9 @@ export default {
       this.amount = data.price;
       this.vat = data.vat;
       this.productId = data.id;
+      this.stockAvailable = data.qtyAvailable;
+
+      //alert(this.productId);
     },
     addProducts() {
       if (this.productCode != "" && this.productCode != undefined) {
@@ -606,7 +618,9 @@ export default {
           vat: this.vat,
           quantity: this.quantity,
           unit: this.unit,
-          total: this.total
+          total: this.total,
+          stockAvailable: this.stockAvailable,
+          id: this.productId
         };
         if (!found) {
           this.products.push(data);
@@ -617,21 +631,22 @@ export default {
           this.products.push(data);
         }
 
+        // this.updatePr(data);
+
         this.operation = "Add";
       }
       this.resetproduct();
     },
 
-    updatePr() {
+    updatePr(rowData) {
       let data = {
-        qtyAvailable: this.quantity
+        qtyAvailable: rowData.stockAvailable - rowData.quantity
       };
-
-      // updateProduct(data, this.productId)
-      //   .then(data => {
-      //     alert("product is successfully updated");
-      //   })
-      //   .catch(err => alert(err.message));
+      updateProduct(data, rowData.id)
+        .then(data => {
+          alert("stock updated");
+        })
+        .catch(err => alert(err.message));
     },
     resetproduct() {
       this.productCode = "";
@@ -694,27 +709,40 @@ export default {
         this.products.length != 0 &&
         this.customerId != ""
       ) {
-        let invoiceData = {
-          invoiceNumber: this.invoiceNumber,
-          invoiceDate: this.invoiceDate,
-          delMode: this.del,
-          username: this.username,
-          products: this.products,
-          customer: this.customerDetails[0],
-          paymentMode: this.mode,
-          totalAmount: this.grandTotal,
-          payment: this.payment,
-          paymentDate: this.customFormatter(this.paymentDate)
-        };
-        createInvoice(invoiceData)
+        getInvoices()
           .then(data => {
-            alert("Invoice is successfully created");
-            this.invoiceData = invoiceData;
-            this.$nextTick(() => {
-              this.isInvoiceSaved = true;
-            });
+            this.invoiceList = data;
+            const found = this.invoiceList.some(
+              el => el.invoiceNumber === this.invoiceNumber
+            );
+            if (!found) {
+              let invoiceData = {
+                invoiceNumber: this.invoiceNumber,
+                invoiceDate: this.invoiceDate,
+                delMode: this.del,
+                username: this.username,
+                products: this.products,
+                customer: this.customerDetails[0],
+                paymentMode: this.mode,
+                totalAmount: this.grandTotal,
+                payment: this.payment,
+                paymentDate: this.customFormatter(this.paymentDate)
+              };
+              createInvoice(invoiceData)
+                .then(data => {
+                  alert("Invoice is successfully created");
+                  this.invoiceData = invoiceData;
+                  this.$nextTick(() => {
+                    this.isInvoiceSaved = true;
+                    this.products.forEach(element => {
+                      this.updatePr(element);
+                    });
+                  });
+                })
+                .catch(err => alert(err.message));
+            }
           })
-          .catch(err => alert(err.message));
+          .catch(err => alert(err));
       }
     },
     getList() {
@@ -725,9 +753,10 @@ export default {
       this.invoiceType = type;
       EventBus.$emit("showContent");
     },
-    deleteRow(code) {
-      alert(code);
-      this.products = this.products.filter(el => el.productCode != code);
+    deleteRow(row) {
+      this.products = this.products.filter(
+        el => el.productCode != row.productCode
+      );
     },
     edit(row) {
       this.operation = "Update";
@@ -753,7 +782,6 @@ export default {
       this.mode = row.mode;
       this.paymentDate = state.date;
       this.payment = row.payment;
-      console.log(state.date);
     }
   }
 };
