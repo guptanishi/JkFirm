@@ -309,19 +309,19 @@
             <div class="field">
               <label class="label">Grand Total</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="calculateGrandTotal" />
+                <input class="input" type="text" v-model="calculateGrandTotal" disabled />
               </div>
             </div>
             <div class="field">
               <label class="label">Total Payment</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="number" v-model="payment" />
+                <input class="input" type="number" v-model="payment" disabled />
               </div>
             </div>
             <div class="field">
               <label class="label">Payment Due</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="number" v-model="calculatePaymentDue" />
+                <input class="input" type="number" v-model="calculatePaymentDue" disabled />
               </div>
             </div>
           </div>

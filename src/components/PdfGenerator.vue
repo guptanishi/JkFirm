@@ -54,7 +54,6 @@
                 <th>S.No</th>
                 <th>Product/HSN</th>
                 <th>Price</th>
-                <th>unit</th>
                 <th>quantity</th>
                 <th>Total</th>
                 <th v-if="invoiceData.delMode == 'outside state'" colspan="2">SGST</th>
@@ -70,7 +69,6 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
                 <td v-if="invoiceData.delMode == 'outside state'">Per%</td>
                 <td v-if="invoiceData.delMode == 'outside state'">Amt</td>
                 <td v-else>&nbsp;</td>
@@ -81,9 +79,8 @@
               <tr v-for="(product,index) in invoiceData.products" :key="product.productCode">
                 <td>{{ index + 1}}.</td>
                 <td>{{ product.productName }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.unit }}</td>
-                <td>{{ product.quantity }}</td>
+                <td>Rs. {{ product.price }} / {{ product.unit != "" ? product.unit : "" }}</td>
+                <td>{{ product.quantity }} {{product.unit}}</td>
                 <td>{{ product.price * product.quantity }}</td>
                 <td v-if="invoiceData.delMode == 'outside state'">{{ product.vat / 2 }}</td>
                 <td

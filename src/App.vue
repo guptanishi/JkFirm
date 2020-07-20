@@ -84,7 +84,6 @@ export default {
   },
   watch: {
     $route(to, from) {
-      alert(to.name);
       if (to != from) {
         this.name = localStorage.username;
       }
