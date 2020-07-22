@@ -12,6 +12,13 @@
       :columns="columns"
       :rows="invoices"
       :search-options="{ enabled: true, placeholder:'search invoices' }"
+      :pagination-options="{ enabled: true,
+        perPage: 15 ,
+        nextLabel: 'next',
+        prevLabel: 'prev',rowsPerPageLabel: 'invoices per page',
+        ofLabel: 'of',
+        pageLabel: 'page', // for 'pages' mode
+        allLabel: 'All' }"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'products'">

@@ -13,6 +13,13 @@
       :rows="products"
       @on-row-click="onRowClick"
       :search-options="{ enabled: true, placeholder: 'Search products', }"
+      :pagination-options="{ enabled: true,
+        perPage: 5,
+        nextLabel: 'next',
+        prevLabel: 'prev',rowsPerPageLabel: 'Records per page',
+        ofLabel: 'of',
+        pageLabel: 'page', // for 'pages' mode
+        allLabel: 'All' }"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'last'">
