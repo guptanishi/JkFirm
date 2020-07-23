@@ -54,6 +54,8 @@ module.exports = app => {
 
   router.get("/cashMemo/lastRecord", cashMemos.findLastMemoInvoiceNumber);
 
+  router.get("/cashMemos/", cashMemos.findAll);
+
   app.use("/api", router);
 
 

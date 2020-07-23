@@ -148,3 +148,8 @@ export function getLastCashMemoInvoiceNumber() {
 		.catch(err => Promise.reject(err.message));
 
 }
+
+export function getCashMemos() {
+	return axios.get(`${BASE_URL}/api/cashMemos`)
+		.then(response => response.data);
+}

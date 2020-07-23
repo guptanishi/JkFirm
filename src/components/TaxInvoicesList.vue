@@ -8,6 +8,9 @@
     <div style="margin-left: 20px">
       <h4>Search invoices</h4>
     </div>
+    <div style="float:right; margin-top:-50px; margin-right: 30px">
+      <button class="btn btn-primary" @click="showCashMemo">{{listName}}</button>
+    </div>
     <vue-good-table
       :columns="columns"
       :rows="invoices"
@@ -46,13 +49,19 @@
 
 <script>
 import { VueGoodTable } from "vue-good-table";
-import { getInvoices, getOneProduct, deleteInvoice } from "../repository";
+import {
+  getInvoices,
+  getOneProduct,
+  deleteInvoice,
+  getCashMemos
+} from "../repository";
 export default {
   name: "taxInvoiceList",
   components: { VueGoodTable },
   data() {
     return {
       invoices: [],
+      listName: "",
       columns: [
         {
           label: "Invoice Number",
@@ -98,6 +107,7 @@ export default {
       getInvoices()
         .then(data => {
           this.invoices = data;
+          this.listName = "show Cash Memos";
         })
         .catch(err => alert(err));
     } else {
@@ -125,6 +135,21 @@ export default {
         name: "taxInvoice",
         params: { data: params.row }
       });
+    },
+    showCashMemo() {
+      if (this.listName == "show Cash Memos") {
+        getCashMemos().then(data => {
+          this.invoices = data;
+          this.listName = "show invoices";
+        });
+      } else {
+        getInvoices()
+          .then(data => {
+            this.invoices = data;
+            this.listName = "show Cash Memos";
+          })
+          .catch(err => alert(err));
+      }
     }
   }
 };
