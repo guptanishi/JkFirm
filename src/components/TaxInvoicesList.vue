@@ -53,7 +53,8 @@ import {
   getInvoices,
   getOneProduct,
   deleteInvoice,
-  getCashMemos
+  getCashMemos,
+  deleteCashMemo
 } from "../repository";
 export default {
   name: "taxInvoiceList",
@@ -118,16 +119,30 @@ export default {
   },
   methods: {
     deleteRow(event, id) {
-      if (confirm("Are you sure you want to delete this invoice?")) {
-        deleteInvoice(id)
-          .then(() => {
-            this.$nextTick(() => {
-              getInvoices()
-                .then(data => (this.invoices = data))
-                .catch(err => alert(err));
-            });
-          })
-          .catch(err => alert(err));
+      if (this.listName == "show Cash Memos") {
+        if (confirm("Are you sure you want to delete this invoice?")) {
+          deleteInvoice(id)
+            .then(() => {
+              this.$nextTick(() => {
+                getInvoices()
+                  .then(data => (this.invoices = data))
+                  .catch(err => alert(err));
+              });
+            })
+            .catch(err => alert(err));
+        }
+      } else {
+        if (confirm("Are you sure you want to delete this Memo?")) {
+          deleteCashMemo(id)
+            .then(() => {
+              this.$nextTick(() => {
+                getCashMemos()
+                  .then(data => (this.invoices = data))
+                  .catch(err => alert(err));
+              });
+            })
+            .catch(err => alert(err));
+        }
       }
     },
     onRowClick(params) {

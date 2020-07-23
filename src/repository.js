@@ -1,5 +1,11 @@
 import axios from 'axios';
-const BASE_URL = 'https://jkfirm.herokuapp.com';
+
+let BASE_URL = ""
+if (process.env.NODE_ENV == "production") {
+	BASE_URL = 'https://jkfirm.herokuapp.com';
+} else {
+	BASE_URL = 'http://localhost:3001';
+}
 
 export function getProducts() {
 	return axios.get(`${BASE_URL}/api/products`)
@@ -152,4 +158,10 @@ export function getLastCashMemoInvoiceNumber() {
 export function getCashMemos() {
 	return axios.get(`${BASE_URL}/api/cashMemos`)
 		.then(response => response.data);
+}
+
+export function deleteCashMemo(id) {
+	return axios.delete(`${BASE_URL}/api/cashMemos/${id}`)
+		.then(response => response.data)
+		.catch(err => Promise.reject(err.message));
 }

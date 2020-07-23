@@ -56,6 +56,8 @@ module.exports = app => {
 
   router.get("/cashMemos/", cashMemos.findAll);
 
+  router.delete("/cashMemos/:id", cashMemos.delete);
+
   app.use("/api", router);
 
 
