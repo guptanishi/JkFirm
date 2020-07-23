@@ -131,3 +131,20 @@ export function deleteInvoice(invoiceNumber) {
 		.then(response => response.data)
 		.catch(err => Promise.reject(err.message));
 }
+
+export function createCashInvoice(data) {
+	return axios.post(`${BASE_URL}/api/cashMemo/create`, data)
+		.then(response => {
+			return response.data
+		})
+		.catch(err => Promise.reject(err.message));
+}
+
+export function getLastCashMemoInvoiceNumber() {
+	return axios.get(`${BASE_URL}/api/cashMemo/lastRecord`)
+		.then(response => {
+			return response.data
+		})
+		.catch(err => Promise.reject(err.message));
+
+}

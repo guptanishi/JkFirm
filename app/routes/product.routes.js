@@ -5,6 +5,8 @@ module.exports = app => {
 
   const invoices = require("../controllers/invoice.controller.js");
 
+  const cashMemos = require("../controllers/cashMemo.controller.js");
+
   var router = require("express").Router();
 
   // Create a new Product
@@ -47,6 +49,10 @@ module.exports = app => {
   router.get("/invoices/lastRecord", invoices.findLastIdRowInvoiceNumber);
 
   router.delete("/invoices/:id", invoices.delete);
+
+  router.post("/cashMemo/create", cashMemos.create);
+
+  router.get("/cashMemo/lastRecord", cashMemos.findLastMemoInvoiceNumber);
 
   app.use("/api", router);
 

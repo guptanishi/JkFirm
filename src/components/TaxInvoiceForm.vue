@@ -259,6 +259,7 @@
                     <option disabled value>Select Value</option>
                     <option>Cheque</option>
                     <option>Cash</option>
+                    <option>Cash Memo</option>
                   </select>
                 </div>
               </div>
@@ -368,7 +369,9 @@ import {
   updateProduct,
   createInvoice,
   getLastInvoiceNumber,
-  getInvoices
+  getInvoices,
+  createCashInvoice,
+  getLastCashMemoInvoiceNumber
 } from "../repository";
 import Datepicker from "vuejs-datepicker";
 import moment from "moment";
@@ -587,6 +590,12 @@ export default {
       let b = String(counter).padStart(2, "0");
       return prefix + "-" + fullYear + b;
     },
+
+    generateCashMemoInvoiceNumber(counter) {
+      const prefix = "PB";
+      let b = String(counter).padStart(2, "0");
+      return prefix + "-" + b;
+    },
     customFormatter(date) {
       return moment(date).format("DD/MM/YYYY");
     },
@@ -709,15 +718,58 @@ export default {
         this.products.length != 0 &&
         this.customerId != ""
       ) {
-        getInvoices()
-          .then(data => {
-            this.invoiceList = data;
-            const found = this.invoiceList.some(
-              el => el.invoiceNumber === this.invoiceNumber
-            );
-            if (!found) {
+        if (this.mode != "Cash Memo") {
+          getInvoices()
+            .then(data => {
+              this.invoiceList = data;
+              const found = this.invoiceList.some(
+                el => el.invoiceNumber === this.invoiceNumber
+              );
+              if (!found) {
+                let invoiceData = {
+                  invoiceNumber: this.invoiceNumber,
+                  invoiceDate: this.invoiceDate,
+                  delMode: this.del,
+                  username: this.username,
+                  products: this.products,
+                  customer: this.customerDetails[0],
+                  paymentMode: this.mode,
+                  totalAmount: this.grandTotal,
+                  payment: this.payment,
+                  paymentDate: this.customFormatter(this.paymentDate)
+                };
+                createInvoice(invoiceData)
+                  .then(data => {
+                    alert("Invoice is successfully created");
+                    this.invoiceData = invoiceData;
+                    this.$nextTick(() => {
+                      this.isInvoiceSaved = true;
+                      this.products.forEach(element => {
+                        this.updatePr(element);
+                      });
+                    });
+                  })
+                  .catch(err => alert(err.message));
+              }
+            })
+            .catch(err => alert(err));
+        } else {
+          let memoNumber = "";
+          getLastCashMemoInvoiceNumber()
+            .then(data => {
+              if (data.length == 0) {
+                memoNumber = this.generateCashMemoInvoiceNumber(1);
+              } else {
+                let lastnumber = data[0].invoiceNumber;
+                let counter = Number(
+                  lastnumber.substring(3, lastnumber.length)
+                );
+                counter++;
+                memoNumber = this.generateCashMemoInvoiceNumber(counter);
+              }
+
               let invoiceData = {
-                invoiceNumber: this.invoiceNumber,
+                invoiceNumber: memoNumber,
                 invoiceDate: this.invoiceDate,
                 delMode: this.del,
                 username: this.username,
@@ -728,9 +780,10 @@ export default {
                 payment: this.payment,
                 paymentDate: this.customFormatter(this.paymentDate)
               };
-              createInvoice(invoiceData)
+
+              createCashInvoice(invoiceData)
                 .then(data => {
-                  alert("Invoice is successfully created");
+                  alert("casMemo is successfully created");
                   this.invoiceData = invoiceData;
                   this.$nextTick(() => {
                     this.isInvoiceSaved = true;
@@ -740,9 +793,9 @@ export default {
                   });
                 })
                 .catch(err => alert(err.message));
-            }
-          })
-          .catch(err => alert(err));
+            })
+            .catch(err => alert(err));
+        }
       }
     },
     getList() {
