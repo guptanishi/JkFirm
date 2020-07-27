@@ -11,8 +11,8 @@
     <vue-good-table
       :columns="columns"
       :rows="products"
-      @on-row-click="onRowClick"
       :search-options="{ enabled: true, placeholder: 'Search products', }"
+      @on-row-click="selectProductFromModal"
       :pagination-options="{ enabled: true,
         perPage: 5,
         nextLabel: 'next',
@@ -99,14 +99,7 @@ export default {
   },
   methods: {
     onRowClick(params) {
-      if (!this.onModal)
-        this.$router.push({
-          name: "updateProduct",
-          params: { data: params.row }
-        });
-      else {
-        this.$emit("productRowClicked", params.row);
-      }
+      this.$emit("productRowClicked", params.row);
     },
     deleteRow(event, id) {
       if (confirm("Are you sure you want to delete this product?")) {
@@ -119,6 +112,14 @@ export default {
             });
           })
           .catch(err => alert(err));
+      }
+    },
+    selectProductFromModal() {
+      if (this.onModal) {
+        this.$router.push({
+          name: "updateProduct",
+          params: { data: params.row }
+        });
       }
     }
   }

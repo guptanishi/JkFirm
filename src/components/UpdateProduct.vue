@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="field">
-        <label class="label">Quantity</label>
+        <label class="label">Stock Available</label>
         <div class="control has-icons-left has-icons-right">
           <input class="input" type="text" placeholder="Unit" v-model="row.qtyAvailable" />
         </div>
@@ -107,7 +107,7 @@ export default {
       };
       updateProduct(data, this.row.id)
         .then(data => {
-          this.$router.push("/");
+          this.$router.push("/loadProducts");
         })
         .catch(err => alert(err.message));
     },
