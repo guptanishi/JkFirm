@@ -45,7 +45,7 @@
       <div class="field">
         <label class="label">Contact Number</label>
         <div class="control has-icons-left has-icons-right">
-          <input class="input" type="number" v-model="contact" maxlength="10" />
+          <input class="input" type="text" v-model="contact" pattern="\d*" maxlength="10" />
         </div>
       </div>
       <div class="field">

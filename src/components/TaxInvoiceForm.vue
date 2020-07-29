@@ -631,18 +631,19 @@ export default {
           stockAvailable: this.stockAvailable,
           id: this.productId
         };
-        if (!found) {
-          this.products.push(data);
+        if (parseInt(this.quantity) > parseInt(this.stockAvailable)) {
+          alert("stock is not available!");
         } else {
-          this.products = this.products.filter(
-            el => el.productCode != this.productCode
-          );
-          this.products.push(data);
+          if (!found) {
+            this.products.push(data);
+          } else {
+            this.products = this.products.filter(
+              el => el.productCode != this.productCode
+            );
+            this.products.push(data);
+            this.operation = "Add";
+          }
         }
-
-        // this.updatePr(data);
-
-        this.operation = "Add";
       }
       this.resetproduct();
     },

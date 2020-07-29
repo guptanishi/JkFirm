@@ -60,7 +60,7 @@
       <div class="field">
         <label class="label">HSN Number</label>
         <div class="control has-icons-left has-icons-right">
-          <input class="input" type="text" v-model="HSN" />
+          <input class="input" type="text" v-model="HSN" pattern="\d*" maxlength="6" />
         </div>
       </div>
 
