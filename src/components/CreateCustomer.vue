@@ -38,7 +38,7 @@
       <div class="field">
         <label class="label">Pincode</label>
         <div class="control has-icons-left has-icons-right">
-          <input class="input" type="text" v-model="pincode" maxlength="6" />
+          <input class="input" type="text" v-model="pincode" maxlength="6" pattern="\d*" />
         </div>
       </div>
 
