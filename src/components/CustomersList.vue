@@ -11,7 +11,7 @@
     <vue-good-table
       :columns="columns"
       :rows="customers"
-      @on-row-click="selectCustomerFromModal"
+      @on-row-click="onRowClick"
       :search-options="{ enabled: true, placeholder: 'Search customers' }"
       :pagination-options="{ enabled: true,
         perPage: 5,
@@ -92,7 +92,6 @@ export default {
     };
   },
   mounted() {
-    alert(this.onModal);
     if (localStorage.username == "admin") {
       getCustomers()
         .then(data => (this.customers = data))
@@ -105,14 +104,13 @@ export default {
   },
   methods: {
     onRowClick(params) {
-      this.$emit("customerRowClicked", params.row);
-    },
-    selectCustomerFromModal() {
-      if (this.onModal) {
+      if (this.$router.currentRoute.name == "loadCustomers")
         this.$router.push({
           name: "updateCustomer",
           params: { data: params.row }
         });
+      else {
+        this.$emit("customerRowClicked", params.row);
       }
     },
     deleteRow(event, id) {

@@ -12,7 +12,7 @@
       :columns="columns"
       :rows="products"
       :search-options="{ enabled: true, placeholder: 'Search products', }"
-      @on-row-click="selectProductFromModal"
+      @on-row-click="onRowClick"
       :pagination-options="{ enabled: true,
         perPage: 5,
         nextLabel: 'next',
@@ -99,7 +99,14 @@ export default {
   },
   methods: {
     onRowClick(params) {
-      this.$emit("productRowClicked", params.row);
+      if (this.$router.currentRoute.name == "loadproductList")
+        this.$router.push({
+          name: "updateProduct",
+          params: { data: params.row }
+        });
+      else {
+        this.$emit("productRowClicked", params.row);
+      }
     },
     deleteRow(event, id) {
       if (confirm("Are you sure you want to delete this product?")) {
@@ -112,14 +119,6 @@ export default {
             });
           })
           .catch(err => alert(err));
-      }
-    },
-    selectProductFromModal() {
-      if (this.onModal) {
-        this.$router.push({
-          name: "updateProduct",
-          params: { data: params.row }
-        });
       }
     }
   }
