@@ -41,6 +41,7 @@
         <div class="control has-icons-left has-icons-right">
           <input class="input" type="Number" placeholder="Selling Price" v-model="sellingPrice" />
         </div>
+        <label style="color: #F00">{{ errors.sellingPrice }}</label>
       </div>
 
       <div class="field">
@@ -48,6 +49,7 @@
         <div class="control has-icons-left has-icons-right">
           <input class="input" type="Number" placeholder="stock" v-model="quantityAvailable" />
         </div>
+        <label style="color: #F00">{{ errors.quantityAvailable }}</label>
       </div>
 
       <div class="field">
@@ -60,7 +62,7 @@
       <div class="field">
         <label class="label">HSN Number</label>
         <div class="control has-icons-left has-icons-right">
-          <input class="input" type="text" v-model="HSN" pattern="\d*" maxlength="6" />
+          <input class="input" type="text" v-model="HSN" pattern="\d*" maxlength="4" />
         </div>
       </div>
 
@@ -90,7 +92,11 @@ export default {
       quantityAvailable: 0,
       gst: 0,
       HSN: "",
-      products: []
+      products: [],
+      errors: {
+        sellingPrice: "",
+        quantity: ""
+      }
     };
   },
   mounted() {
@@ -117,33 +123,43 @@ export default {
   methods: {
     create() {
       if (this.productCode != "" && this.productName != "") {
-        getProducts()
-          .then(data => {
-            this.products = data;
+        if (this.sellingPrice == "") {
+          this.errors.sellingPrice = "Please enter selling price";
+        }
+        if (this.quantityAvailable == "") {
+          this.errors.quantityAvailable = "Please enter quantity available";
+        } else {
+          getProducts()
+            .then(data => {
+              this.products = data;
 
-            const found = this.products.some(
-              el => el.productCode === this.productCode
-            );
-            if (!found) {
-              let data = {
-                productCode: this.productCode,
-                productName: this.productName,
-                unit: this.unit,
-                description: this.description,
-                costPrice: this.costPrice,
-                sellingPrice: this.sellingPrice,
-                quantityAvailable: this.quantityAvailable,
-                gst: this.gst,
-                HSN: this.HSN
-              };
-              createProduct(data)
-                .then(data => {
-                  this.$router.push("/loadProducts");
-                })
-                .catch(err => alert(err.message));
-            }
-          })
-          .catch(err => alert(err));
+              const found = this.products.some(
+                el => el.productCode === this.productCode
+              );
+
+              if (!found) {
+                let data = {
+                  productCode: this.productCode,
+                  productName: this.productName,
+                  unit: this.unit,
+                  description: this.description,
+                  costPrice: this.costPrice,
+                  sellingPrice: this.sellingPrice,
+                  quantityAvailable: this.quantityAvailable,
+                  gst: this.gst,
+                  HSN: this.HSN
+                };
+
+                this.errors = {};
+                createProduct(data)
+                  .then(data => {
+                    this.$router.push("/loadProducts");
+                  })
+                  .catch(err => alert(err.message));
+              }
+            })
+            .catch(err => alert(err));
+        }
       }
     },
 
