@@ -29,7 +29,12 @@
     "vue-router": "^3.2.0",
     "vuejs-datepicker": "^1.6.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "3.2.0",
+    "@vue/cli-plugin-eslint": "3.2.0",
+    "@vue/cli-service": "3.2.0",
+    "vue-template-compiler": "^2.5.17"
+  },
   "eslintConfig": {
     "root": true,
     "env": {
