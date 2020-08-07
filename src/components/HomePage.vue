@@ -3,48 +3,60 @@
     <div class="row">
       <div class="col-6 text-center">
         <router-link :to="{ name: 'loadproductList' }" class="nav-link">
-          <img src="../../public/product.png" width="150px" height="150px" />
-          <br />
-          <span class="textStyle">Product List</span>
+          <div class="shadow p-3 mb-5 bg-white rounded">
+            <img src="../../public/product.png" width="80px" height="80px" />
+            <br />
+            <span class="textStyle">Product List</span>
+          </div>
         </router-link>
       </div>
       <div class="col-6 text-center">
         <router-link to="/createProduct" class="nav-link">
-          <img src="../../public/buy.png" width="150px" height="150px" />
-          <br />
-          <span class="textStyle">Create Products</span>
+          <div class="shadow p-3 mb-5 bg-white rounded">
+            <img src="../../public/buy.png" width="80px" height="80px" />
+            <br />
+            <span class="textStyle">Create Products</span>
+          </div>
         </router-link>
       </div>
     </div>
     <div class="row top-margin">
       <div class="col-6 text-center">
         <router-link to="/getCustomers" class="nav-link">
-          <img src="../../public/customer.png" width="150px" height="150px" />
-          <br />
-          <span class="textStyle">Customers List</span>
+          <div class="shadow p-3 mb-5 bg-white rounded">
+            <img src="../../public/customer.png" width="80px" height="80px" />
+            <br />
+            <span class="textStyle">Customers List</span>
+          </div>
         </router-link>
       </div>
       <div class="col-6 text-center">
         <router-link to="/createCustomer" class="nav-link">
-          <img src="../../public/add.png" width="150px" height="150px" />
-          <br />
-          <span class="textStyle">Create Customers</span>
+          <div class="shadow p-3 mb-5 bg-white rounded">
+            <img src="../../public/add.png" width="80px" height="80px" />
+            <br />
+            <span class="textStyle">Create Customers</span>
+          </div>
         </router-link>
       </div>
     </div>
     <div class="row top-margin">
       <div class="col-6 text-center">
         <router-link to="/taxInvoice" class="nav-link">
-          <img src="../../public/form.png" width="150px" height="150px" />
-          <br />
-          <span class="textStyle">Tax Invoice</span>
+          <div class="shadow p-3 mb-5 bg-white rounded">
+            <img src="../../public/form.png" width="80px" height="80px" />
+            <br />
+            <span class="textStyle">Tax Invoice</span>
+          </div>
         </router-link>
       </div>
       <div class="col-6 text-center">
         <router-link to="/getInvoices" class="nav-link">
-          <img src="../../public/bill.png" width="150px" height="150px" />
-          <br />
-          <span class="textStyle">Invoices List</span>
+          <div class="shadow p-3 mb-5 bg-white rounded">
+            <img src="../../public/bill.png" width="80px" height="80px" />
+            <br />
+            <span class="textStyle">Invoices List</span>
+          </div>
         </router-link>
       </div>
     </div>
@@ -59,7 +71,7 @@ export default {
 <style>
 .textStyle {
   margin-top: 20px;
-  font-size: 32px;
+  font-size: 22px;
   font-weight: bold;
 }
 .top-margin {
