@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-light navbar-expand-lg bg-light justify-content-between">
+    <nav class="navbar navbar-dark navbar-expand-lg bg-dark justify-content-between">
       <a class="navbar-brand">
         <router-link :to="{ name: 'homePage' }" class="nav-link">
           <h1>JKFIRM</h1>
@@ -8,46 +8,46 @@
       </a>
       <div id="navbarNavDropdown" v-if="isAuthenticated">
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <li class="nav-item text-center">
             <router-link :to="{ name: 'loadproductList' }" class="nav-link">
-              <img src="../public/product.png" width="60px" height="60px" />
+              <img src="../public/order.png" width="40px" height="40px" />
               <br />
-              <span>Product List</span>
+              <span style="color:#FFF">Product List</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item text-center">
             <router-link to="/createProduct" class="nav-link">
-              <img src="../public/buy.png" width="60px" height="60px" />
+              <img src="../public/parcel.png" width="40px" height="40px" />
               <br />
-              <span>Create Products</span>
+              <span style="color:#FFF">Create Products</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item text-center">
             <router-link to="/getCustomers" class="nav-link">
-              <img src="../public/customer.png" width="60px" height="60px" />
+              <img src="../public/customer.png" width="40px" height="40px" />
               <br />
-              <span>Customers List</span>
+              <span style="color:#FFF">Customers List</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item text-center">
             <router-link to="/createCustomer" class="nav-link">
-              <img src="../public/add.png" width="60px" height="60px" />
+              <img src="../public/add.png" width="40px" height="40px" />
               <br />
-              <span>Create Customer</span>
+              <span style="color:#FFF">Create Customer</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item text-center">
             <router-link to="/taxInvoice" class="nav-link">
-              <img src="../public/form.png" width="60px" height="60px" />
+              <img src="../public/form.png" width="40px" height="40px" />
               <br />
-              <span>Tax Invoice</span>
+              <span style="color:#FFF">Tax Invoice</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item text-center">
             <router-link to="/getInvoices" class="nav-link">
-              <img src="../public/bill.png" width="60px" height="60px" />
+              <img src="../public/bill.png" width="40px" height="40px" />
               <br />
-              <span>Invoice List</span>
+              <span style="color:#FFF">Invoice List</span>
             </router-link>
           </li>
         </ul>

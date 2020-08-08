@@ -4,7 +4,7 @@
       <div class="col-6 text-center">
         <router-link :to="{ name: 'loadproductList' }" class="nav-link">
           <div class="shadow p-3 mb-5 bg-white rounded">
-            <img src="../../public/product.png" width="80px" height="80px" />
+            <img src="../../public/order.png" width="80px" height="80px" />
             <br />
             <span class="textStyle">Product List</span>
           </div>
@@ -13,7 +13,7 @@
       <div class="col-6 text-center">
         <router-link to="/createProduct" class="nav-link">
           <div class="shadow p-3 mb-5 bg-white rounded">
-            <img src="../../public/buy.png" width="80px" height="80px" />
+            <img src="../../public/parcel.png" width="80px" height="80px" />
             <br />
             <span class="textStyle">Create Products</span>
           </div>
