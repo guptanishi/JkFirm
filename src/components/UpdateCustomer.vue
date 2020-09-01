@@ -50,14 +50,14 @@
       <div class="field">
         <label class="label">Pincode</label>
         <div class="control has-icons-left has-icons-right">
-          <input class="input" type="text" v-model="row.pincode" />
+          <input class="input" type="text" v-model="row.pincode" maxlength="6" pattern="\d*" />
         </div>
       </div>
 
       <div class="field">
         <label class="label">Contact Number</label>
         <div class="control has-icons-left has-icons-right">
-          <input class="input" type="text" v-model="row.contact" />
+          <input class="input" type="text" v-model="row.contact" pattern="\d*" maxlength="10" />
         </div>
       </div>
       <div class="field">
@@ -70,8 +70,9 @@
       <div class="field">
         <label class="label">GST no.</label>
         <div class="control has-icons-left has-icons-right">
-          <input class="input" type="text" v-model="row.gstNumber" />
+          <input class="input" type="text" v-model="row.gstNumber" required />
         </div>
+        <label v-if="errors.length" style="color: #F00">{{errors[0]}}</label>
       </div>
 
       <div class="field is-grouped">
@@ -93,7 +94,8 @@ export default {
   props: ["data"],
   data() {
     return {
-      row: ""
+      row: "",
+      errors: []
     };
   },
   mounted() {
@@ -107,23 +109,27 @@ export default {
   },
   methods: {
     update() {
-      let data = {
-        customerId: this.row.customerId,
-        customerName: this.row.customerName,
-        address: this.row.address,
-        city: this.row.city,
-        state: this.row.state,
-        pincode: this.row.pincode,
-        contact: this.row.contact,
-        emailId: this.row.emailId,
-        gstNumber: this.row.gstNumber
-      };
+      if (this.row.gstNumber == "" || this.row.gstNumber === null) {
+        this.errors.push("Please enter GST No/Adhar NO");
+      } else {
+        let data = {
+          customerId: this.row.customerId,
+          customerName: this.row.customerName,
+          address: this.row.address,
+          city: this.row.city,
+          state: this.row.state,
+          pincode: this.row.pincode,
+          contact: this.row.contact,
+          emailId: this.row.emailId,
+          gstNumber: this.row.gstNumber
+        };
 
-      updateCustomer(data, this.row.id)
-        .then(data => {
-          this.$router.push("/getCustomers");
-        })
-        .catch(err => alert(err.message));
+        updateCustomer(data, this.row.id)
+          .then(data => {
+            this.$router.push("/getCustomers");
+          })
+          .catch(err => alert(err.message));
+      }
     },
     reset() {
       this.row.customerId = "";

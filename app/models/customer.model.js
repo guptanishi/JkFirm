@@ -9,7 +9,7 @@ module.exports = mongoose => {
       pincode: Number,
       contact: Number,
       emailId: String,
-      gstNumber: Number
+      gstNumber: String
     },
     { timestamps: true }
   );
