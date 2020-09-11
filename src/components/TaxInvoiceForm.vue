@@ -494,7 +494,8 @@ export default {
       operation: "Add",
       paymentOperation: "Add",
       stockAvailable: "",
-      invoiceList: []
+      invoiceList: [],
+      HSN: ""
     };
   },
   computed: {
@@ -612,6 +613,7 @@ export default {
       this.vat = data.vat;
       this.productId = data.id;
       this.stockAvailable = data.qtyAvailable;
+      this.HSN = data.HSN;
 
       //alert(this.productId);
     },
@@ -629,7 +631,8 @@ export default {
           unit: this.unit,
           total: this.total,
           stockAvailable: this.stockAvailable,
-          id: this.productId
+          id: this.productId,
+          HSN: this.HSN
         };
         if (parseInt(this.quantity) > parseInt(this.stockAvailable)) {
           alert("stock is not available!");

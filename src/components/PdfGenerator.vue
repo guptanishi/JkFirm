@@ -1,7 +1,7 @@
 <template>
   <div id="content" style="min-height:100%;
    position:relative; margin:20px">
-    <div class="container" style="border: 2px solid #000; height: 1080px; ">
+    <div class="container bold" style="border: 2px solid #000; height: 1080px; ">
       <div class="row justify-content-end" style="border-bottom:2px solid #000">
         <div class="col-4">
           <img src="../../public/JK-Logo.png" alt="..." class="img-thumbnail imageStyle" />
@@ -16,7 +16,9 @@
             </div>
           </div>
           <div class="row justify-content-center text-danger">
-            <h4>JAGDISH KRISHI YANTRA UDYOG</h4>
+            <h3>
+              <b>JAGDISH KRISHI YANTRA UDYOG</b>
+            </h3>
           </div>
           <div class="row justify-content-center text-danger">
             <h5>G-35, Industrial Area, Panki III, Kanpur</h5>
@@ -47,7 +49,7 @@
       </div>
 
       <div>
-        <div class="row top-buffer">
+        <div class="row top-buffer lightBold">
           <table class="table table-bordered">
             <thead>
               <tr>
@@ -56,9 +58,9 @@
                 <th>Price</th>
                 <th>quantity</th>
                 <th>Total</th>
-                <th v-if="invoiceData.delMode == 'outside state'" colspan="2">SGST</th>
-                <th v-else>GST</th>
-                <th v-if="invoiceData.delMode == 'outside state'" colspan="2">CGST</th>
+                <th v-if="invoiceData.delMode == 'within state'" colspan="2">SGST</th>
+                <th v-else colspan="2">IGST</th>
+                <th v-if="invoiceData.delMode == 'within state'" colspan="2">CGST</th>
                 <th>Total</th>
               </tr>
             </thead>
@@ -69,28 +71,28 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td v-if="invoiceData.delMode == 'outside state'">Per%</td>
-                <td v-if="invoiceData.delMode == 'outside state'">Amt</td>
-                <td v-else>&nbsp;</td>
-                <td v-if="invoiceData.delMode == 'outside state'">Per%</td>
-                <td v-if="invoiceData.delMode == 'outside state'">Amt</td>
-                <td>&nbsp;</td>
+                <td>Per%</td>
+                <td>Amt</td>
+                <td v-if="invoiceData.delMode == 'within state'">Per%</td>
+                <td v-if="invoiceData.delMode == 'within state'">Amt</td>
+                <td v-if="invoiceData.delMode == 'within state'">&nbsp;</td>
               </tr>
               <tr v-for="(product,index) in invoiceData.products" :key="product.productCode">
                 <td>{{ index + 1}}.</td>
-                <td>{{ product.productName }}</td>
+                <td>{{ product.productName }} - {{product.HSN}}</td>
                 <td>Rs. {{ product.price }} / {{ product.unit != "" ? product.unit : "" }}</td>
                 <td>{{ product.quantity }} {{product.unit}}</td>
                 <td>{{ product.price * product.quantity }}</td>
-                <td v-if="invoiceData.delMode == 'outside state'">{{ product.vat / 2 }}</td>
+                <td v-if="invoiceData.delMode == 'within state'">{{ product.vat / 2 }}</td>
+                <td v-else>{{ product.vat}} %</td>
                 <td
-                  v-if="invoiceData.delMode == 'outside state'"
-                >{{ (product.price * product.quantity * product.vat)/100 }}</td>
-                <td v-else>{{ product.vat }}%</td>
-                <td v-if="invoiceData.delMode == 'outside state'">{{ product.vat / 2 }}</td>
+                  v-if="invoiceData.delMode == 'within state'"
+                >{{ (product.price * product.quantity * (product.vat/2) )/100 }}</td>
+                <td v-else>{{ (product.price * product.quantity * product.vat) / 100 }}</td>
+                <td v-if="invoiceData.delMode == 'within state'">{{ product.vat / 2 }}</td>
                 <td
-                  v-if="invoiceData.delMode == 'outside state'"
-                >{{ (product.price * product.quantity * product.vat)/100 }}</td>
+                  v-if="invoiceData.delMode == 'within state'"
+                >{{ (product.price * product.quantity * (product.vat/2))/100 }}</td>
                 <td>{{ product.total }}</td>
               </tr>
             </tbody>
@@ -117,7 +119,7 @@
         </div>
       </div>
       <div class="row top-buffer" style="position: absolute; bottom: 0;width: 100%;margin-top:50px">
-        <div class="col-9">
+        <div class="col-8">
           <p>
             *Terms and conditions*
             <br />
@@ -130,7 +132,7 @@
             <span>Bank- Allahabad Bank</span>
           </p>
         </div>
-        <div class="col-3">Authorised Signatory</div>
+        <div class="col-4">Authorised Signatory</div>
       </div>
     </div>
   </div>
@@ -299,6 +301,14 @@ export default {
 </script>
 
  <style>
+.bold {
+  font-weight: 700;
+}
+
+.lightBold {
+  font-weight: 500;
+}
+
 .border {
   border: solid 4px #000;
 }
