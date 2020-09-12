@@ -549,6 +549,8 @@ export default {
         this.invoiceDate = state.date;
         this.paymentDate = state.date;
       } else {
+        console.log("nis");
+        console.log(this.rowData);
         this.invoiceNumber = this.rowData.invoiceNumber;
         this.invoiceDate = this.customFormatter(this.rowData.invoiceDate);
         this.products = this.rowData.products;
@@ -556,6 +558,10 @@ export default {
         let data = {
           customerId: this.rowData.customerId,
           customerName: this.rowData.customerName,
+          state: this.rowData.state,
+          address: this.rowData.address,
+          contact: this.rowData.contact,
+          gstNumber: this.rowData.gstNumber,
           mode: this.rowData.paymentMode,
           payment: this.rowData.payment,
           paymentDate: this.customFormatter(this.rowData.paymentDate)

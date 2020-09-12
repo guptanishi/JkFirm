@@ -39,8 +39,12 @@
           >Address: {{invoiceData.customer["address"]}} {{invoiceData.customer["city"]}} {{invoiceData.customer["state"]}}</div>
           <div class="row">Contact No: {{invoiceData.customer["contact"]}}</div>
         </div>
-        <div class="col-4">
-          <div class="row justify-content-end" v-if="invoiceData.customer !=undefined">
+        <div class="col-6">
+          <div
+            class="row justify-content-end"
+            v-if="invoiceData.customer !=undefined"
+            style=" margin-right:20px"
+          >
             <div>Invoice Date: {{this.customFormatter(invoiceData.invoiceDate)}}</div>
             <br />
             <div>GST/Adhar No: {{invoiceData.customer["gstNumber"]}}</div>
@@ -56,11 +60,19 @@
                 <th>S.No</th>
                 <th>Product/HSN</th>
                 <th>Price</th>
-                <th>quantity</th>
+                <th>Quantity</th>
                 <th>Total</th>
-                <th v-if="invoiceData.delMode == 'within state'" colspan="2">SGST</th>
-                <th v-else colspan="2">IGST</th>
-                <th v-if="invoiceData.delMode == 'within state'" colspan="2">CGST</th>
+                <th
+                  v-if="invoiceData.delMode == 'within state'"
+                  colspan="2"
+                  style="text-align: center"
+                >SGST</th>
+                <th v-else colspan="2" style="text-align: center">IGST</th>
+                <th
+                  v-if="invoiceData.delMode == 'within state'"
+                  colspan="2"
+                  style="text-align: center"
+                >CGST</th>
                 <th>Total</th>
               </tr>
             </thead>
@@ -168,7 +180,8 @@ export default {
   },
   mounted() {
     EventBus.$on("showContent", () => {
-      document.getElementById("content").style.display = "block";
+      if (document.getElementById("content") != null)
+        document.getElementById("content").style.display = "block";
     });
     this.openNewTab();
   },
@@ -179,7 +192,9 @@ export default {
     },
 
     openNewTab() {
+      //alert("dsfsdf");
       this.invoiceData = this.info;
+      console.log(this.invoiceData);
       var element = document.getElementById("content");
       var doc = new jsPDF("p", "mm", "a4");
       var width = doc.internal.pageSize.getWidth();

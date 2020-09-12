@@ -107,6 +107,7 @@ export default {
     if (localStorage.username == "admin") {
       getInvoices()
         .then(data => {
+          console.log(data);
           this.invoices = data;
           this.listName = "show Cash Memos";
         })
