@@ -549,8 +549,6 @@ export default {
         this.invoiceDate = state.date;
         this.paymentDate = state.date;
       } else {
-        console.log("nis");
-        console.log(this.rowData);
         this.invoiceNumber = this.rowData.invoiceNumber;
         this.invoiceDate = this.customFormatter(this.rowData.invoiceDate);
         this.products = this.rowData.products;

@@ -105,7 +105,7 @@
                 <td
                   v-if="invoiceData.delMode == 'within state'"
                 >{{ (product.price * product.quantity * (product.vat/2))/100 }}</td>
-                <td>{{ product.total }}</td>
+                <td>{{ product.total}}</td>
               </tr>
             </tbody>
           </table>
@@ -115,7 +115,7 @@
             <span>Chargable Amount In Words</span>
             <br />
             <span>
-              <strong>{{numberToEnglish( Number(invoiceData.totalAmount)) | upperCase}} ONLY</strong>
+              <strong>{{numberToEnglish( Math.ceil(invoiceData.totalAmount)) | upperCase}} ONLY</strong>
             </span>
           </div>
           <div class="col-6">
@@ -124,7 +124,7 @@
                 <div class="row text-center">Grand Total</div>
               </div>
               <div class="col-6">
-                <div class="row text-center">{{invoiceData.totalAmount}}</div>
+                <div class="row text-center">{{Math.ceil(invoiceData.totalAmount)}}</div>
               </div>
             </div>
           </div>
