@@ -26,13 +26,23 @@
             <div class="field">
               <label class="label">Invoice Date:</label>
               <div class="control has-icons-left has-icons-right">
-                <datepicker v-model="invoiceDate" :format="customFormatter" class="inputType"></datepicker>
+                <datepicker
+                  v-model="invoiceDate"
+                  :format="customFormatter"
+                  class="inputType"
+                ></datepicker>
               </div>
             </div>
             <div class="field">
               <label class="label">Salesman Name</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="userName" v-model="userName" disabled />
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="userName"
+                  v-model="userName"
+                  disabled
+                />
               </div>
             </div>
           </div>
@@ -80,13 +90,24 @@
             <div class="field">
               <label class="label">Price</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="number" placeholder="price" v-model="price" disabled />
+                <input
+                  class="input"
+                  type="number"
+                  placeholder="price"
+                  v-model="price"
+                  disabled
+                />
               </div>
             </div>
             <div class="field">
               <label class="label">Quantity</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="number" placeholder="quantity" v-model="quantity" />
+                <input
+                  class="input"
+                  type="number"
+                  placeholder="quantity"
+                  v-model="quantity"
+                />
               </div>
             </div>
             <div class="field">
@@ -117,7 +138,13 @@
             <div class="field">
               <label class="label">Gst</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="number" placeholder="GST" v-model="vat" disabled />%
+                <input
+                  class="input"
+                  type="number"
+                  placeholder="GST"
+                  v-model="vat"
+                  disabled
+                />%
               </div>
             </div>
             <div class="field">
@@ -135,17 +162,19 @@
             <div class="field">
               <div class="control">
                 <label class="radio">
-                  <input type="radio" name="tax" v-model="taxType" value="1" /> Including Tax
+                  <input type="radio" name="tax" v-model="taxType" value="1" />
+                  Including Tax
                 </label>
                 <label class="radio">
-                  <input type="radio" name="tax" v-model="taxType" value="0" /> Non-including Tax
+                  <input type="radio" name="tax" v-model="taxType" value="0" />
+                  Non-including Tax
                 </label>
               </div>
             </div>
           </div>
         </div>
         <footer class="card-footer">
-          <a @click="addProducts" class="card-footer-item">{{operation}}</a>
+          <a @click="addProducts" class="card-footer-item">{{ operation }}</a>
           <!-- <a @click="updatePr" class="card-footer-item">Update</a> -->
           <a @click="resetproduct" class="card-footer-item">Reset</a>
         </footer>
@@ -156,14 +185,17 @@
             <vue-good-table :columns="productColumns" :rows="products">
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'last'">
-                  <button style="margin-left:10px" @click.stop="deleteRow(props.row)">
+                  <button
+                    style="margin-left: 10px"
+                    @click.stop="deleteRow(props.row)"
+                  >
                     <i class="fa fa-trash-o"></i>
                   </button>
                   <button @click.stop="edit(props.row)">
                     <i class="fa fa-pencil"></i>
                   </button>
                 </span>
-                <span v-else>{{props.formattedRow[props.column.field]}}</span>
+                <span v-else>{{ props.formattedRow[props.column.field] }}</span>
               </template>
             </vue-good-table>
           </div>
@@ -185,7 +217,12 @@
             <div class="field">
               <label class="label">Customer Id</label>
               <div class="control">
-                <input class="input" type="text" v-model="customerId" @click="onCustomerIdClick" />
+                <input
+                  class="input"
+                  type="text"
+                  v-model="customerId"
+                  @click="onCustomerIdClick"
+                />
                 <div v-if="showCustomerModal">
                   <ModalForCustomers
                     :showCustomerModal="showCustomerModal"
@@ -197,7 +234,12 @@
             <div class="field">
               <label class="label">Customer Name</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="customerName" disabled />
+                <input
+                  class="input"
+                  type="text"
+                  v-model="customerName"
+                  disabled
+                />
               </div>
             </div>
             <div class="field">
@@ -215,7 +257,12 @@
             <div class="field">
               <label class="label">Contact No.</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="number" v-model="contact" maxlength="10" />
+                <input
+                  class="input"
+                  type="number"
+                  v-model="contact"
+                  maxlength="10"
+                />
               </div>
             </div>
             <div class="field">
@@ -273,13 +320,19 @@
             <div class="field">
               <label class="label">Payment Date</label>
               <div class="control has-icons-left has-icons-right">
-                <datepicker v-model="paymentDate" :format="customFormatter" class="inputType"></datepicker>
+                <datepicker
+                  v-model="paymentDate"
+                  :format="customFormatter"
+                  class="inputType"
+                ></datepicker>
               </div>
             </div>
           </div>
         </div>
         <footer class="card-footer">
-          <a @click="addCustomerDetail" class="card-footer-item">{{paymentOperation}}</a>
+          <a @click="addCustomerDetail" class="card-footer-item">{{
+            paymentOperation
+          }}</a>
           <a @click="resetPaymentDetails" class="card-footer-item">Reset</a>
         </footer>
       </div>
@@ -290,14 +343,17 @@
             <vue-good-table :columns="paymentColumns" :rows="customerDetails">
               <template slot="table-row" slot-scope="props">
                 <span v-if="props.column.field == 'last'">
-                  <button style="margin-left:10px" @click.stop="deletePaymentRow(props.row.id)">
+                  <button
+                    style="margin-left: 10px"
+                    @click.stop="deletePaymentRow(props.row.id)"
+                  >
                     <i class="fa fa-trash-o"></i>
                   </button>
                   <button @click.stop="editPaymentRow(props.row)">
                     <i class="fa fa-pencil"></i>
                   </button>
                 </span>
-                <span v-else>{{props.formattedRow[props.column.field]}}</span>
+                <span v-else>{{ props.formattedRow[props.column.field] }}</span>
               </template>
             </vue-good-table>
           </div>
@@ -310,7 +366,12 @@
             <div class="field">
               <label class="label">Grand Total</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" v-model="calculateGrandTotal" disabled />
+                <input
+                  class="input"
+                  type="text"
+                  v-model="calculateGrandTotal"
+                  disabled
+                />
               </div>
             </div>
             <div class="field">
@@ -322,44 +383,63 @@
             <div class="field">
               <label class="label">Payment Due</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="number" v-model="calculatePaymentDue" disabled />
+                <input
+                  class="input"
+                  type="number"
+                  v-model="calculatePaymentDue"
+                  disabled
+                />
               </div>
             </div>
           </div>
 
           <div class="field is-grouped">
             <div class="control">
-              <button class="button btn-primary" @click="saveInvoice">Save</button>
+              <button class="button btn-primary" @click="saveInvoice">
+                Save
+              </button>
             </div>
             <div class="control">
-              <button class="button btn-primary">Cancel</button>
+              <button class="button btn-primary" @click="reloadPage">
+                Cancel
+              </button>
             </div>
             <div class="control">
               <button
                 class="button btn-secondary"
                 :disabled="!this.isInvoiceSaved"
                 @click="generatePdf('')"
-              >First Copy</button>
+              >
+                First Copy
+              </button>
             </div>
             <div class="control">
               <button
                 class="button btn-secondary"
                 :disabled="!this.isInvoiceSaved"
                 @click="generatePdf('Duplicate')"
-              >Duplicate</button>
+              >
+                Duplicate
+              </button>
             </div>
             <div class="control">
               <button
                 class="button btn-secondary"
                 :disabled="!this.isInvoiceSaved"
                 @click="generatePdf('Triplicate')"
-              >Triplicate</button>
+              >
+                Triplicate
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <component v-bind:is="componentName" :info="invoiceData" :invoiceType="invoiceType"></component>
+    <component
+      v-bind:is="componentName"
+      :info="invoiceData"
+      :invoiceType="invoiceType"
+    ></component>
   </div>
 </template>
 
@@ -371,7 +451,7 @@ import {
   getLastInvoiceNumber,
   getInvoices,
   createCashInvoice,
-  getLastCashMemoInvoiceNumber
+  getLastCashMemoInvoiceNumber,
 } from "../repository";
 import Datepicker from "vuejs-datepicker";
 import moment from "moment";
@@ -381,7 +461,7 @@ import PdfGenerator from "./PdfGenerator.vue";
 import { EventBus } from "../../event-bus.js";
 
 var state = {
-  date: new Date()
+  date: new Date(),
 };
 
 export default {
@@ -390,7 +470,7 @@ export default {
     Datepicker,
     ModalForProducts,
     ModalForCustomers,
-    PdfGenerator
+    PdfGenerator,
   },
   props: ["data"],
 
@@ -400,62 +480,62 @@ export default {
       paymentColumns: [
         {
           label: "Customer Name",
-          field: "customerName"
+          field: "customerName",
         },
         {
           label: "State",
-          field: "state"
+          field: "state",
         },
         {
           label: "Payment Mode",
-          field: "mode"
+          field: "mode",
         },
         {
           label: "Payment",
-          field: "payment"
+          field: "payment",
         },
         {
           label: "Payment Date",
-          field: "paymentDate"
+          field: "paymentDate",
         },
         {
           label: "Options",
-          field: "last"
-        }
+          field: "last",
+        },
       ],
       productColumns: [
         {
           label: "PR Code",
-          field: "productCode"
+          field: "productCode",
         },
         {
           label: "PR Name",
-          field: "productName"
+          field: "productName",
         },
         {
           label: "Price",
-          field: "price"
+          field: "price",
         },
         {
           label: "Quantity",
-          field: "quantity"
+          field: "quantity",
         },
         {
           label: "Vat",
-          field: "vat"
+          field: "vat",
         },
         {
           label: "HSN",
-          field: "HSN"
+          field: "HSN",
         },
         {
           label: "Total",
-          field: "total"
+          field: "total",
         },
         {
           label: "Options",
-          field: "last"
-        }
+          field: "last",
+        },
       ],
       products: [],
       productId: "",
@@ -495,7 +575,7 @@ export default {
       paymentOperation: "Add",
       stockAvailable: "",
       invoiceList: [],
-      HSN: ""
+      HSN: "",
     };
   },
   computed: {
@@ -521,7 +601,7 @@ export default {
     },
     calculatePaymentDue() {
       return (this.paymentDue = this.grandTotal - this.payment);
-    }
+    },
   },
   mounted() {
     EventBus.$on("hideContent", () => {
@@ -532,7 +612,7 @@ export default {
       this.rowData = this.data;
       if (this.rowData == undefined) {
         getLastInvoiceNumber()
-          .then(data => {
+          .then((data) => {
             if (
               data.length == 0 ||
               (state.date.getMonth() + 1 == 4 && state.date.getDate() == 1)
@@ -545,7 +625,7 @@ export default {
               this.invoiceNumber = this.generateInvoiceNumber(counter);
             }
           })
-          .catch(err => alert(err.message));
+          .catch((err) => alert(err.message));
         this.invoiceDate = state.date;
         this.paymentDate = state.date;
       } else {
@@ -562,7 +642,7 @@ export default {
           gstNumber: this.rowData.gstNumber,
           mode: this.rowData.paymentMode,
           payment: this.rowData.payment,
-          paymentDate: this.customFormatter(this.rowData.paymentDate)
+          paymentDate: this.customFormatter(this.rowData.paymentDate),
         };
         this.grandTotal = this.rowData.totalAmount;
         this.payment = this.rowData.payment;
@@ -578,13 +658,13 @@ export default {
           paymentMode: this.mode,
           totalAmount: this.grandTotal,
           payment: this.payment,
-          paymentDate: this.customFormatter(this.paymentDate)
+          paymentDate: this.customFormatter(this.paymentDate),
         };
         this.isInvoiceSaved = true;
       }
     } else {
       this.$router.push({
-        name: "login"
+        name: "login",
       });
     }
   },
@@ -624,7 +704,7 @@ export default {
     addProducts() {
       if (this.productCode != "" && this.productCode != undefined) {
         const found = this.products.some(
-          el => el.productCode === this.productCode
+          (el) => el.productCode === this.productCode
         );
         let data = {
           productCode: this.productCode,
@@ -636,7 +716,7 @@ export default {
           total: this.total,
           stockAvailable: this.stockAvailable,
           id: this.productId,
-          HSN: this.HSN
+          HSN: this.HSN,
         };
         if (parseInt(this.quantity) > parseInt(this.stockAvailable)) {
           alert("stock is not available!");
@@ -645,7 +725,7 @@ export default {
             this.products.push(data);
           } else {
             this.products = this.products.filter(
-              el => el.productCode != this.productCode
+              (el) => el.productCode != this.productCode
             );
             this.products.push(data);
             this.operation = "Add";
@@ -657,13 +737,13 @@ export default {
 
     updatePr(rowData) {
       let data = {
-        qtyAvailable: rowData.stockAvailable - rowData.quantity
+        qtyAvailable: rowData.stockAvailable - rowData.quantity,
       };
       updateProduct(data, rowData.id)
-        .then(data => {
+        .then((data) => {
           alert("stock updated");
         })
-        .catch(err => alert(err.message));
+        .catch((err) => alert(err.message));
     },
     resetproduct() {
       this.productCode = "";
@@ -696,7 +776,7 @@ export default {
     addCustomerDetail() {
       if (this.customerId !== undefined && this.customerId != "") {
         const found = this.customerDetails.some(
-          el => el.customerId === this.customerId
+          (el) => el.customerId === this.customerId
         );
         let data = {
           customerId: this.customerId,
@@ -707,13 +787,13 @@ export default {
           gstNumber: this.gstNumber,
           mode: this.mode,
           payment: this.payment,
-          paymentDate: this.customFormatter(this.paymentDate)
+          paymentDate: this.customFormatter(this.paymentDate),
         };
         if (!found) {
           this.customerDetails.push(data);
         } else {
           this.customerDetails = this.customerDetails.filter(
-            el => el.customerId != this.customerId
+            (el) => el.customerId != this.customerId
           );
           this.customerDetails.push(data);
         }
@@ -728,10 +808,10 @@ export default {
       ) {
         if (this.mode != "Cash Memo") {
           getInvoices()
-            .then(data => {
+            .then((data) => {
               this.invoiceList = data;
               const found = this.invoiceList.some(
-                el => el.invoiceNumber === this.invoiceNumber
+                (el) => el.invoiceNumber === this.invoiceNumber
               );
               if (!found) {
                 let invoiceData = {
@@ -744,27 +824,27 @@ export default {
                   paymentMode: this.mode,
                   totalAmount: this.grandTotal,
                   payment: this.payment,
-                  paymentDate: this.customFormatter(this.paymentDate)
+                  paymentDate: this.customFormatter(this.paymentDate),
                 };
                 createInvoice(invoiceData)
-                  .then(data => {
+                  .then((data) => {
                     alert("Invoice is successfully created");
                     this.invoiceData = invoiceData;
                     this.$nextTick(() => {
                       this.isInvoiceSaved = true;
-                      this.products.forEach(element => {
+                      this.products.forEach((element) => {
                         this.updatePr(element);
                       });
                     });
                   })
-                  .catch(err => alert(err.message));
+                  .catch((err) => alert(err.message));
               }
             })
-            .catch(err => alert(err));
+            .catch((err) => alert(err));
         } else {
           let memoNumber = "";
           getLastCashMemoInvoiceNumber()
-            .then(data => {
+            .then((data) => {
               if (data.length == 0) {
                 memoNumber = this.generateCashMemoInvoiceNumber(1);
               } else {
@@ -786,23 +866,23 @@ export default {
                 paymentMode: this.mode,
                 totalAmount: this.grandTotal,
                 payment: this.payment,
-                paymentDate: this.customFormatter(this.paymentDate)
+                paymentDate: this.customFormatter(this.paymentDate),
               };
 
               createCashInvoice(invoiceData)
-                .then(data => {
+                .then((data) => {
                   alert("casMemo is successfully created");
                   this.invoiceData = invoiceData;
                   this.$nextTick(() => {
                     this.isInvoiceSaved = true;
-                    this.products.forEach(element => {
+                    this.products.forEach((element) => {
                       this.updatePr(element);
                     });
                   });
                 })
-                .catch(err => alert(err.message));
+                .catch((err) => alert(err.message));
             })
-            .catch(err => alert(err));
+            .catch((err) => alert(err));
         }
       }
     },
@@ -816,7 +896,7 @@ export default {
     },
     deleteRow(row) {
       this.products = this.products.filter(
-        el => el.productCode != row.productCode
+        (el) => el.productCode != row.productCode
       );
     },
     edit(row) {
@@ -829,7 +909,7 @@ export default {
       this.unit = row.unit;
     },
     deletePaymentRow(id) {
-      this.customerDetails = this.customerDetails.filter(el => el._id != id);
+      this.customerDetails = this.customerDetails.filter((el) => el._id != id);
     },
     editPaymentRow(row) {
       this.paymentOperation = "update";
@@ -843,8 +923,11 @@ export default {
       this.mode = row.mode;
       this.paymentDate = state.date;
       this.payment = row.payment;
-    }
-  }
+    },
+    reloadPage() {
+      this.$router.go(0);
+    },
+  },
 };
 </script>
 <style scoped>

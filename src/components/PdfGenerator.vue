@@ -1,18 +1,24 @@
 <template>
-  <div id="content" style="min-height:100%;
-   position:relative; margin:20px">
-    <div class="container bold" style="border: 2px solid #000; height: 1080px; ">
-      <div class="row justify-content-end" style="border-bottom:2px solid #000">
+  <div id="content" style="min-height: 100%; position: relative; margin: 20px">
+    <div class="container bold" style="border: 2px solid #000; height: 1080px">
+      <div
+        class="row justify-content-end"
+        style="border-bottom: 2px solid #000"
+      >
         <div class="col-4">
-          <img src="../../public/JK-Logo.png" alt="..." class="img-thumbnail imageStyle" />
+          <img
+            src="../../public/JK-Logo.png"
+            alt="..."
+            class="img-thumbnail imageStyle"
+          />
         </div>
-        <div class="col-8" style="margin-top:20px">
+        <div class="col-8" style="margin-top: 20px">
           <div class="row">
             <div class="col-9 text-center text-danger">
               <h5>Tax Invoice</h5>
             </div>
             <div class="col-3 justify-content-start">
-              <h5>{{invoiceType}}</h5>
+              <h5>{{ invoiceType }}</h5>
             </div>
           </div>
           <div class="row justify-content-center text-danger">
@@ -24,30 +30,52 @@
             <h5>G-35, Industrial Area, Panki III, Kanpur</h5>
           </div>
           <div class="row justify-content-start">Contact No. : 09415926676</div>
-          <div class="row justify-content-start">Email: jagdishkrishiyantraudyog@gmail.com</div>
+          <div class="row justify-content-start">
+            Email: jagdishkrishiyantraudyog@gmail.com
+          </div>
           <div class="row justify-content-start">
             <b>GST No : 09AHKPG1772G1ZA</b>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-6 justify-content-start" v-if="invoiceData.customer !=undefined">
-          <div class="row">Invoice No : {{invoiceData.invoiceNumber}}</div>
-          <div class="row">Customer Name : {{invoiceData.customer["customerName"]}}</div>
-          <div
-            class="row"
-          >Address: {{invoiceData.customer["address"]}} {{invoiceData.customer["city"]}} {{invoiceData.customer["state"]}}</div>
-          <div class="row">Contact No: {{invoiceData.customer["contact"]}}</div>
+        <div
+          class="col-6 justify-content-start"
+          v-if="invoiceData.customer != undefined"
+        >
+          <div class="row">
+            <div class="col-5">Invoice No :</div>
+            <div class="col-7">{{ invoiceData.invoiceNumber }}</div>
+          </div>
+          <div class="row">
+            <div class="col-5">Customer Name :</div>
+            <div class="col-7">{{ invoiceData.customer["customerName"] }}</div>
+          </div>
+          <div class="row">
+            <div class="col-5">Address:</div>
+            <div class="col-7">
+              {{ invoiceData.customer["address"] }}
+              {{ invoiceData.customer["city"] }}
+              {{ invoiceData.customer["state"] }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5">Contact No:</div>
+            <div class="col-7">
+              {{ invoiceData.customer["contact"] }}
+            </div>
+          </div>
         </div>
         <div class="col-6">
-          <div
-            class="row justify-content-end"
-            v-if="invoiceData.customer !=undefined"
-            style=" margin-right:20px"
-          >
-            <div>Invoice Date: {{this.customFormatter(invoiceData.invoiceDate)}}</div>
-            <br />
-            <div>GST/Adhar No: {{invoiceData.customer["gstNumber"]}}</div>
+          <div class="row" v-if="invoiceData.customer != undefined">
+            <div class="col-5">Invoice Date:</div>
+            <div class="col-7">
+              {{ this.customFormatter(invoiceData.invoiceDate) }}
+            </div>
+          </div>
+          <div class="row" v-if="invoiceData.customer != undefined">
+            <div class="col-5">GST/Adhar No:</div>
+            <div class="col-7">{{ invoiceData.customer["gstNumber"] }}</div>
           </div>
         </div>
       </div>
@@ -60,24 +88,30 @@
                 <th>S.No</th>
                 <th>Product/HSN</th>
                 <th>Price</th>
-                <th>Quantity</th>
+                <th>Qty</th>
+                <th>Unit</th>
                 <th>Total</th>
                 <th
                   v-if="invoiceData.delMode == 'within state'"
                   colspan="2"
                   style="text-align: center"
-                >SGST</th>
+                >
+                  SGST
+                </th>
                 <th v-else colspan="2" style="text-align: center">IGST</th>
                 <th
                   v-if="invoiceData.delMode == 'within state'"
                   colspan="2"
                   style="text-align: center"
-                >CGST</th>
+                >
+                  CGST
+                </th>
                 <th>Total</th>
               </tr>
             </thead>
             <tbody>
               <tr>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -89,23 +123,47 @@
                 <td v-if="invoiceData.delMode == 'within state'">Amt</td>
                 <td v-if="invoiceData.delMode == 'within state'">&nbsp;</td>
               </tr>
-              <tr v-for="(product,index) in invoiceData.products" :key="product.productCode">
-                <td>{{ index + 1}}.</td>
-                <td>{{ product.productName }} - {{product.HSN}}</td>
-                <td>Rs. {{ product.price }} / {{ product.unit != "" ? product.unit : "" }}</td>
-                <td>{{ product.quantity }} {{product.unit}}</td>
+              <tr
+                v-for="(product, index) in invoiceData.products"
+                :key="product.productCode"
+              >
+                <td>{{ index + 1 }}.</td>
+                <td>{{ product.productName }} - {{ product.HSN }}</td>
+                <td>Rs. {{ parseFloat(product.price).toFixed(2) }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.unit }}</td>
                 <td>{{ product.price * product.quantity }}</td>
-                <td v-if="invoiceData.delMode == 'within state'">{{ product.vat / 2 }}</td>
-                <td v-else>{{ product.vat}} %</td>
-                <td
-                  v-if="invoiceData.delMode == 'within state'"
-                >{{ (product.price * product.quantity * (product.vat/2) )/100 }}</td>
-                <td v-else>{{ (product.price * product.quantity * product.vat) / 100 }}</td>
-                <td v-if="invoiceData.delMode == 'within state'">{{ product.vat / 2 }}</td>
-                <td
-                  v-if="invoiceData.delMode == 'within state'"
-                >{{ (product.price * product.quantity * (product.vat/2))/100 }}</td>
-                <td>{{ product.total}}</td>
+                <td v-if="invoiceData.delMode == 'within state'">
+                  {{ product.vat / 2 }} %
+                </td>
+                <td v-else>{{ product.vat }} %</td>
+                <td v-if="invoiceData.delMode == 'within state'">
+                  {{
+                    parseFloat(
+                      (product.price * product.quantity * (product.vat / 2)) /
+                        100
+                    ).toFixed(2)
+                  }}
+                </td>
+                <td v-else>
+                  {{
+                    parseFloat(
+                      (product.price * product.quantity * product.vat) / 100
+                    ).toFixed(2)
+                  }}
+                </td>
+                <td v-if="invoiceData.delMode == 'within state'">
+                  {{ product.vat / 2 }}%
+                </td>
+                <td v-if="invoiceData.delMode == 'within state'">
+                  {{
+                    parseFloat(
+                      (product.price * product.quantity * (product.vat / 2)) /
+                        100
+                    ).toFixed(2)
+                  }}
+                </td>
+                <td>{{ parseFloat(product.total).toFixed(2) }}</td>
               </tr>
             </tbody>
           </table>
@@ -115,22 +173,71 @@
             <span>Chargable Amount In Words</span>
             <br />
             <span>
-              <strong>{{numberToEnglish( Math.ceil(invoiceData.totalAmount)) | upperCase}} ONLY</strong>
+              <strong
+                >RUPEES
+                {{
+                  numberToEnglish(Math.ceil(invoiceData.totalAmount))
+                    | upperCase
+                }}
+                ONLY</strong
+              >
             </span>
           </div>
-          <div class="col-6">
+          <div class="col-6" style="border-style: none none solid solid">
             <div class="row">
-              <div class="col-6">
-                <div class="row text-center">Grand Total</div>
+              <div class="col-6" style="border-right: 2px solid #000">
+                <div
+                  v-if="invoiceData.delMode == 'within state'"
+                  class="row"
+                  style="margin-left: 30px"
+                >
+                  SGST Total
+                </div>
+                <div v-else class="row" style="margin-left: 30px">
+                  GST Total
+                </div>
+                <div
+                  v-if="invoiceData.delMode == 'within state'"
+                  class="row"
+                  style="margin-left: 30px"
+                >
+                  CGST Total
+                </div>
+                <div v-else class="row" style="margin-left: 30px">&nbsp;</div>
+                <div class="row" style="margin-left: 30px">Grand Total</div>
               </div>
               <div class="col-6">
-                <div class="row text-center">{{Math.ceil(invoiceData.totalAmount)}}</div>
+                <div
+                  v-if="invoiceData.delMode == 'within state'"
+                  class="row"
+                  style="margin-left: 30px"
+                >
+                  {{ parseFloat(this.sumOfSGST()).toFixed(2) }}
+                </div>
+                <div v-else class="row" style="margin-left: 30px">
+                  {{ parseFloat(this.sumofGST()).toFixed(2) }}
+                </div>
+                <div
+                  v-if="invoiceData.delMode == 'within state'"
+                  class="row"
+                  style="margin-left: 30px"
+                >
+                  {{ parseFloat(this.sumOfCGST()).toFixed(2) }}
+                </div>
+                <div v-else class="row" style="margin-left: 30px">&nbsp;</div>
+
+                <div class="row" style="margin-left: 30px">
+                  {{ Math.ceil(invoiceData.totalAmount) }}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row top-buffer" style="position: absolute; bottom: 0;width: 100%;margin-top:50px">
+      <div
+        class="row top-buffer"
+        style="position: absolute; bottom: 0; width: 100%; margin-top: 50px"
+      >
         <div class="col-8">
           <p>
             *Terms and conditions*
@@ -159,7 +266,7 @@ import moment from "moment";
 import { EventBus } from "../../event-bus.js";
 
 var state = {
-  date: new Date()
+  date: new Date(),
 };
 
 export default {
@@ -168,7 +275,9 @@ export default {
 
   data() {
     return {
-      invoiceData: {}
+      invoiceData: {},
+      SGST: [],
+      CGST: [],
     };
   },
   watch: {
@@ -176,7 +285,7 @@ export default {
       if (newValue != oldValue) {
         this.openNewTab();
       }
-    }
+    },
   },
   mounted() {
     EventBus.$on("showContent", () => {
@@ -191,6 +300,40 @@ export default {
       return moment(date).format("DD/MM/YYYY");
     },
 
+    sumOfSGST() {
+      let SGST = 0;
+      if (this.invoiceData) {
+        this.invoiceData.products.forEach((product) => {
+          SGST =
+            SGST + (product.price * product.quantity * (product.vat / 2)) / 100;
+        });
+      }
+      console.log(SGST);
+      return SGST;
+    },
+    sumOfCGST() {
+      let CGST = 0;
+      if (this.invoiceData) {
+        this.invoiceData.products.forEach((product) => {
+          CGST =
+            CGST + (product.price * product.quantity * (product.vat / 2)) / 100;
+        });
+      }
+      console.log(CGST);
+      return CGST;
+    },
+
+    sumofGST() {
+      let GST = 0;
+      if (this.invoiceData) {
+        this.invoiceData.products.forEach((product) => {
+          GST = GST + (product.price * product.quantity * product.vat) / 100;
+        });
+      }
+      console.log(GST);
+      return GST;
+    },
+
     openNewTab() {
       //alert("dsfsdf");
       this.invoiceData = this.info;
@@ -202,15 +345,15 @@ export default {
       var opt = {
         fileName: `invoice${state.date}.pdf`,
         html2canvas: {
-          scale: 1
+          scale: 1,
         },
-        jsPDF: doc
+        jsPDF: doc,
       };
       html2pdf()
         .from(element)
         .toPdf()
         .get("pdf")
-        .then(function(pdf) {
+        .then(function (pdf) {
           window.open(pdf.output("bloburl"), "_blank");
           EventBus.$emit("hideContent");
         });
@@ -310,18 +453,20 @@ export default {
         words_string = words_string.split("  ").join(" ");
       }
       return words_string;
-    }
-  }
+    },
+  },
 };
 </script>
 
  <style>
 .bold {
   font-weight: 700;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .lightBold {
   font-weight: 500;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .border {
@@ -339,5 +484,8 @@ export default {
 div.absolute {
   position: fixed;
   bottom: 0;
+}
+.ml-50 {
+  margin-left: 30px;
 }
 </style>
