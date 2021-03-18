@@ -3,7 +3,7 @@
     <div class="container bold" style="border: 2px solid #000; height: 1080px">
       <div
         class="row justify-content-end"
-        style="border-bottom: 2px solid #000"
+        style="border-bottom: 3px solid #000"
       >
         <div class="col-4">
           <img
@@ -88,8 +88,7 @@
                 <th>S.No</th>
                 <th>Product/HSN</th>
                 <th>Price</th>
-                <th>Qty</th>
-                <th>Unit</th>
+                <th>Quantity</th>
                 <th>Total</th>
                 <th
                   v-if="invoiceData.delMode == 'within state'"
@@ -116,7 +115,6 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
                 <td>Per%</td>
                 <td>Amt</td>
                 <td v-if="invoiceData.delMode == 'within state'">Per%</td>
@@ -130,8 +128,7 @@
                 <td>{{ index + 1 }}.</td>
                 <td>{{ product.productName }} - {{ product.HSN }}</td>
                 <td>Rs. {{ parseFloat(product.price).toFixed(2) }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>{{ product.unit }}</td>
+                <td>{{ product.quantity }} {{ product.unit }}</td>
                 <td>{{ product.price * product.quantity }}</td>
                 <td v-if="invoiceData.delMode == 'within state'">
                   {{ product.vat / 2 }} %
@@ -185,7 +182,7 @@
           </div>
           <div class="col-6" style="border-style: none none solid solid">
             <div class="row">
-              <div class="col-6" style="border-right: 2px solid #000">
+              <div class="col-6" style="border-right: 1px solid #000">
                 <div
                   v-if="invoiceData.delMode == 'within state'"
                   class="row"
@@ -215,7 +212,7 @@
                   {{ parseFloat(this.sumOfSGST()).toFixed(2) }}
                 </div>
                 <div v-else class="row" style="margin-left: 30px">
-                  {{ parseFloat(this.sumofGST()).toFixed(2) }}
+                  {{ parseFloat(this.sumOfGST()).toFixed(2) }}
                 </div>
                 <div
                   v-if="invoiceData.delMode == 'within state'"
@@ -227,7 +224,9 @@
                 <div v-else class="row" style="margin-left: 30px">&nbsp;</div>
 
                 <div class="row" style="margin-left: 30px">
-                  {{ Math.ceil(invoiceData.totalAmount) }}
+                  {{
+                    parseFloat(Math.ceil(invoiceData.totalAmount)).toFixed(2)
+                  }}
                 </div>
               </div>
             </div>
@@ -323,12 +322,14 @@ export default {
       return CGST;
     },
 
-    sumofGST() {
+    sumOfGST() {
       let GST = 0;
-      if (this.invoiceData) {
-        this.invoiceData.products.forEach((product) => {
-          GST = GST + (product.price * product.quantity * product.vat) / 100;
-        });
+      if (this.invoiceData != undefined) {
+        if (this.invoiceData.products != undefined) {
+          this.invoiceData.products.forEach((product) => {
+            GST = GST + (product.price * product.quantity * product.vat) / 100;
+          });
+        }
       }
       console.log(GST);
       return GST;
@@ -339,17 +340,18 @@ export default {
       this.invoiceData = this.info;
       console.log(this.invoiceData);
       var element = document.getElementById("content");
-      var doc = new jsPDF("p", "mm", "a4");
+      var doc = new jsPDF("p", "in", "a4");
       var width = doc.internal.pageSize.getWidth();
       var height = doc.internal.pageSize.getHeight();
       var opt = {
         fileName: `invoice${state.date}.pdf`,
         html2canvas: {
-          scale: 1,
+          scale: 5,
         },
         jsPDF: doc,
       };
       html2pdf()
+        .set(opt)
         .from(element)
         .toPdf()
         .get("pdf")
@@ -459,6 +461,11 @@ export default {
 </script>
 
  <style>
+#content {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 9pt;
+}
+
 .bold {
   font-weight: 700;
   font-family: "Times New Roman", Times, serif;
@@ -469,15 +476,12 @@ export default {
   font-family: "Times New Roman", Times, serif;
 }
 
-.border {
-  border: solid 4px #000;
-}
 .imageStyle {
   margin-top: 50px;
   padding: 10px;
 }
 .top-buffer {
-  border-top: solid 4px #000;
+  border-top: solid 2px #000;
   margin-top: 20px;
 }
 
