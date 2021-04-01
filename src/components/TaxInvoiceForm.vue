@@ -395,7 +395,7 @@
 
           <div class="field is-grouped">
             <div class="control">
-              <button class="button btn-primary" @click="saveInvoice">
+             <button class="button btn-primary" @click="saveInvoice">
                 Save
               </button>
             </div>
@@ -614,10 +614,11 @@ export default {
         getLastInvoiceNumber()
           .then((data) => {
             if (
-              data.length == 0 ||
-              (state.date.getMonth() + 1 == 4 && state.date.getDate() == 1)
+              data.length == 0 &&
+              state.date.getMonth() + 1 == 4 &&
+              state.date.getDate() == 1
             ) {
-              this.invoiceNumber = this.generateInvoiceNumber(204);
+              this.invoiceNumber = this.generateInvoiceNumber(1);
             } else {
               let lastnumber = data[0].invoiceNumber;
               let counter = Number(lastnumber.substring(7, lastnumber.length));
@@ -670,7 +671,7 @@ export default {
   },
   methods: {
     generateInvoiceNumber(counter) {
-      const prefix = "PB";
+      const prefix = "JK";
       let fullYear = state.date.getFullYear();
       let b = String(counter).padStart(2, "0");
       return prefix + "-" + fullYear + b;
