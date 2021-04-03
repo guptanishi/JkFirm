@@ -651,7 +651,7 @@ export default {
 
         this.invoiceData = {
           invoiceNumber: this.invoiceNumber,
-          invoiceDate: this.invoiceDate,
+          invoiceDate: this.customFormatter(this.invoiceDate),
           delMode: this.del,
           username: this.username,
           products: this.products,
