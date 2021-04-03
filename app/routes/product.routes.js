@@ -46,6 +46,8 @@ module.exports = app => {
 
   router.post("/invoices/create", invoices.create);
 
+  router.post("/invoices/:id", invoices.update);
+
   router.get("/invoices/lastRecord", invoices.findLastIdRowInvoiceNumber);
 
   router.delete("/invoices/:id", invoices.delete);

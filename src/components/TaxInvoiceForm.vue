@@ -395,7 +395,7 @@
 
           <div class="field is-grouped">
             <div class="control">
-             <button class="button btn-primary" @click="saveInvoice">
+              <button class="button btn-primary" @click="saveInvoice">
                 Save
               </button>
             </div>
@@ -445,13 +445,13 @@
 
 <script>
 import {
-  createCustomer,
   updateProduct,
   createInvoice,
   getLastInvoiceNumber,
   getInvoices,
   createCashInvoice,
   getLastCashMemoInvoiceNumber,
+  updateInvoice,
 } from "../repository";
 import Datepicker from "vuejs-datepicker";
 import moment from "moment";
@@ -576,6 +576,7 @@ export default {
       stockAvailable: "",
       invoiceList: [],
       HSN: "",
+      invoiceEditMode: false,
     };
   },
   computed: {
@@ -630,10 +631,15 @@ export default {
         this.invoiceDate = state.date;
         this.paymentDate = state.date;
       } else {
+        this.invoiceEditMode = true;
         this.invoiceNumber = this.rowData.invoiceNumber;
-        this.invoiceDate = this.customFormatter(this.rowData.invoiceDate);
+        this.invoiceDate = this.rowData.invoiceDate;
         this.products = this.rowData.products;
         this.del = this.rowData.delMode;
+        this.grandTotal = this.rowData.totalAmount;
+        this.payment = this.rowData.payment;
+        this.paymentDate = this.customFormatter(this.rowData.paymentDate);
+
         let data = {
           customerId: this.rowData.customerId,
           customerName: this.rowData.customerName,
@@ -643,24 +649,9 @@ export default {
           gstNumber: this.rowData.gstNumber,
           mode: this.rowData.paymentMode,
           payment: this.rowData.payment,
-          paymentDate: this.customFormatter(this.rowData.paymentDate),
-        };
-        this.grandTotal = this.rowData.totalAmount;
-        this.payment = this.rowData.payment;
-        this.customerDetails.push(data);
-
-        this.invoiceData = {
-          invoiceNumber: this.invoiceNumber,
-          invoiceDate: this.customFormatter(this.invoiceDate),
-          delMode: this.del,
-          username: this.username,
-          products: this.products,
-          customer: this.customerDetails[0],
-          paymentMode: this.mode,
-          totalAmount: this.grandTotal,
-          payment: this.payment,
           paymentDate: this.customFormatter(this.paymentDate),
         };
+        this.customerDetails.push(data);
         this.isInvoiceSaved = true;
       }
     } else {
@@ -803,9 +794,10 @@ export default {
     },
     saveInvoice() {
       if (
-        this.invoiceNumber != "" &&
-        this.products.length != 0 &&
-        this.customerId != ""
+        (this.invoiceNumber != "" &&
+          this.products.length != 0 &&
+          this.customerId != "") ||
+        this.invoiceEditMode
       ) {
         if (this.mode != "Cash Memo") {
           getInvoices()
@@ -814,19 +806,19 @@ export default {
               const found = this.invoiceList.some(
                 (el) => el.invoiceNumber === this.invoiceNumber
               );
+              let invoiceData = {
+                invoiceNumber: this.invoiceNumber,
+                invoiceDate: this.invoiceDate,
+                delMode: this.del,
+                username: this.username,
+                products: this.products,
+                customer: this.customerDetails[0],
+                paymentMode: this.mode,
+                totalAmount: this.grandTotal,
+                payment: this.payment,
+                paymentDate: this.customFormatter(this.paymentDate),
+              };
               if (!found) {
-                let invoiceData = {
-                  invoiceNumber: this.invoiceNumber,
-                  invoiceDate: this.invoiceDate,
-                  delMode: this.del,
-                  username: this.username,
-                  products: this.products,
-                  customer: this.customerDetails[0],
-                  paymentMode: this.mode,
-                  totalAmount: this.grandTotal,
-                  payment: this.payment,
-                  paymentDate: this.customFormatter(this.paymentDate),
-                };
                 createInvoice(invoiceData)
                   .then((data) => {
                     alert("Invoice is successfully created");
@@ -839,6 +831,18 @@ export default {
                     });
                   })
                   .catch((err) => alert(err.message));
+              } else {
+                console.log(invoiceData);
+
+                updateInvoice(invoiceData, this.rowData.id).then((data) => {
+                  this.invoiceData = invoiceData;
+                  alert("Invoice is successfully updated");
+                  this.$nextTick(() => {
+                    this.products.forEach((element) => {
+                      this.updatePr(element);
+                    });
+                  });
+                });
               }
             })
             .catch((err) => alert(err));

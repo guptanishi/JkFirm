@@ -70,47 +70,30 @@ exports.findLastIdRowInvoiceNumber = (req, res) => {
     });
 };
 
-// //Find a single Tutorial with an id
-// exports.findOne = (req, res) => {
-//   const id = req.params.id;
+// Update a Tutorial by the id in the request
+exports.update = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!"
+    });
+  }
 
-//   Customer.findById(id)
-//     .then(data => {
-//       if (!data)
-//         res.status(404).send({ message: "Not found Customer with id " + id });
-//       else res.send(data);
-//     })
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .send({ message: "Error retrieving Customer with id=" + code });
-//     });
-// };
+  const id = req.params.id;
 
-// // Update a Tutorial by the id in the request
-// exports.update = (req, res) => {
-//   if (!req.body) {
-//     return res.status(400).send({
-//       message: "Data to update can not be empty!"
-//     });
-//   }
-
-//   const id = req.params.id;
-
-//   Customer.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-//     .then(data => {
-//       if (!data) {
-//         res.status(404).send({
-//           message: `Cannot update Customer with id=${id}. Maybe Customer was not found!`
-//         });
-//       } else res.send({ message: "Customer was updated successfully." });
-//     })
-//     .catch(err => {
-//       res.status(500).send({
-//         message: "Error updating Customer with id=" + id
-//       });
-//     });
-// };
+  Invoice.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Invoice with id=${id}. Maybe Invoice was not found!`
+        });
+      } else res.send({ message: "Invoice was updated successfully." });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Invoice with id=" + id
+      });
+    });
+};
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
