@@ -191,7 +191,7 @@
                   SGST Total
                 </div>
                 <div v-else class="row" style="margin-left: 30px">
-                  GST Total
+                  IGST Total
                 </div>
                 <div
                   v-if="invoiceData.delMode == 'within state'"
@@ -245,12 +245,14 @@
             <br />
             <span>2-A/C No- 20292185271</span>
             <br />
-            <span>3- IFSC: ALLA0211265</span>
+            <span>3- IFSC: IDIB000K579</span>
             <br />
-            <span>Bank- Allahabad Bank</span>
+            <span>Bank- Indian Bank</span>
           </p>
         </div>
-        <div class="col-4">Authorised Signatory</div>
+        <div class="col-4" style="margin-top: 70px">
+          <span style="border-top: 1px solid #000">Authorised Signatory</span>
+        </div>
       </div>
     </div>
   </div>
