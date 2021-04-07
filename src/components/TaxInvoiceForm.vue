@@ -648,6 +648,19 @@ export default {
           paymentDate: this.customFormatter(this.paymentDate),
         };
         this.customerDetails.push(data);
+
+        this.invoiceData = {
+          invoiceNumber: this.invoiceNumber,
+          invoiceDate: this.invoiceDate,
+          delMode: this.del,
+          username: this.username,
+          products: this.products,
+          customer: this.customerDetails[0],
+          paymentMode: this.mode,
+          totalAmount: this.grandTotal,
+          payment: this.payment,
+          paymentDate: this.customFormatter(this.paymentDate),
+        };
         this.isInvoiceSaved = true;
       }
     } else {
@@ -802,19 +815,20 @@ export default {
               const found = this.invoiceList.some(
                 (el) => el.invoiceNumber === this.invoiceNumber
               );
-              let invoiceData = {
-                invoiceNumber: this.invoiceNumber,
-                invoiceDate: this.invoiceDate,
-                delMode: this.del,
-                username: this.username,
-                products: this.products,
-                customer: this.customerDetails[0],
-                paymentMode: this.mode,
-                totalAmount: this.grandTotal,
-                payment: this.payment,
-                paymentDate: this.customFormatter(this.paymentDate),
-              };
+
               if (!found) {
+                let invoiceData = {
+                  invoiceNumber: this.invoiceNumber,
+                  invoiceDate: this.invoiceDate,
+                  delMode: this.del,
+                  username: this.username,
+                  products: this.products,
+                  customer: this.customerDetails[0],
+                  paymentMode: this.mode,
+                  totalAmount: this.grandTotal,
+                  payment: this.payment,
+                  paymentDate: this.customFormatter(this.paymentDate),
+                };
                 createInvoice(invoiceData)
                   .then((data) => {
                     alert("Invoice is successfully created");
@@ -828,17 +842,19 @@ export default {
                   })
                   .catch((err) => alert(err.message));
               } else {
-                console.log(invoiceData);
+                console.log(this.invoiceData);
 
-                updateInvoice(invoiceData, this.rowData.id).then((data) => {
-                  this.invoiceData = invoiceData;
-                  alert("Invoice is successfully updated");
-                  this.$nextTick(() => {
-                    this.products.forEach((element) => {
-                      this.updatePr(element);
+                updateInvoice(this.invoiceData, this.rowData.id).then(
+                  (data) => {
+                    // this.invoiceData = invoiceData;
+                    alert("Invoice is successfully updated");
+                    this.$nextTick(() => {
+                      this.products.forEach((element) => {
+                        this.updatePr(element);
+                      });
                     });
-                  });
-                });
+                  }
+                );
               }
             })
             .catch((err) => alert(err));
