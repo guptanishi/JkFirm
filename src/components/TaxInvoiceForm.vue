@@ -612,11 +612,12 @@ export default {
     if (localStorage.username == "admin") {
       this.rowData = this.data;
       if (this.rowData == undefined) {
+        
         getLastInvoiceNumber()
           .then((data) => {
-            if (data.length == 0) {
-              this.invoiceNumber = this.generateInvoiceNumber(1);
-            } else {
+            if (data.length == 0 || state.date.getMonth() === 3) {
+              this.invoiceNumber = this.generateInvoiceNumber(5);
+            }else {
               let lastnumber = data[0].invoiceNumber;
               let counter = Number(lastnumber.substring(7, lastnumber.length));
               counter++;
