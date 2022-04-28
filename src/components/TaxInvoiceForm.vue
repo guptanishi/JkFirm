@@ -615,8 +615,8 @@ export default {
         
         getLastInvoiceNumber()
           .then((data) => {
-            if (data.length == 0) {
-              this.invoiceNumber = this.generateInvoiceNumber(5);
+            if (data.length == 0 || state.date.getMonth() == 3) {
+              this.invoiceNumber = this.generateInvoiceNumber(24);
             }else {
               let lastnumber = data[0].invoiceNumber;
               let counter = Number(lastnumber.substring(7, lastnumber.length));
