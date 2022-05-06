@@ -66,7 +66,7 @@ export default {
       columns: [
         {
           label: "Invoice Number",
-          field: "invoiceNumber"
+          field: "invoiceNumber",
         },
         {
           label: "Products",
