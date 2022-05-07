@@ -30,6 +30,9 @@
             :key="product.productId"
           >{{ product.productName}}</li>
         </span>
+        <span v-else-if="props.column.field == 'invoiceDate'">
+        {{props.row.invoiceDate | moment}}
+        </span>
         <span
           v-else-if="props.column.field == 'paymentDue'"
         >{{props.row.totalAmount - props.row.payment}}</span>
@@ -49,6 +52,7 @@
 
 <script>
 import { VueGoodTable } from "vue-good-table";
+import moment from "moment";
 import {
   getInvoices,
   getOneProduct,
@@ -69,6 +73,10 @@ export default {
           field: "invoiceNumber",
         },
         {
+          label: "Invoice Date",
+          field: "invoiceDate"
+        },
+        {
           label: "Products",
           field: "products"
         },
@@ -80,10 +88,7 @@ export default {
           label: "Total Amount",
           field: "totalAmount"
         },
-        {
-          label: "Payment Date",
-          field: "paymentDate"
-        },
+        
         {
           label: "Payment",
           field: "payment"
@@ -102,6 +107,11 @@ export default {
         }
       ]
     };
+  },
+  filters: {
+  moment: function (date) {
+    return moment(date).format('DD/MM/YYYY HH:MM:ss');
+  }
   },
   mounted() {
     if (localStorage.username == "admin") {
