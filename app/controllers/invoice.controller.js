@@ -43,8 +43,9 @@ exports.create = (req, res) => {
 
 //Retrieve all invoices from the database.
 exports.findAll = (req, res) => {
-  Invoice.find().sort({'invoiceDate':-1})
+  Invoice.find().sort({invoiceDate: -1, invoiceNumber: -1})
     .then(data => {
+      console.log(data);
       res.send(data);
     })
     .catch(err => {
@@ -56,7 +57,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.findLastIdRowInvoiceNumber = (req, res) => {
-  Invoice.find().sort({'invoiceDate':-1}).limit(1).then(data => {
+  Invoice.find().sort({invoiceDate: -1, invoiceNumber: -1}).limit(1).then(data => {
     res.send(data);
   })
     .catch(err => {
