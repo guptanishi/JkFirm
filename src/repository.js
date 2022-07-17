@@ -156,6 +156,7 @@ export function getLastCashMemoInvoiceNumber() {
 }
 
 export function updateInvoice(data, id) {
+	console.log(id);
 	return axios.post(`${BASE_URL}/api/invoices/${id}`, {
 		invoiceNumber: data.invoiceNumber,
 		invoiceDate: data.invoiceDate,
@@ -176,7 +177,9 @@ export function updateInvoice(data, id) {
 		.then(response => {
 			return response.data
 		})
-		.catch(err => Promise.reject(err.message));
+		.catch(err => {
+			console.log(err);
+		});
 }
 
 export function getCashMemos() {

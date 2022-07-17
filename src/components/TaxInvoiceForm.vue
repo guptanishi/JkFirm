@@ -576,6 +576,7 @@ export default {
       stockAvailable: "",
       invoiceList: [],
       HSN: "",
+      id: "",
       invoiceEditMode: false,
     };
   },
@@ -624,10 +625,11 @@ export default {
               this.invoiceNumber = this.generateInvoiceNumber(counter);
             }
           })
-          .catch((err) => alert(err.message));
+          .catch((err) => alert("can not fetch invoice number"));
         this.invoiceDate = state.date;
         this.paymentDate = state.date;
       } else {
+        
         this.invoiceEditMode = true;
         this.invoiceNumber = this.rowData.invoiceNumber;
         this.invoiceDate = this.rowData.invoiceDate;
@@ -636,6 +638,7 @@ export default {
         this.grandTotal = this.rowData.totalAmount;
         this.payment = this.rowData.payment;
         this.paymentDate = this.customFormatter(this.rowData.paymentDate);
+        this.id = this.rowData.id;
 
         let data = {
           customerId: this.rowData.customerId,
@@ -648,6 +651,7 @@ export default {
           payment: this.rowData.payment,
           paymentDate: this.customFormatter(this.paymentDate),
         };
+
         this.customerDetails.push(data);
 
         this.invoiceData = {
@@ -662,6 +666,7 @@ export default {
           payment: this.payment,
           paymentDate: this.customFormatter(this.paymentDate),
         };
+        console.log(this.rowData.id);
         this.isInvoiceSaved = true;
       }
     } else {
@@ -704,6 +709,7 @@ export default {
       //alert(this.productId);
     },
     addProducts() {
+      debugger;
       if (this.productCode != "" && this.productCode != undefined) {
         const found = this.products.some(
           (el) => el.productCode === this.productCode
@@ -745,7 +751,7 @@ export default {
         .then((data) => {
           alert("stock updated");
         })
-        .catch((err) => alert(err.message));
+        .catch((err) => alert("product not updated"));
     },
     resetproduct() {
       this.productCode = "";
@@ -817,19 +823,20 @@ export default {
                 (el) => el.invoiceNumber === this.invoiceNumber
               );
 
+              let invoiceData = {
+                invoiceNumber: this.invoiceNumber,
+                invoiceDate: this.invoiceDate,
+                delMode: this.del,
+                username: this.username,
+                products: this.products,
+                customer: this.customerDetails[0],
+                paymentMode: this.mode,
+                totalAmount: this.grandTotal,
+                payment: this.payment,
+                paymentDate: this.customFormatter(this.paymentDate),
+              };
+
               if (!found) {
-                let invoiceData = {
-                  invoiceNumber: this.invoiceNumber,
-                  invoiceDate: this.invoiceDate,
-                  delMode: this.del,
-                  username: this.username,
-                  products: this.products,
-                  customer: this.customerDetails[0],
-                  paymentMode: this.mode,
-                  totalAmount: this.grandTotal,
-                  payment: this.payment,
-                  paymentDate: this.customFormatter(this.paymentDate),
-                };
                 createInvoice(invoiceData)
                   .then((data) => {
                     alert("Invoice is successfully created");
@@ -841,11 +848,11 @@ export default {
                       });
                     });
                   })
-                  .catch((err) => alert(err.message));
+                  .catch((err) => alert("invoice not saved successfully"));
               } else {
-                console.log(this.invoiceData);
+                console.log(this.rowData);
 
-                updateInvoice(this.invoiceData, this.rowData.id).then(
+                updateInvoice(invoiceData, this.id).then(
                   (data) => {
                     // this.invoiceData = invoiceData;
                     alert("Invoice is successfully updated");
@@ -858,7 +865,7 @@ export default {
                 );
               }
             })
-            .catch((err) => alert(err));
+            .catch((err) => alert("Invoice not saved"));
         } else {
           let memoNumber = "";
           getLastCashMemoInvoiceNumber()
@@ -898,9 +905,9 @@ export default {
                     });
                   });
                 })
-                .catch((err) => alert(err.message));
+                .catch((err) => alert("casMemo is not saved"));
             })
-            .catch((err) => alert(err));
+            .catch((err) => alert("can not fetch cash memo"));
         }
       }
     },
@@ -913,9 +920,11 @@ export default {
       EventBus.$emit("showContent");
     },
     deleteRow(row) {
+      console.log(row);
       this.products = this.products.filter(
-        (el) => el.productCode != row.productCode
+        (el) => el.productCode !== row.productCode
       );
+      console.log(this.products);
     },
     edit(row) {
       this.operation = "Update";
