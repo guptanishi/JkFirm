@@ -465,12 +465,12 @@ export default {
  <style>
 #content {
   font-family: "Helvetica", "Arial", sans-serif;
-  font-size: 12pt;
+  font-size: 9pt;
 
 }
 
 .bold {
-  font-weight: bold;
+  font-weight: 900;
   font-family: "Times New Roman", Times, serif;
 }
 
@@ -496,6 +496,6 @@ div.absolute {
   margin-left: 30px;
 }
 .bigFont {
-  font-size: 13pt;
+  font-size: 9pt;
 }
 </style>
