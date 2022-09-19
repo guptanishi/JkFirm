@@ -108,7 +108,7 @@
                 <th>Total</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="bold bigFont">
               <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -165,7 +165,7 @@
             </tbody>
           </table>
         </div>
-        <div class="row top-buffer">
+        <div class="row top-buffer bigFont">
           <div class="col-6">
             <span>Chargable Amount In Words</span>
             <br />
@@ -465,11 +465,12 @@ export default {
  <style>
 #content {
   font-family: "Helvetica", "Arial", sans-serif;
-  font-size: 9pt;
+  font-size: 12pt;
+
 }
 
 .bold {
-  font-weight: 700;
+  font-weight: bold;
   font-family: "Times New Roman", Times, serif;
 }
 
@@ -493,5 +494,8 @@ div.absolute {
 }
 .ml-50 {
   margin-left: 30px;
+}
+.bigFont {
+  font-size: 13pt;
 }
 </style>
