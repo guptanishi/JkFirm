@@ -37,8 +37,9 @@ db.mongoose
 
 require("./app/routes/product.routes")(app);
 
-app.get("*", (req, res) => {
-  res.sendFile(__dirname + '/dist/index.html');
+app.get("/", (req, res) => {
+  res.write(__dirname + 'dsfdsf')
+  // res.sendFile(__dirname + '/dist/index.html');
 }); 
 
 
