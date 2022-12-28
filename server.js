@@ -1,34 +1,41 @@
 'use strict';
 
-const express = require('express');
-const app = express();
-const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-var serveStatic = require('serve-static');
+// const express = require('express');
+// const app = express();
+// const cors = require('cors');
+// const bodyParser = require('body-parser');
+// var serveStatic = require('serve-static');
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
-app.use(serveStatic(__dirname + "/dist"));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(cors());
+// app.use(serveStatic(__dirname + "/dist"));
 
-const db = require("./app/models");
-console.log(db.url);
-db.mongoose
-  .connect(db.url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {
-    console.log("Connected to the database!");
-  })
-  .catch(err => {
-    console.log("Cannot connect to the database!", err);
-    process.exit();
-  });
+
+var http = require('http');
+
+//create a server object:
+http.createServer(function (req, res) {
+  res.write('Hello World!'); //write a response to the client
+  res.end(); //end the response
+  const PORT = process.env.PORT || 3001;
+}).listen(PORT); //the server object listens on port 8080
+
+// const db = require("./app/models");
+// console.log(db.url);
+// db.mongoose
+//   .connect(db.url, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+//   })
+//   .then(() => {
+//     console.log("Connected to the database!");
+//   })
+//   .catch(err => {
+//     console.log("Cannot connect to the database!", err);
+//     process.exit();
+//   });
 
 // simple route
 // app.get("/", (req, res) => {
@@ -37,11 +44,11 @@ db.mongoose
 //   res.sendFile(__dirname + '/dist/index.html');
 // }); 
 
-require("./app/routes/product.routes")(app);
+// require("./app/routes/product.routes")(app);
 
-app.get("*", (req, res) => {
-  res.sendFile(__dirname + '/dist/index.html');
-}); 
+// app.get("*", (req, res) => {
+//   res.sendFile(__dirname + '/dist/index.html');
+// }); 
 
 
 const PORT = process.env.PORT || 3001;
