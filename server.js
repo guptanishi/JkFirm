@@ -13,15 +13,6 @@ app.use(cors());
 app.use(serveStatic(__dirname + "/dist"));
 
 
-// var http = require('http');
-// const PORT = process.env.PORT || 3001;
-// //create a server object:
-// http.createServer(function (req, res) {
-//   res.write('Hello World!'); //write a response to the client
-//   res.end(); //end the response
- 
-// }).listen(PORT); //the server object listens on port 8080
-
 const db = require("./app/models");
 console.log(db.url);
 db.mongoose
@@ -44,11 +35,11 @@ db.mongoose
 //   res.sendFile(__dirname + '/dist/index.html');
 // }); 
 
-//require("./app/routes/product.routes")(app);
+require("./app/routes/product.routes")(app);
 
-// app.get("*", (req, res) => {
-//   res.sendFile(__dirname + '/dist/index.html');
-// }); 
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + '/dist/index.html');
+}); 
 
 
 const PORT = process.env.PORT || 3001;
