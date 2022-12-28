@@ -39,9 +39,10 @@ db.mongoose
 
 require("./app/routes/product.routes")(app);
 
-// app.get("*", (req, res) => {
-//   res.sendFile(__dirname + '/dist/index.html');
-// }); 
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + '/dist/index.html');
+}); 
+
 
 const PORT = process.env.PORT || 3001;
 
