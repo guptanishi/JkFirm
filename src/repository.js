@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let BASE_URL = ""
 if (process.env.NODE_ENV == "production") {
-	BASE_URL = 'https://jkfirm.herokuapp.com';
+	BASE_URL = 'https://jkfirm.onrender.com';
 } else {
 	BASE_URL = 'http://localhost:3001';
 }
