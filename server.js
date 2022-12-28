@@ -14,12 +14,12 @@
 
 
 var http = require('http');
-
+const PORT = process.env.PORT || 3001;
 //create a server object:
 http.createServer(function (req, res) {
   res.write('Hello World!'); //write a response to the client
   res.end(); //end the response
-  const PORT = process.env.PORT || 3001;
+ 
 }).listen(PORT); //the server object listens on port 8080
 
 // const db = require("./app/models");
@@ -51,7 +51,7 @@ http.createServer(function (req, res) {
 // }); 
 
 
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
 
-app.listen(PORT);
-console.log('api runnging on port ' + PORT + ': ');
+// app.listen(PORT);
+// console.log('api runnging on port ' + PORT + ': ');
