@@ -12,7 +12,9 @@
       <button class="btn btn-primary" @click="showCashMemo">{{listName}}</button>
     </div>
     <vue-good-table
+      :mode="remote"
       :columns="columns"
+      :isLoading.sync="isLoading"
       :rows="invoices"
       :search-options="{ enabled: true, placeholder:'search invoices' }"
       :pagination-options="{ enabled: true,
@@ -33,12 +35,10 @@
         <span v-else-if="props.column.field == 'invoiceDate'">
         {{props.row.invoiceDate | moment}}
         </span>
-        <span
-          v-else-if="props.column.field == 'paymentDue'"
-        >{{props.row.totalAmount - props.row.payment}}</span>
+        
         <span v-else-if="props.column.field == 'last'">
           <button @click.stop="deleteRow(this, props.row.id)">
-            <i class="fa fa-trash-o"></i>
+            <i class="fa fa-trash-o "></i>
           </button>
           <button style="margin-left:20px" @click.stop="onRowClick(props)">
             <i class="fa fa-pencil"></i>
@@ -67,6 +67,7 @@ export default {
     return {
       invoices: [],
       listName: "",
+      isLoading: false,
       columns: [
         {
           label: "Invoice Number",
@@ -88,15 +89,7 @@ export default {
           label: "Total Amount",
           field: "totalAmount"
         },
-        
-        {
-          label: "Payment",
-          field: "payment"
-        },
-        {
-          label: "Payment Due",
-          field: "paymentDue"
-        },
+      
         {
           label: "Delievery",
           field: "delMode"
@@ -104,7 +97,8 @@ export default {
         {
           label: "Options",
           field: "last"
-        }
+        },
+        
       ]
     };
   },
@@ -115,8 +109,10 @@ export default {
   },
   mounted() {
     if (localStorage.username == "admin") {
+      this.isLoading = true;
       getInvoices()
         .then(data => {
+          this.isLoading = false;
           console.log(data);
           this.invoices = data;
           this.listName = "show Cash Memos";
