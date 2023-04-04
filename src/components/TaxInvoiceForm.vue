@@ -676,12 +676,9 @@ export default {
   methods: {
     generateInvoiceNumber(counter) {
       const prefix = "JK";
-      let fullYear = "";
-      if (state.date.getMonth < 12 && state.date.getMonth > 3) {
-        fullYear = state.date.getFullYear() + 1;
-      } else {
-        fullYear = state.date.getFullYear() ;
-      }
+
+      let fullYear = state.date.getFullYear() + 1;
+
       let b = String(counter).padStart(3, "0");
       return prefix + "-" + fullYear + b;
     },
