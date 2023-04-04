@@ -451,7 +451,7 @@ import {
   getInvoices,
   createCashInvoice,
   getLastCashMemoInvoiceNumber,
-  updateInvoice,
+  updateInvoice
 } from "../repository";
 import Datepicker from "vuejs-datepicker";
 import moment from "moment";
@@ -461,7 +461,7 @@ import PdfGenerator from "./PdfGenerator.vue";
 import { EventBus } from "../../event-bus.js";
 
 var state = {
-  date: new Date(),
+  date: new Date()
 };
 
 export default {
@@ -470,7 +470,7 @@ export default {
     Datepicker,
     ModalForProducts,
     ModalForCustomers,
-    PdfGenerator,
+    PdfGenerator
   },
   props: ["data"],
 
@@ -480,62 +480,62 @@ export default {
       paymentColumns: [
         {
           label: "Customer Name",
-          field: "customerName",
+          field: "customerName"
         },
         {
           label: "State",
-          field: "state",
+          field: "state"
         },
         {
           label: "Payment Mode",
-          field: "mode",
+          field: "mode"
         },
         {
           label: "Payment",
-          field: "payment",
+          field: "payment"
         },
         {
           label: "Payment Date",
-          field: "paymentDate",
+          field: "paymentDate"
         },
         {
           label: "Options",
-          field: "last",
-        },
+          field: "last"
+        }
       ],
       productColumns: [
         {
           label: "PR Code",
-          field: "productCode",
+          field: "productCode"
         },
         {
           label: "PR Name",
-          field: "productName",
+          field: "productName"
         },
         {
           label: "Price",
-          field: "price",
+          field: "price"
         },
         {
           label: "Quantity",
-          field: "quantity",
+          field: "quantity"
         },
         {
           label: "Vat",
-          field: "vat",
+          field: "vat"
         },
         {
           label: "HSN",
-          field: "HSN",
+          field: "HSN"
         },
         {
           label: "Total",
-          field: "total",
+          field: "total"
         },
         {
           label: "Options",
-          field: "last",
-        },
+          field: "last"
+        }
       ],
       products: [],
       productId: "",
@@ -577,7 +577,7 @@ export default {
       invoiceList: [],
       HSN: "",
       id: "",
-      invoiceEditMode: false,
+      invoiceEditMode: false
     };
   },
   computed: {
@@ -603,7 +603,7 @@ export default {
     },
     calculatePaymentDue() {
       return (this.paymentDue = this.grandTotal - this.payment);
-    },
+    }
   },
   mounted() {
     EventBus.$on("hideContent", () => {
@@ -613,23 +613,21 @@ export default {
     if (localStorage.username == "admin") {
       this.rowData = this.data;
       if (this.rowData == undefined) {
-        
         getLastInvoiceNumber()
-          .then((data) => {
+          .then(data => {
             if (data.length == 0) {
               this.invoiceNumber = this.generateInvoiceNumber(5);
-            }else {
+            } else {
               let lastnumber = data[0].invoiceNumber;
               let counter = Number(lastnumber.substring(7, lastnumber.length));
               counter++;
               this.invoiceNumber = this.generateInvoiceNumber(counter);
             }
           })
-          .catch((err) => alert("can not fetch invoice number"));
+          .catch(err => alert("can not fetch invoice number"));
         this.invoiceDate = state.date;
         this.paymentDate = state.date;
       } else {
-        
         this.invoiceEditMode = true;
         this.invoiceNumber = this.rowData.invoiceNumber;
         this.invoiceDate = this.rowData.invoiceDate;
@@ -649,7 +647,7 @@ export default {
           gstNumber: this.rowData.gstNumber,
           mode: this.rowData.paymentMode,
           payment: this.rowData.payment,
-          paymentDate: this.customFormatter(this.paymentDate),
+          paymentDate: this.customFormatter(this.paymentDate)
         };
 
         this.customerDetails.push(data);
@@ -664,22 +662,27 @@ export default {
           paymentMode: this.mode,
           totalAmount: this.grandTotal,
           payment: this.payment,
-          paymentDate: this.customFormatter(this.paymentDate),
+          paymentDate: this.customFormatter(this.paymentDate)
         };
         console.log(this.rowData.id);
         this.isInvoiceSaved = true;
       }
     } else {
       this.$router.push({
-        name: "login",
+        name: "login"
       });
     }
   },
   methods: {
     generateInvoiceNumber(counter) {
       const prefix = "JK";
-      let fullYear = state.date.getFullYear();
-      let b = String(counter).padStart(2, "0");
+      let fullYear = "";
+      if (state.date.getMonth < 12 && state.date.getMonth > 3) {
+        fullYear = state.date.getFullYear() + 1;
+      } else {
+        fullYear = state.date.getFullYear() ;
+      }
+      let b = String(counter).padStart(3, "0");
       return prefix + "-" + fullYear + b;
     },
 
@@ -712,7 +715,7 @@ export default {
       debugger;
       if (this.productCode != "" && this.productCode != undefined) {
         const found = this.products.some(
-          (el) => el.productCode === this.productCode
+          el => el.productCode === this.productCode
         );
         let data = {
           productCode: this.productCode,
@@ -724,7 +727,7 @@ export default {
           total: this.total,
           stockAvailable: this.stockAvailable,
           id: this.productId,
-          HSN: this.HSN,
+          HSN: this.HSN
         };
         if (parseInt(this.quantity) > parseInt(this.stockAvailable)) {
           alert("stock is not available!");
@@ -733,7 +736,7 @@ export default {
             this.products.push(data);
           } else {
             this.products = this.products.filter(
-              (el) => el.productCode != this.productCode
+              el => el.productCode != this.productCode
             );
             this.products.push(data);
             this.operation = "Add";
@@ -745,13 +748,13 @@ export default {
 
     updatePr(rowData) {
       let data = {
-        qtyAvailable: rowData.stockAvailable - rowData.quantity,
+        qtyAvailable: rowData.stockAvailable - rowData.quantity
       };
       updateProduct(data, rowData.id)
-        .then((data) => {
+        .then(data => {
           alert("stock updated");
         })
-        .catch((err) => alert("product not updated"));
+        .catch(err => alert("product not updated"));
     },
     resetproduct() {
       this.productCode = "";
@@ -784,7 +787,7 @@ export default {
     addCustomerDetail() {
       if (this.customerId !== undefined && this.customerId != "") {
         const found = this.customerDetails.some(
-          (el) => el.customerId === this.customerId
+          el => el.customerId === this.customerId
         );
         let data = {
           customerId: this.customerId,
@@ -795,13 +798,13 @@ export default {
           gstNumber: this.gstNumber,
           mode: this.mode,
           payment: this.payment,
-          paymentDate: this.customFormatter(this.paymentDate),
+          paymentDate: this.customFormatter(this.paymentDate)
         };
         if (!found) {
           this.customerDetails.push(data);
         } else {
           this.customerDetails = this.customerDetails.filter(
-            (el) => el.customerId != this.customerId
+            el => el.customerId != this.customerId
           );
           this.customerDetails.push(data);
         }
@@ -817,10 +820,10 @@ export default {
       ) {
         if (this.mode != "Cash Memo") {
           getInvoices()
-            .then((data) => {
+            .then(data => {
               this.invoiceList = data;
               const found = this.invoiceList.some(
-                (el) => el.invoiceNumber === this.invoiceNumber
+                el => el.invoiceNumber === this.invoiceNumber
               );
 
               let invoiceData = {
@@ -833,43 +836,41 @@ export default {
                 paymentMode: this.mode,
                 totalAmount: this.grandTotal,
                 payment: this.payment,
-                paymentDate: this.customFormatter(this.paymentDate),
+                paymentDate: this.customFormatter(this.paymentDate)
               };
 
               if (!found) {
                 createInvoice(invoiceData)
-                  .then((data) => {
+                  .then(data => {
                     alert("Invoice is successfully created");
                     this.invoiceData = invoiceData;
                     this.$nextTick(() => {
                       this.isInvoiceSaved = true;
-                      this.products.forEach((element) => {
+                      this.products.forEach(element => {
                         this.updatePr(element);
                       });
                     });
                   })
-                  .catch((err) => alert("invoice not saved successfully"));
+                  .catch(err => alert("invoice not saved successfully"));
               } else {
                 console.log(this.rowData);
 
-                updateInvoice(invoiceData, this.id).then(
-                  (data) => {
-                    // this.invoiceData = invoiceData;
-                    alert("Invoice is successfully updated");
-                    this.$nextTick(() => {
-                      this.products.forEach((element) => {
-                        this.updatePr(element);
-                      });
+                updateInvoice(invoiceData, this.id).then(data => {
+                  // this.invoiceData = invoiceData;
+                  alert("Invoice is successfully updated");
+                  this.$nextTick(() => {
+                    this.products.forEach(element => {
+                      this.updatePr(element);
                     });
-                  }
-                );
+                  });
+                });
               }
             })
-            .catch((err) => alert("Invoice not saved"));
+            .catch(err => alert("Invoice not saved"));
         } else {
           let memoNumber = "";
           getLastCashMemoInvoiceNumber()
-            .then((data) => {
+            .then(data => {
               if (data.length == 0) {
                 memoNumber = this.generateCashMemoInvoiceNumber(1);
               } else {
@@ -891,23 +892,23 @@ export default {
                 paymentMode: this.mode,
                 totalAmount: this.grandTotal,
                 payment: this.payment,
-                paymentDate: this.customFormatter(this.paymentDate),
+                paymentDate: this.customFormatter(this.paymentDate)
               };
 
               createCashInvoice(invoiceData)
-                .then((data) => {
+                .then(data => {
                   alert("casMemo is successfully created");
                   this.invoiceData = invoiceData;
                   this.$nextTick(() => {
                     this.isInvoiceSaved = true;
-                    this.products.forEach((element) => {
+                    this.products.forEach(element => {
                       this.updatePr(element);
                     });
                   });
                 })
-                .catch((err) => alert("casMemo is not saved"));
+                .catch(err => alert("casMemo is not saved"));
             })
-            .catch((err) => alert("can not fetch cash memo"));
+            .catch(err => alert("can not fetch cash memo"));
         }
       }
     },
@@ -922,7 +923,7 @@ export default {
     deleteRow(row) {
       console.log(row);
       this.products = this.products.filter(
-        (el) => el.productCode !== row.productCode
+        el => el.productCode !== row.productCode
       );
       console.log(this.products);
     },
@@ -936,7 +937,7 @@ export default {
       this.unit = row.unit;
     },
     deletePaymentRow(id) {
-      this.customerDetails = this.customerDetails.filter((el) => el._id != id);
+      this.customerDetails = this.customerDetails.filter(el => el._id != id);
     },
     editPaymentRow(row) {
       this.paymentOperation = "update";
@@ -953,8 +954,8 @@ export default {
     },
     reloadPage() {
       this.$router.go(0);
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
