@@ -267,7 +267,7 @@ import moment from "moment";
 import { EventBus } from "../../event-bus.js";
 
 var state = {
-  date: new Date(),
+  date: new Date()
 };
 
 export default {
@@ -278,7 +278,7 @@ export default {
     return {
       invoiceData: {},
       SGST: [],
-      CGST: [],
+      CGST: []
     };
   },
   watch: {
@@ -286,7 +286,7 @@ export default {
       if (newValue != oldValue) {
         this.openNewTab();
       }
-    },
+    }
   },
   mounted() {
     EventBus.$on("showContent", () => {
@@ -304,7 +304,7 @@ export default {
     sumOfSGST() {
       let SGST = 0;
       if (this.invoiceData) {
-        this.invoiceData.products.forEach((product) => {
+        this.invoiceData.products.forEach(product => {
           SGST =
             SGST + (product.price * product.quantity * (product.vat / 2)) / 100;
         });
@@ -315,7 +315,7 @@ export default {
     sumOfCGST() {
       let CGST = 0;
       if (this.invoiceData) {
-        this.invoiceData.products.forEach((product) => {
+        this.invoiceData.products.forEach(product => {
           CGST =
             CGST + (product.price * product.quantity * (product.vat / 2)) / 100;
         });
@@ -328,7 +328,7 @@ export default {
       let GST = 0;
       if (this.invoiceData != undefined) {
         if (this.invoiceData.products != undefined) {
-          this.invoiceData.products.forEach((product) => {
+          this.invoiceData.products.forEach(product => {
             GST = GST + (product.price * product.quantity * product.vat) / 100;
           });
         }
@@ -338,29 +338,23 @@ export default {
     },
 
     openNewTab() {
-      //alert("dsfsdf");
       this.invoiceData = this.info;
       console.log(this.invoiceData);
-      var element = document.getElementById("content");
-      var doc = new jsPDF("p", "in", "a4");
-      var width = doc.internal.pageSize.getWidth();
-      var height = doc.internal.pageSize.getHeight();
-      var opt = {
+      let element = document.getElementById("content");
+      let doc = new jsPDF("p", "in", "a4");
+      let opt = {
         fileName: `invoice${state.date}.pdf`,
         html2canvas: {
-          scale: 5,
+          scale: 5
         },
-        jsPDF: doc,
+        jsPDF: doc
       };
       html2pdf()
         .set(opt)
         .from(element)
         .toPdf()
         .get("pdf")
-        .then(function (pdf) {
-          window.open(pdf.output("bloburl"), "_blank");
-          EventBus.$emit("hideContent");
-        });
+        .save();
     },
 
     numberToEnglish(amount) {
@@ -457,8 +451,8 @@ export default {
         words_string = words_string.split("  ").join(" ");
       }
       return words_string;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -466,7 +460,6 @@ export default {
 #content {
   font-family: "Helvetica", "Arial", sans-serif;
   font-size: 9pt;
-
 }
 
 .bold {

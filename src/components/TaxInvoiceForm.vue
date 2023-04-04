@@ -749,7 +749,7 @@ export default {
       };
       updateProduct(data, rowData.id)
         .then(data => {
-          alert("stock updated");
+          console.log("stock updated");
         })
         .catch(err => alert("product not updated"));
     },
