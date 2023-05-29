@@ -610,7 +610,6 @@ export default {
     });
 
     if (localStorage.username == "admin") {
-      console.log(this.action);
       this.rowData = this.data;
       if (this.rowData == undefined) {
         getLastInvoiceNumber()
@@ -714,7 +713,6 @@ export default {
       this.stockAvailable = data.qtyAvailable;
       this.HSN = data.HSN;
 
-      //alert(this.productId);
     },
     addProducts() {
       if (this.productCode != "" && this.productCode != undefined) {
@@ -925,11 +923,10 @@ export default {
       EventBus.$emit("showContent");
     },
     deleteRow(row) {
-      console.log(row);
       this.products = this.products.filter(
         el => el.productCode !== row.productCode
       );
-      console.log(this.products);
+
     },
     edit(row) {
       this.operation = "Update";
