@@ -472,7 +472,7 @@ export default {
     ModalForCustomers,
     PdfGenerator
   },
-  props: ["data"],
+  props: ["data", "action"],
 
   data() {
     return {
@@ -566,7 +566,6 @@ export default {
       paymentDue: 0,
       del: "within state",
       invoiceData: {},
-      customerDetails: [],
       isInvoiceSaved: false,
       componentName: "",
       invoiceType: "",
@@ -611,6 +610,7 @@ export default {
     });
 
     if (localStorage.username == "admin") {
+      console.log(this.action);
       this.rowData = this.data;
       if (this.rowData == undefined) {
         getLastInvoiceNumber()
@@ -667,6 +667,14 @@ export default {
         console.log(this.rowData.id);
         this.isInvoiceSaved = true;
       }
+      if (this.action == "download") {
+        this.generatePdf("Triplicate");
+        this.$nextTick(() => {
+          this.$router.push({
+            name: "taxInvoiceList"
+          });
+        });
+      }
     } else {
       this.$router.push({
         name: "login"
@@ -709,7 +717,6 @@ export default {
       //alert(this.productId);
     },
     addProducts() {
-      debugger;
       if (this.productCode != "" && this.productCode != undefined) {
         const found = this.products.some(
           el => el.productCode === this.productCode

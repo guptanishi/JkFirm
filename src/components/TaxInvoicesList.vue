@@ -12,7 +12,6 @@
       <button class="btn btn-primary" @click="showCashMemo">{{listName}}</button>
     </div>
     <vue-good-table
-      :mode="remote"
       :columns="columns"
       :isLoading.sync="isLoading"
       :rows="invoices"
@@ -43,6 +42,9 @@
           <button style="margin-left:20px" @click.stop="onRowClick(props)">
             <i class="fa fa-pencil"></i>
           </button>
+           <button style="margin-left:20px" @click.stop="downloadInvoice(props)">
+            <i class="fa fa-download"></i>
+          </button>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>
@@ -55,7 +57,6 @@ import { VueGoodTable } from "vue-good-table";
 import moment from "moment";
 import {
   getInvoices,
-  getOneProduct,
   deleteInvoice,
   getCashMemos,
   deleteCashMemo
@@ -71,7 +72,7 @@ export default {
       columns: [
         {
           label: "Invoice Number",
-          field: "invoiceNumber",
+          field: "invoiceNumber"
         },
         {
           label: "Invoice Date",
@@ -103,9 +104,9 @@ export default {
     };
   },
   filters: {
-  moment: function (date) {
-    return moment(date).format('DD/MM/YYYY HH:MM:ss');
-  }
+    moment: function(date) {
+      return moment(date).format("DD/MM/YYYY HH:MM:ss");
+    }
   },
   mounted() {
     if (localStorage.username == "admin") {
@@ -113,7 +114,6 @@ export default {
       getInvoices()
         .then(data => {
           this.isLoading = false;
-          console.log(data);
           this.invoices = data;
           this.listName = "show Cash Memos";
         })
@@ -151,6 +151,12 @@ export default {
             .catch(err => alert(err));
         }
       }
+    },
+    downloadInvoice(params) {
+      this.$router.push({
+        name: "taxInvoice",
+        params: { data: params.row, action: "download" }
+      });
     },
     onRowClick(params) {
       this.$router.push({
