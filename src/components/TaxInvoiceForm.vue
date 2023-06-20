@@ -785,6 +785,7 @@ export default {
       this.address = data.address;
       this.contact = data.contact;
       this.gstNumber = data.gstNumber;
+      this.del = this.state.startsWith("M.") ? "outside state" : "within state";
     },
     addCustomerDetail() {
       if (this.customerId !== undefined && this.customerId != "") {
@@ -926,7 +927,6 @@ export default {
       this.products = this.products.filter(
         el => el.productCode !== row.productCode
       );
-
     },
     edit(row) {
       this.operation = "Update";
