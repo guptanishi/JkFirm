@@ -9,7 +9,11 @@
       <h4>Search invoices</h4>
     </div>
     <div style="float:right; margin-top:-50px; margin-right: 30px">
-      <button class="btn btn-primary" @click="showCashMemo">{{listName}}</button>
+
+      <download-excel :data="invoices" :fields= "json_fields">
+        <button class="btn btn-primary"> Export Data</button>
+      </download-excel>
+     
     </div>
     <vue-good-table
       :columns="columns"
@@ -17,12 +21,17 @@
       :rows="invoices"
       :search-options="{ enabled: true, placeholder:'search invoices' }"
       :pagination-options="{ enabled: true,
-        perPage: 15 ,
+      
+        perPage: 100 ,
         nextLabel: 'next',
-        prevLabel: 'prev',rowsPerPageLabel: 'invoices per page',
+        prevLabel: 'prev',
+        rowsPerPageLabel: 'invoices per page',
         ofLabel: 'of',
         pageLabel: 'page', // for 'pages' mode
-        allLabel: 'All' }"
+        allLabel: 'All' ,
+        mode: 'pages'
+        }"
+         @on-row-click="getRowIndex"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'products'">
@@ -53,7 +62,12 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { VueGoodTable } from "vue-good-table";
+import JsonExcel from "vue-json-excel";
+
+Vue.component("downloadExcel", JsonExcel);
+
 import moment from "moment";
 import {
   getInvoices,
@@ -69,6 +83,50 @@ export default {
       invoices: [],
       listName: "",
       isLoading: false,
+
+      allowedKeys: [
+        "invoiceNumber",
+        "invoiceDate",
+        "products",
+        "customerId",
+        "customerName",
+        "address",
+        "state",
+        "contact",
+        "gstNumber",
+        "totalAmount",
+        "paymentDate"
+      ],
+      json_fields: {
+        "Invoice Number": "invoiceNumber",
+        "Invoice Date": {
+          field: "invoiceDate",
+          callback: value => {
+            const date = new Date(value);
+            return date.toLocaleDateString("en-GB");
+          }
+        },
+        Products: {
+          field: "products",
+          callback: value => {
+            let stringValue = "";
+            value.forEach((product, index) => {
+              stringValue =
+                stringValue + `${index + 1}. ${product.productName}\n`;
+            });
+
+            return stringValue;
+          }
+        },
+        "Customer Id": "customerId",
+        "Customer Name": "customerName",
+        Address: "address",
+        state: "state",
+        contact: "contact",
+        "GST Number": "gstNumber",
+        totalAmount: "totalAmount"
+      },
+
       columns: [
         {
           label: "Invoice Number",
@@ -90,7 +148,7 @@ export default {
           label: "Total Amount",
           field: "totalAmount"
         },
-      
+
         {
           label: "Delievery",
           field: "delMode"
@@ -98,10 +156,26 @@ export default {
         {
           label: "Options",
           field: "last"
-        },
-        
+        }
       ]
     };
+  },
+
+  computed: {
+    exportData: function() {
+      let exportedArray = [];
+      this.invoices.map(invoice => {
+        const filtered = Object.keys(invoice)
+          .filter(key => this.allowedKeys.includes(key))
+          .reduce((obj, key) => {
+            obj[key] = invoice[key];
+            return obj;
+          }, {});
+        exportedArray.push(filtered);
+      });
+
+      return JSON.stringify(exportedArray);
+    }
   },
   filters: {
     moment: function(date) {
@@ -164,20 +238,9 @@ export default {
         params: { data: params.row }
       });
     },
-    showCashMemo() {
-      if (this.listName == "show Cash Memos") {
-        getCashMemos().then(data => {
-          this.invoices = data;
-          this.listName = "show invoices";
-        });
-      } else {
-        getInvoices()
-          .then(data => {
-            this.invoices = data;
-            this.listName = "show Cash Memos";
-          })
-          .catch(err => alert(err));
-      }
+
+    getRowIndex(params) {
+      alert(params.pageIndex);
     }
   }
 };
