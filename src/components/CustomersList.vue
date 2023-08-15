@@ -13,8 +13,12 @@
       :rows="customers"
       @on-row-click="onRowClick"
       :search-options="{ enabled: true, placeholder: 'Search customers' }"
+       :sort-options="{
+        enabled: true,
+        initialSortBy: {field: 'customerName', type: 'asc'}
+       }"
       :pagination-options="{ enabled: true,
-        perPage: 5,
+        perPage: 25,
         nextLabel: 'next',
         prevLabel: 'prev',rowsPerPageLabel: 'Records per page',
         ofLabel: 'of',
@@ -42,14 +46,15 @@ import { deleteCustomer, getCustomers } from "../repository";
 export default {
   name: "getCustomers",
   components: { VueGoodTable },
-  props: ["onModal"],
+  props: ["onModal", "isLoadOnModal"],
   data() {
     return {
       customers: [],
       columns: [
         {
           label: "Id",
-          field: "customerId"
+          field: "customerId",
+          hidden: this.isLoadOnModal
         },
         {
           label: "Name",
@@ -69,7 +74,8 @@ export default {
         },
         {
           label: "Pin Code",
-          field: "pincode"
+          field: "pincode",
+          hidden: this.isLoadOnModal
         },
         {
           label: "Phone No.",
@@ -77,7 +83,8 @@ export default {
         },
         {
           label: "Email Id",
-          field: "emailId"
+          field: "emailId",
+          hidden: this.isLoadOnModal
         },
         {
           label: "GST No.",
@@ -86,7 +93,8 @@ export default {
 
         {
           label: "option",
-          field: "last"
+          field: "last",
+          hidden: this.isLoadOnModal
         }
       ]
     };

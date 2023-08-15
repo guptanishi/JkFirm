@@ -6,7 +6,7 @@
          
         </header>
         <section class="modal-card-body">
-          <LoadProductList onModal="true" @productRowClicked="clikedRow"/>
+          <LoadProductList onModal="true" @productRowClicked="clikedRow" :isLoadOnModal="true"/>
         </section>
       </div>
       <button @click="toggle" class="modal-close is-large" aria-label="close"></button>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { createNote }  from '../repository';
+
 import LoadProductList from './LoadProductList.vue';
 export default {
   name: 'modalForProduct',

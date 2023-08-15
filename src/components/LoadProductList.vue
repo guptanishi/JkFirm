@@ -46,11 +46,16 @@ import { getProducts, deleteProducts } from "../repository";
 export default {
   name: "loadproductList",
   components: { VueGoodTable },
-  props: ["onModal"],
+  props: ["onModal", "isLoadOnModal"],
   data() {
     return {
       products: [],
       columns: [
+        {
+          label: "Product Code",
+          field: "productCode",
+          hidden: this.isLoadOnModal
+        },
         {
           label: "Product Name",
           field: "productName"
@@ -68,13 +73,22 @@ export default {
           field: "unit"
         },
         {
+          label: "GST",
+          field: "vat"
+        },
+        {
           label: "Stock Available",
           field: "qtyAvailable"
+        },
+        {
+          label: "HSN",
+          field: "HSN"
+        },
+        {
+          label: "Option",
+          field: "last",
+          hidden: this.isLoadOnModal
         }
-        // {
-        //   label: "Option",
-        //   field: "last"
-        // }
       ]
     };
   },

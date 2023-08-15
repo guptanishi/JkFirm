@@ -6,7 +6,7 @@
          
         </header>
         <section class="modal-card-body">
-          <CustomersList onModal="true" @customerRowClicked="clikedRow"/>
+          <CustomersList onModal="true" @customerRowClicked="clikedRow" :isLoadOnModal="true"/>
         </section>
       </div>
       <button @click="toggle" class="modal-close is-large" aria-label="close"></button>
