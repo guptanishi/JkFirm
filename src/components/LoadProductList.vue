@@ -11,10 +11,14 @@
     <vue-good-table
       :columns="columns"
       :rows="products"
-      :search-options="{ enabled: true, placeholder: 'Search products', }"
+      :search-options="{ enabled: true, placeholder: 'Search products'}"
       @on-row-click="onRowClick"
+        :sort-options="{
+        enabled: true,
+        initialSortBy: {field: 'productName', type: 'asc'}
+       }"
       :pagination-options="{ enabled: true,
-        perPage: 5,
+        perPage: 25,
         nextLabel: 'next',
         prevLabel: 'prev',rowsPerPageLabel: 'Records per page',
         ofLabel: 'of',
@@ -48,10 +52,6 @@ export default {
       products: [],
       columns: [
         {
-          label: "Product Code",
-          field: "productCode"
-        },
-        {
           label: "Product Name",
           field: "productName"
         },
@@ -68,21 +68,13 @@ export default {
           field: "unit"
         },
         {
-          label: "GST",
-          field: "vat"
-        },
-        {
           label: "Stock Available",
           field: "qtyAvailable"
-        },
-        {
-          label: "HSN",
-          field: "HSN"
-        },
-        {
-          label: "Option",
-          field: "last"
         }
+        // {
+        //   label: "Option",
+        //   field: "last"
+        // }
       ]
     };
   },

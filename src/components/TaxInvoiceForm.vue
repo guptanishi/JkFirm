@@ -1,5 +1,5 @@
 <template>
-  <div class="columns container is-fluid">
+  <div class="columns container is-fluid" v-if="!isLoading">
     <div class="column is-half">
       <div class="card">
         <header class="card-header">
@@ -441,6 +441,7 @@
       :invoiceType="invoiceType"
     ></component>
   </div>
+   <div class="loader" id="loader-1" v-else></div>
 </template>
 
 <script>
@@ -576,7 +577,8 @@ export default {
       invoiceList: [],
       HSN: "",
       id: "",
-      invoiceEditMode: false
+      invoiceEditMode: false,
+      isLoading: false
     };
   },
   computed: {
@@ -610,6 +612,7 @@ export default {
     });
 
     if (localStorage.username == "admin") {
+      this.isLoading = true;
       this.rowData = this.data;
       if (this.rowData == undefined) {
         getLastInvoiceNumber()
@@ -622,6 +625,7 @@ export default {
               counter++;
               this.invoiceNumber = this.generateInvoiceNumber(counter);
             }
+            this.isLoading = false;
           })
           .catch(err => alert("can not fetch invoice number"));
         this.invoiceDate = state.date;
@@ -712,7 +716,6 @@ export default {
       this.productId = data.id;
       this.stockAvailable = data.qtyAvailable;
       this.HSN = data.HSN;
-
     },
     addProducts() {
       if (this.productCode != "" && this.productCode != undefined) {
@@ -976,5 +979,32 @@ export default {
 }
 .fa-angle-down {
   display: none;
+}
+.loader {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  position: relative;
+  margin: 0 auto;
+  top: 100px;
+  border: 10px solid transparent;
+  border-top-color: #3498db;
+  border-bottom-color: #ccc;
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 </style>
