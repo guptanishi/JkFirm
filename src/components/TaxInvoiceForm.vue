@@ -631,6 +631,7 @@ export default {
         this.invoiceDate = state.date;
         this.paymentDate = state.date;
       } else {
+         this.isLoading = false;
         this.invoiceEditMode = true;
         this.invoiceNumber = this.rowData.invoiceNumber;
         this.invoiceDate = this.rowData.invoiceDate;
