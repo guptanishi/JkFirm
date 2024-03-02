@@ -8,54 +8,55 @@
     <div style="margin-left: 20px">
       <h4>Search invoices</h4>
     </div>
-    <div style="float:right; margin-top:-50px; margin-right: 30px">
-
-      <download-excel :data="invoices" :fields= "json_fields">
-        <button class="btn btn-primary"> Export Data</button>
+    <div style="float: right; margin-top: -50px; margin-right: 30px">
+      <download-excel :data="invoices" :fields="json_fields">
+        <button class="btn btn-primary">Export Data</button>
       </download-excel>
-     
     </div>
     <vue-good-table
       :columns="columns"
       :isLoading.sync="isLoading"
       :rows="invoices"
-      :search-options="{ enabled: true, placeholder:'search invoices' }"
-      :pagination-options="{ enabled: true,
-      
-        perPage: 100 ,
+      :search-options="{ enabled: true, placeholder: 'search invoices' }"
+      :pagination-options="{
+        enabled: true,
         nextLabel: 'next',
         prevLabel: 'prev',
         rowsPerPageLabel: 'invoices per page',
         ofLabel: 'of',
         pageLabel: 'page', // for 'pages' mode
-        allLabel: 'All' ,
-        mode: 'pages'
-        }"
-         @on-row-click="getRowIndex"
+        allLabel: 'All',
+      }"
+      @on-row-click="getRowIndex"
+      @on-page-change="onPageChange"
+      @on-per-page-change="onPerPageChange"
+      :totalRows="totalRecords"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'products'">
-          <li
-            v-for="product in props.row.products"
-            :key="product.productId"
-          >{{ product.productName}}</li>
+          <li v-for="product in props.row.products" :key="product.productId">
+            {{ product.productName }}
+          </li>
         </span>
         <span v-else-if="props.column.field == 'invoiceDate'">
-        {{props.row.invoiceDate | moment}}
+          {{ props.row.invoiceDate | moment }}
         </span>
-        
+
         <span v-else-if="props.column.field == 'last'">
           <button @click.stop="deleteRow(this, props.row.id)">
-            <i class="fa fa-trash-o "></i>
+            <i class="fa fa-trash-o"></i>
           </button>
-          <button style="margin-left:20px" @click.stop="onRowClick(props)">
+          <button style="margin-left: 20px" @click.stop="onRowClick(props)">
             <i class="fa fa-pencil"></i>
           </button>
-           <button style="margin-left:20px" @click.stop="downloadInvoice(props)">
+          <button
+            style="margin-left: 20px"
+            @click.stop="downloadInvoice(props)"
+          >
             <i class="fa fa-download"></i>
           </button>
         </span>
-        <span v-else>{{props.formattedRow[props.column.field]}}</span>
+        <span v-else>{{ props.formattedRow[props.column.field] }}</span>
       </template>
     </vue-good-table>
   </div>
@@ -73,7 +74,7 @@ import {
   getInvoices,
   deleteInvoice,
   getCashMemos,
-  deleteCashMemo
+  deleteCashMemo,
 } from "../repository";
 export default {
   name: "taxInvoiceList",
@@ -84,6 +85,7 @@ export default {
       listName: "",
       isLoading: false,
 
+      totalRecords: 0,
       allowedKeys: [
         "invoiceNumber",
         "invoiceDate",
@@ -95,20 +97,20 @@ export default {
         "contact",
         "gstNumber",
         "totalAmount",
-        "paymentDate"
+        "paymentDate",
       ],
       json_fields: {
         "Invoice Number": "invoiceNumber",
         "Invoice Date": {
           field: "invoiceDate",
-          callback: value => {
+          callback: (value) => {
             const date = new Date(value);
             return date.toLocaleDateString("en-GB");
-          }
+          },
         },
         Products: {
           field: "products",
-          callback: value => {
+          callback: (value) => {
             let stringValue = "";
             value.forEach((product, index) => {
               stringValue =
@@ -116,7 +118,7 @@ export default {
             });
 
             return stringValue;
-          }
+          },
         },
         "Customer Id": "customerId",
         "Customer Name": "customerName",
@@ -124,49 +126,54 @@ export default {
         state: "state",
         contact: "contact",
         "GST Number": "gstNumber",
-        totalAmount: "totalAmount"
+        totalAmount: "totalAmount",
       },
 
       columns: [
         {
           label: "Invoice Number",
-          field: "invoiceNumber"
+          field: "invoiceNumber",
         },
         {
           label: "Invoice Date",
-          field: "invoiceDate"
+          field: "invoiceDate",
         },
         {
           label: "Products",
-          field: "products"
+          field: "products",
         },
         {
           label: "Customer Name",
-          field: "customerName"
+          field: "customerName",
         },
         {
           label: "Total Amount",
-          field: "totalAmount"
+          field: "totalAmount",
         },
 
         {
           label: "Delievery",
-          field: "delMode"
+          field: "delMode",
         },
         {
           label: "Options",
-          field: "last"
-        }
-      ]
+          field: "last",
+        },
+      ],
+
+      serverParams: {
+        page: 1, // what page I want to show
+        perPage: 10, // how many items I'm showing per page
+      },
     };
   },
 
   computed: {
-    exportData: function() {
+    exportData: function () {
       let exportedArray = [];
-      this.invoices.map(invoice => {
+      this.invoices.map((invoice) => {
         const filtered = Object.keys(invoice)
-          .filter(key => this.allowedKeys.includes(key))
+          .filter((key) => this.allowedKeys.includes(key))
           .reduce((obj, key) => {
             obj[key] = invoice[key];
             return obj;
@@ -175,29 +182,24 @@ export default {
       });
 
       return JSON.stringify(exportedArray);
-    }
+    },
   },
   filters: {
-    moment: function(date) {
+    moment: function (date) {
       return moment(date).format("DD/MM/YYYY HH:MM:ss");
-    }
+    },
   },
   mounted() {
     if (localStorage.username == "admin") {
       this.isLoading = true;
-      getInvoices()
-        .then(data => {
-          this.isLoading = false;
-          this.invoices = data;
-          this.listName = "show Cash Memos";
-        })
-        .catch(err => alert(err));
+      this.loadItems();
     } else {
       this.$router.push({
-        name: "login"
+        name: "login",
       });
     }
   },
+
   methods: {
     deleteRow(event, id) {
       if (this.listName == "show Cash Memos") {
@@ -206,11 +208,11 @@ export default {
             .then(() => {
               this.$nextTick(() => {
                 getInvoices()
-                  .then(data => (this.invoices = data))
-                  .catch(err => alert(err));
+                  .then((data) => (this.invoices = data))
+                  .catch((err) => alert(err));
               });
             })
-            .catch(err => alert(err));
+            .catch((err) => alert(err));
         }
       } else {
         if (confirm("Are you sure you want to delete this Memo?")) {
@@ -218,30 +220,55 @@ export default {
             .then(() => {
               this.$nextTick(() => {
                 getCashMemos()
-                  .then(data => (this.invoices = data))
-                  .catch(err => alert(err));
+                  .then((data) => (this.invoices = data))
+                  .catch((err) => alert(err));
               });
             })
-            .catch(err => alert(err));
+            .catch((err) => alert(err));
         }
       }
     },
     downloadInvoice(params) {
       this.$router.push({
         name: "taxInvoice",
-        params: { data: params.row, action: "download" }
+        params: { data: params.row, action: "download" },
       });
     },
     onRowClick(params) {
       this.$router.push({
         name: "taxInvoice",
-        params: { data: params.row }
+        params: { data: params.row },
       });
+    },
+
+    updateParams(newProps) {
+      this.serverParams = Object.assign({}, this.serverParams, newProps);
+    },
+
+    onPageChange(params) {
+      this.updateParams({ page: params.currentPage });
+      this.loadItems();
+    },
+
+    onPerPageChange(params) {
+      this.updateParams({ perPage: params.currentPerPage });
+      this.loadItems();
+    },
+
+    loadItems() {
+      getInvoices(this.serverParams)
+        .then((data) => {
+          this.isLoading = false;
+          this.invoices = data;
+          this.totalRecords = data.totalRecords;
+          this.listName = "show Cash Memos";
+        })
+        .catch((err) => alert(err));
     },
 
     getRowIndex(params) {
       alert(params.pageIndex);
-    }
-  }
+    },
+  },
 };
 </script>
