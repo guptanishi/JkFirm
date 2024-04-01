@@ -622,7 +622,7 @@ export default {
         getLastInvoiceNumber()
           .then((data) => {
             if (data.length == 0) {
-              this.invoiceNumber = this.generateInvoiceNumber(5);
+              this.invoiceNumber = this.generateInvoiceNumber(1);
             } else {
               let lastnumber = data[0].invoiceNumber;
               let counter = Number(lastnumber.substring(7, lastnumber.length));
@@ -693,10 +693,11 @@ export default {
     generateInvoiceNumber(counter) {
       const prefix = "JK";
 
-      let fullYear = state.date.getFullYear() + 1;
+      let fullYear = state.date.getFullYear().toString().substring(2);
+      let nextYear = (state.date.getFullYear() + 1).toString().substring(2);
 
       let b = String(counter).padStart(3, "0");
-      return prefix + "-" + fullYear + b;
+      return prefix + fullYear + nextYear + "-"+ b;
     },
 
     generateCashMemoInvoiceNumber(counter) {
