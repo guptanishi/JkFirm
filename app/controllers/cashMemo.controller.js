@@ -26,7 +26,6 @@ exports.create = (req, res) => {
     cashMemo
         .save(cashMemo)
         .then(data => {
-            console.log(data)
             res.send(data);
         })
         .catch(err => {
