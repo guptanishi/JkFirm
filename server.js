@@ -6,13 +6,16 @@ const cors = require('cors');
 
 // CORS configuration for Vercel
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? [
-    'https://jk-firm.vercel.app',
-    'https://jk-firm-api.vercel.app'
-  ] : '*',
+  origin: '*',  // Allow all origins in development and production for now
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Add error handling for serverless
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something broke!' });
+});
 
 // Use Express built-in body parsers
 app.use(express.json({ limit: '5mb' }));
