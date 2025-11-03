@@ -3,45 +3,59 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const bodyParser = require('body-parser');
-var serveStatic = require('serve-static');
 
+// CORS configuration for Vercel
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? [
+    'https://jk-firm.vercel.app',
+    'https://jk-firm-api.vercel.app'
+  ] : '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
-app.use(serveStatic(__dirname + "/dist"));
+// Use Express built-in body parsers
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
+// Database connection
 const db = require("./app/models");
-console.log(db.url);
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log("Connected to the database!");
+    if (process.env.NODE_ENV !== 'production') {
+      console.log("Connected to the database!");
+    }
   })
   .catch(err => {
-    console.log("Cannot connect to the database!", err);
-    process.exit();
+    if (process.env.NODE_ENV !== 'production') {
+      console.log("Cannot connect to the database!", err);
+    }
+    process.exit(1);
   });
 
-// simple route
-// app.get("/", (req, res) => {
-//   var p=__dirname + '/dist/index.html';
-//   console.log("p",p);
-//   res.sendFile(__dirname + '/dist/index.html');
-// }); 
-
+// API Routes
 require("./app/routes/product.routes")(app);
 
-app.get("*", (req, res) => {
-  res.sendFile(__dirname + '/dist/index.html');
-}); 
+// Serve static files only in development
+if (process.env.NODE_ENV !== 'production') {
+  const serveStatic = require('serve-static');
+  app.use(serveStatic(__dirname + "/dist"));
+  
+  // Serve index.html for all routes in development
+  app.get("*", (req, res) => {
+    res.sendFile(__dirname + '/dist/index.html');
+  });
 
+  // Start server only in development
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`API running on port ${PORT}`);
+  });
+}
 
-const PORT = process.env.PORT || 3001;
-
-app.listen(PORT);
-console.log('api runnging on port ' + PORT + ': ');
+// Export for Vercel serverless deployment
+module.exports = app;
