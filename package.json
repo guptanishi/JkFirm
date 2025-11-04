@@ -4,39 +4,43 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "build": "npm i && vue-cli-service build",
-    "serve": "set NODE_OPTIONS=--openssl-legacy-provider &&  vue-cli-service serve"
+    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve"
   },
   "dependencies": {
-    "axios": "^0.18.1",
-    "bcrypt": "^4.0.1",
-    "bootstrap": "^4.5.0",
+    "@vercel/node": "^3.0.25",
+    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^4.6.2",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "html2canvas": "1.0.0-alpha.12",
-    "html2pdf.js": "^0.9.2",
-    "jquery": "^3.5.1",
-    "jsonwebtoken": "^8.5.1",
-    "jspdf": "^1.5.3",
-    "moment": "^2.26.0",
-    "mongoose": "^5.9.15",
+    "express": "^4.18.2",
+    "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.9.3",
+    "jquery": "^3.7.1",
+    "jsonwebtoken": "^9.0.2",
+    "jspdf": "^2.5.1",
+    "moment": "^2.29.4",
+    "mongoose": "^5.13.21",
     "number-to-words": "^1.2.4",
     "popper.js": "^1.16.1",
-    "vue": "^2.6.12",
-    "vue-good-table": "^2.19.3",
+    "vue": "^2.6.14",
+    "core-js": "^3.39.0",
+    "vue-good-table": "^2.21.11",
     "vue-json-excel": "^0.3.0",
-    "vue-router": "^3.2.0",
-    "vue-server-renderer": "^2.6.12",
-    "vuejs-datepicker": "^1.6.2",
-    "@vercel/node": "^2.0.0",
-    "express": "^4.17.1",
-    "cors": "^2.8.5"
+    "vue-router": "^3.6.5",
+    "vue-server-renderer": "^2.6.14",
+    "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "3.2.0",
-    "@vue/cli-plugin-eslint": "3.2.0",
-    "@vue/cli-service": "3.2.0",
-    "vue-template-compiler": "^2.6.12"
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@babel/core": "^7.26.0",
+    "@babel/eslint-parser": "^7.26.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^7.20.0",
+    "cross-env": "^10.1.0",
+    "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
     "root": true,
@@ -49,12 +53,21 @@
     ],
     "rules": {},
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@babel/eslint-parser",
+      "requireConfigFile": false
     }
   },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "engines": {
+    "node": ">=18"
   }
 }
