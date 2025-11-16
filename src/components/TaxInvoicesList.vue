@@ -207,7 +207,7 @@ export default {
           deleteInvoice(id)
             .then(() => {
               this.$nextTick(() => {
-                getInvoices()
+                getInvoices(this.serverParams)
                   .then((data) => (this.invoices = data))
                   .catch((err) => alert(err));
               });

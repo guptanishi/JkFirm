@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     toggle(){
-         this.show = !this.show;
+         this.$emit('close');
     },
     clikedRow(data){
         this.$emit('rowClicked', data);

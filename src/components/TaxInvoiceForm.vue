@@ -72,7 +72,7 @@
                 />
               </div>
               <div v-if="show">
-                <ModalForProducts :show="show" @rowClicked="rowClicked" />
+                <ModalForProducts :show="show" @rowClicked="rowClicked" @close="show = false" />
               </div>
             </div>
             <div class="field">
