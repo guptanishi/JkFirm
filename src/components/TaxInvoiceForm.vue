@@ -791,7 +791,7 @@ export default {
       this.customerId = data.customerId;
       this.customerName = data.customerName;
       this.state = data.state;
-      this.address = data.address;
+      this.address = `${data.address}, ${data.city}`;
       this.contact = data.contact;
       this.gstNumber = data.gstNumber;
       this.del = this.state.startsWith("M.") ? "outside state" : "within state";
