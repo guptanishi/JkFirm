@@ -40,7 +40,7 @@ export default {
         localStorage.password = this.password;
 
         this.$router.push({
-          name: "homePage"
+          name: "dashboard"
         });
         //alert(localStorage.username);
       } else {

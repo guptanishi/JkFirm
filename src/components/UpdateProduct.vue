@@ -28,13 +28,6 @@
         </div>
       </div>
       <div class="field">
-        <label class="label">Stock Available</label>
-        <div class="control has-icons-left has-icons-right">
-          <input class="input" type="text" placeholder="Unit" v-model="row.qtyAvailable" />
-        </div>
-      </div>
-
-      <div class="field">
         <label class="label">Cost Price</label>
         <div class="control has-icons-left has-icons-right">
           <input class="input" type="Number" placeholder="Cost Price" v-model="row.costPrice" />
@@ -98,7 +91,6 @@ export default {
       let data = {
         productCode: this.row.productCode,
         productName: this.row.productName,
-        qtyAvailable: this.row.qtyAvailable,
         unit: this.row.unit,
         costPrice: this.row.costPrice,
         price: this.row.price,
@@ -114,7 +106,6 @@ export default {
     reset() {
       this.row.productCode = "";
       this.row.productName = "";
-      this.row.qtyAvailable = "";
       this.row.unit = "";
       this.row.costPrice = 0;
       this.row.price = 0;

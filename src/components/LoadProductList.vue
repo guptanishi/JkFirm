@@ -77,10 +77,6 @@ export default {
           field: "vat"
         },
         {
-          label: "Stock Available",
-          field: "qtyAvailable"
-        },
-        {
           label: "HSN",
           field: "HSN"
         },

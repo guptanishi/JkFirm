@@ -7,6 +7,8 @@ module.exports = app => {
 
   const cashMemos = require("../controllers/cashMemo.controller.js");
 
+  const dashboard = require("../controllers/dashboard.controller.js");
+
   var router = require("express").Router();
 
   // Create a new Product
@@ -59,6 +61,11 @@ module.exports = app => {
   router.get("/cashMemos/", cashMemos.findAll);
 
   router.delete("/cashMemos/:id", cashMemos.delete);
+
+  // Dashboard routes
+  router.get("/dashboard/sales-by-item", dashboard.getSalesByItem);
+  router.get("/dashboard/top-customers-quantity", dashboard.getTopCustomersByQuantity);
+  router.get("/dashboard/top-customers-revenue", dashboard.getTopCustomersByRevenue);
 
   app.use("/api", router);
 

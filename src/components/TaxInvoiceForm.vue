@@ -95,7 +95,6 @@
                   type="number"
                   placeholder="price"
                   v-model="price"
-                  disabled
                 />
               </div>
             </div>
@@ -577,7 +576,6 @@ export default {
       rowData: {},
       operation: "Add",
       paymentOperation: "Add",
-      stockAvailable: "",
       invoiceList: [],
       HSN: "",
       id: "",
@@ -720,7 +718,6 @@ export default {
       this.amount = data.price;
       this.vat = data.vat;
       this.productId = data.id;
-      this.stockAvailable = data.qtyAvailable;
       this.HSN = data.HSN;
     },
     addProducts() {
@@ -736,36 +733,24 @@ export default {
           quantity: this.quantity,
           unit: this.unit,
           total: this.total,
-          stockAvailable: this.stockAvailable,
           id: this.productId,
           HSN: this.HSN,
         };
-        if (parseInt(this.quantity) > parseInt(this.stockAvailable)) {
-          alert("stock is not available!");
+        if (!found) {
+          this.products.push(data);
         } else {
-          if (!found) {
-            this.products.push(data);
-          } else {
-            this.products = this.products.filter(
-              (el) => el.productCode != this.productCode
-            );
-            this.products.push(data);
-            this.operation = "Add";
-          }
+          this.products = this.products.filter(
+            (el) => el.productCode != this.productCode
+          );
+          this.products.push(data);
+          this.operation = "Add";
         }
       }
       this.resetproduct();
     },
 
     updatePr(rowData) {
-      let data = {
-        qtyAvailable: rowData.stockAvailable - rowData.quantity,
-      };
-      updateProduct(data, rowData.id)
-        .then((data) => {
-          console.log("stock updated");
-        })
-        .catch((err) => alert("product not updated"));
+      // Stock update removed - not needed anymore
     },
     resetproduct() {
       this.productCode = "";

@@ -11,6 +11,7 @@ import TaxInvoicesList from './components/TaxInvoicesList';
 import PdfGenerator from './components/PdfGenerator';
 import LoginPage from './components/LoginPage';
 import HomePage from './components/HomePage';
+import Dashboard from './components/Dashboard';
 
 Vue.use(Router)
 
@@ -26,6 +27,11 @@ export default new Router({
             path: '/homePage',
             name: 'homePage',
             component: HomePage
+        },
+        {
+            path: '/dashboard',
+            name: 'dashboard',
+            component: Dashboard
         },
         {
             path: '/loadProducts',

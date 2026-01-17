@@ -2,12 +2,19 @@
   <div id="app">
     <nav class="navbar navbar-dark navbar-expand-lg bg-dark justify-content-between">
       <a class="navbar-brand">
-        <router-link :to="{ name: 'homePage' }" class="nav-link">
+        <router-link :to="{ name: 'dashboard' }" class="nav-link">
           <h1>JKFIRM</h1>
         </router-link>
       </a>
       <div id="navbarNavDropdown" v-if="isAuthenticated">
         <ul class="navbar-nav">
+          <li class="nav-item text-center">
+            <router-link :to="{ name: 'dashboard' }" class="nav-link">
+              <img src="../public/form.png" width="40px" height="40px" />
+              <br />
+              <span style="color:#FFF">Dashboard</span>
+            </router-link>
+          </li>
           <li class="nav-item text-center">
             <router-link :to="{ name: 'loadproductList' }" class="nav-link">
               <img src="../public/order.png" width="40px" height="40px" />

@@ -21,6 +21,11 @@ module.exports = mongoose => {
     { timestamps: true }
   );
 
+  // Add indexes for dashboard queries
+  schema.index({ invoiceDate: 1 });
+  schema.index({ customerId: 1 });
+  schema.index({ "products.productCode": 1 });
+
   schema.method("toJSON", function () {
     const { __v, _id, ...object } = this.toObject();
     object.id = _id;

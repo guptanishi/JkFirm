@@ -189,3 +189,24 @@ export function deleteCashMemo(id) {
 		.then(response => response.data)
 		.catch(err => Promise.reject(err.message));
 }
+
+// Dashboard APIs
+
+export function getSalesByItem(year, month) {
+	const params = month ? `?year=${year}&month=${month}` : `?year=${year}`;
+	return axios.get(`${BASE_URL}/api/dashboard/sales-by-item${params}`)
+		.then(response => response.data)
+		.catch(err => Promise.reject(err.message));
+}
+
+export function getTopCustomersByQuantity(year) {
+	return axios.get(`${BASE_URL}/api/dashboard/top-customers-quantity?year=${year}`)
+		.then(response => response.data)
+		.catch(err => Promise.reject(err.message));
+}
+
+export function getTopCustomersByRevenue(year) {
+	return axios.get(`${BASE_URL}/api/dashboard/top-customers-revenue?year=${year}`)
+		.then(response => response.data)
+		.catch(err => Promise.reject(err.message));
+}

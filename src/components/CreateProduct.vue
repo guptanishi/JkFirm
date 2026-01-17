@@ -45,14 +45,6 @@
       </div>
 
       <div class="field">
-        <label class="label">Opening Stock</label>
-        <div class="control has-icons-left has-icons-right">
-          <input class="input" type="Number" placeholder="stock" v-model="quantityAvailable" />
-        </div>
-        <label style="color: #F00">{{ errors.quantityAvailable }}</label>
-      </div>
-
-      <div class="field">
         <label class="label">GST %</label>
         <div class="control has-icons-left has-icons-right">
           <input class="input" type="text" v-model="gst" />
@@ -89,13 +81,11 @@ export default {
       unit: "",
       costPrice: 0.0,
       sellingPrice: 0.0,
-      quantityAvailable: 0,
       gst: 0,
       HSN: "",
       products: [],
       errors: {
-        sellingPrice: "",
-        quantity: ""
+        sellingPrice: ""
       }
     };
   },
@@ -125,9 +115,6 @@ export default {
       if (this.productCode != "" && this.productName != "") {
         if (this.sellingPrice == "") {
           this.errors.sellingPrice = "Please enter selling price";
-        }
-        if (this.quantityAvailable == "") {
-          this.errors.quantityAvailable = "Please enter quantity available";
         } else {
           getProducts()
             .then(data => {
@@ -145,7 +132,6 @@ export default {
                   description: this.description,
                   costPrice: this.costPrice,
                   sellingPrice: this.sellingPrice,
-                  quantityAvailable: this.quantityAvailable,
                   gst: this.gst,
                   HSN: this.HSN
                 };
