@@ -5,6 +5,16 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VueGoodTablePlugin from 'vue-good-table';
 
+// Modern fonts
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/fira-code/400.css';
+
+// Modern design system
+import './assets/modern-design-system.css';
+
 // import the styles 
 import 'vue-good-table/dist/vue-good-table.css';
 
