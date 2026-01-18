@@ -1,10 +1,8 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-dark navbar-expand-lg bg-dark justify-content-between">
-      <a class="navbar-brand">
-        <router-link :to="{ name: 'dashboard' }" class="nav-link">
-          <h1>JKFIRM</h1>
-        </router-link>
+      <a class="navbar-brand" @click.prevent="navigateToDashboard" style="cursor: pointer;">
+        <h1>JKFIRM</h1>
       </a>
       <div id="navbarNavDropdown" v-if="isAuthenticated">
         <ul class="navbar-nav">
@@ -106,6 +104,11 @@ export default {
     }
   },
   methods: {
+    navigateToDashboard() {
+      if (this.$route.name !== 'dashboard') {
+        this.$router.push({ name: 'dashboard' });
+      }
+    },
     logout() {
       localStorage.username = "";
       localStorage.password = "";
