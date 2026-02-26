@@ -76,7 +76,7 @@ export function createCustomer(data) {
 		gstNumber: data.gstNumber
 	})
 		.then(response => {
-			return response.data
+			return response
 		})
 		.catch(err => Promise.reject(err.message));
 }

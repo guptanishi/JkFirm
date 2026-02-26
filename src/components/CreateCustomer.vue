@@ -427,11 +427,7 @@ export default {
           this.successMessage = "Customer created successfully!";
           
           // Reset form after 2 seconds and load next customer ID
-          setTimeout(() => {
-            this.resetForm();
-            this.loadCustomerId();
-            this.successMessage = "";
-          }, 2000);
+          this.$router.push("/getCustomers");
         }
       } catch (error) {
         this.errorMessage = "Failed to create customer. Please try again.";
