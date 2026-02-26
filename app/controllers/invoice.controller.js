@@ -97,7 +97,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Invoice.findByIdAndRemove(id, { useFindAndModify: false })
+  Invoice.findByIdAndDelete(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({

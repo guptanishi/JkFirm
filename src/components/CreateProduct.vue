@@ -310,22 +310,28 @@ export default {
       getLastProductCode()
         .then(data => {
           if (data.length === 0) {
-            this.productCode = this.generateProductCode(0);
+            this.productCode = this.generateProductCode("LSF-", 1);
           } else {
-            let lastnumber = data[0].productCode;
-            let counter = Number(lastnumber.substring(4, lastnumber.length));
-            this.productCode = this.generateProductCode(counter + 1);
+            let lastCode = data[0].productCode;
+            let match = lastCode.match(/^(.*?)(\d+)$/);
+            if (match) {
+              let prefix = match[1];
+              let counter = Number(match[2]);
+              let digits = match[2].length;
+              this.productCode = prefix + this.zeroPad(counter + 1, digits);
+            } else {
+              this.productCode = this.generateProductCode("LSF-", 1);
+            }
           }
         })
         .catch((error) => {
           console.error("Error loading product code:", error);
-          // Generate a default code if API fails
-          this.productCode = this.generateProductCode(0);
+          this.productCode = this.generateProductCode("LSF-", 1);
           this.errorMessage = "Using default product code. Please check your connection.";
         });
     },
-    generateProductCode(number) {
-      return "PROD" + this.zeroPad(number, 4);
+    generateProductCode(prefix, number) {
+      return prefix + this.zeroPad(number, 4);
     },
     zeroPad(num, places) {
       return String(num).padStart(places, "0");

@@ -19,19 +19,19 @@ exports.create = (req, res) => {
     pincode: req.body.pincode,
     contact: req.body.contact,
     emailId: req.body.emailId,
-    gstNumber: req.body.gstNumber
+    gstNumber: req.body.gstNumber,
   });
 
   // Save product in the database
   customer
     .save(customer)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Customer."
+          err.message || "Some error occurred while creating the Customer.",
       });
     });
 };
@@ -39,16 +39,18 @@ exports.create = (req, res) => {
 //Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
   const customerId = req.query.customerId;
-  var condition = customerId ? { customerId: { $regex: new RegExp(customerId), $options: "i" } } : {};
+  var condition = customerId
+    ? { customerId: { $regex: new RegExp(customerId), $options: "i" } }
+    : {};
 
   Customer.find(condition)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Customer."
+          err.message || "Some error occurred while retrieving Customer.",
       });
     });
 };
@@ -58,12 +60,12 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Customer.findById(id)
-    .then(data => {
+    .then((data) => {
       if (!data)
         res.status(404).send({ message: "Not found Customer with id " + id });
       else res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res
         .status(500)
         .send({ message: "Error retrieving Customer with id=" + code });
@@ -74,23 +76,23 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
-      message: "Data to update can not be empty!"
+      message: "Data to update can not be empty!",
     });
   }
 
   const id = req.params.id;
 
   Customer.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-    .then(data => {
+    .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update Customer with id=${id}. Maybe Customer was not found!`
+          message: `Cannot update Customer with id=${id}. Maybe Customer was not found!`,
         });
       } else res.send({ message: "Customer was updated successfully." });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error updating Customer with id=" + id
+        message: "Error updating Customer with id=" + id,
       });
     });
 };
@@ -99,21 +101,21 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Customer.findByIdAndRemove(id, { useFindAndModify: false })
-    .then(data => {
+  Customer.findByIdAndDelete(id, { useFindAndModify: false })
+    .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot delete Customer with id=${id}. Maybe Customer was not found!`
+          message: `Cannot delete Customer with id=${id}. Maybe Customer was not found!`,
         });
       } else {
         res.send({
-          message: "Customer was deleted successfully!"
+          message: "Customer was deleted successfully!",
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Customer with id=" + id
+        message: "Could not delete Customer with id=" + id,
       });
     });
 };
@@ -121,15 +123,15 @@ exports.delete = (req, res) => {
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
   Customer.deleteMany({})
-    .then(data => {
+    .then((data) => {
       res.send({
-        message: `${data.deletedCount} Customer were deleted successfully!`
+        message: `${data.deletedCount} Customer were deleted successfully!`,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all Customer."
+          err.message || "Some error occurred while removing all Customer.",
       });
     });
 };
@@ -137,26 +139,28 @@ exports.deleteAll = (req, res) => {
 // Find all published Tutorials
 exports.findAllPublished = (req, res) => {
   Customer.find({ published: true })
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving customer."
+          err.message || "Some error occurred while retrieving customer.",
       });
     });
 };
 
-
 exports.findLastRecord = (req, res) => {
-  Customer.find().sort({ "_id": -1 }).limit(1).then(data => {
-    res.send(data);
-  })
-    .catch(err => {
+  Customer.find()
+    .sort({ customerId: -1 })
+    .limit(1)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving customer."
+          err.message || "Some error occurred while retrieving customer.",
       });
     });
 };

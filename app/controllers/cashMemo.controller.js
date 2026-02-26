@@ -52,7 +52,7 @@ exports.findLastMemoInvoiceNumber = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    CashMemo.findByIdAndRemove(id, { useFindAndModify: false })
+    CashMemo.findByIdAndDelete(id, { useFindAndModify: false })
         .then(data => {
             if (!data) {
                 res.status(404).send({
@@ -90,7 +90,7 @@ exports.findAll = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    CashMemo.findByIdAndRemove(id, { useFindAndModify: false })
+    CashMemo.findByIdAndDelete(id, { useFindAndModify: false })
         .then(data => {
             if (!data) {
                 res.status(404).send({

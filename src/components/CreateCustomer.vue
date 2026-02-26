@@ -367,10 +367,12 @@ export default {
       getLastCustomerId()
         .then(data => {
           if (data.length === 0) {
+           
             this.customerId = this.generateCustomerId(0);
           } else {
+           
             let lastnumber = data[0].customerId;
-            let counter = Number(lastnumber.substring(4, lastnumber.length));
+            let counter = Number.parseInt(lastnumber);
             this.customerId = this.generateCustomerId(counter + 1);
           }
         })
@@ -382,7 +384,7 @@ export default {
         });
     },
     generateCustomerId(number) {
-      return "CUST" + this.zeroPad(number, 4);
+      return this.zeroPad(number, 3);
     },
     zeroPad(num, places) {
       return String(num).padStart(places, "0");

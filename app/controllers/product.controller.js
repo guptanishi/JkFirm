@@ -100,7 +100,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Product.findByIdAndRemove(id, { useFindAndModify: false })
+  Product.findByIdAndDelete(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -150,7 +150,7 @@ exports.findAllPublished = (req, res) => {
 };
 
 exports.findLastRecord = (req, res) => {
-  Product.find().sort({"_id" : -1}).limit(1).then(data => {
+  Product.find().sort({productCode: -1}).limit(1).then(data => {
     res.send(data);
   })
   .catch(err => {
