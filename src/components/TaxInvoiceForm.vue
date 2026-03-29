@@ -225,7 +225,7 @@
                   </div>
                 </div>
 
-                <div class="grid-modern grid-cols-3" style="margin-top: 1rem;">
+                <div class="grid-modern grid-cols-3" style="margin-top: 1rem">
                   <div class="form-group-modern">
                     <label class="form-label-modern">Unit</label>
                     <select v-model="unit" class="form-select-modern" disabled>
@@ -466,7 +466,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -669,8 +668,10 @@ export default {
         getLastInvoiceNumber()
           .then((data) => {
             clearTimeout(timeoutId);
-            if (data.length == 0) {
-              this.invoiceNumber = this.generateInvoiceNumber(1);
+            const isAprilFirst =
+              state.date.getDate() === 1 && state.date.getMonth() === 3;
+            if (data.length == 0 || isAprilFirst) {
+              this.invoiceNumber = this.generateInvoiceNumber1(1);
             } else {
               let lastnumber = data[0].invoiceNumber;
               let counter = Number(lastnumber.substring(7, lastnumber.length));
@@ -698,6 +699,15 @@ export default {
         this.payment = this.rowData.payment;
         this.paymentDate = this.customFormatter(this.rowData.paymentDate);
         this.id = this.rowData.id;
+
+        // Prefill customer form fields so they appear in the form
+        this.customerId = this.rowData.customerId;
+        this.customerName = this.rowData.customerName;
+        this.state = this.rowData.state;
+        this.address = this.rowData.address;
+        this.contact = this.rowData.contact;
+        this.gstNumber = this.rowData.gstNumber;
+        this.mode = this.rowData.paymentMode;
 
         let data = {
           customerId: this.rowData.customerId,
@@ -767,6 +777,15 @@ export default {
 
       let b = String(counter).padStart(3, "0");
       return prefix + fullYear + nextYear + "-" + b;
+    },
+    generateInvoiceNumber1(counter) {
+      const prefix = "JK";
+
+      let fullYear = state.date.getFullYear().toString().substring(2);
+      
+
+      let b = String(counter).padStart(3, "0");
+      return prefix + fullYear  + "-" + b;
     },
 
     generateCashMemoInvoiceNumber(counter) {
@@ -1031,13 +1050,13 @@ export default {
   --success-600: #059669;
   --success-700: #047857;
   --success-800: #065f46;
-  
+
   /* Warning Colors */
   --warning-500: #f59e0b;
   --warning-600: #d97706;
   --warning-700: #b45309;
   --warning-800: #92400e;
-  
+
   /* Error/Danger Colors */
   --error-500: #ef4444;
   --error-600: #dc2626;

@@ -37,37 +37,48 @@
 
 <script>
 export default {
-  name: 'ModernSidebar',
+  name: "ModernSidebar",
   data() {
     return {
       navItems: [
-        { path: '/dashboard', label: 'Dashboard', icon: 'fa fa-tachometer' },
-        { path: '/taxInvoice', label: 'New Invoice', icon: 'fa fa-plus-circle' },
-        { path: '/getInvoices', label: 'Invoices', icon: 'fa fa-file-text-o' },
-        { path: '/loadProducts', label: 'Products', icon: 'fa fa-cube' },
-        { path: '/createProduct', label: 'Add Product', icon: 'fa fa-plus-square' },
-        { path: '/getCustomers', label: 'Customers', icon: 'fa fa-users' },
-        { path: '/createCustomer', label: 'Add Customer', icon: 'fa fa-user-plus' },
-      ]
+        {
+          path: "/taxInvoice",
+          label: "New Invoice",
+          icon: "fa fa-plus-circle",
+        },
+        { path: "/getInvoices", label: "Invoices", icon: "fa fa-file-text-o" },
+        { path: "/loadProducts", label: "Products", icon: "fa fa-cube" },
+        {
+          path: "/createProduct",
+          label: "Add Product",
+          icon: "fa fa-plus-square",
+        },
+        { path: "/getCustomers", label: "Customers", icon: "fa fa-users" },
+        {
+          path: "/createCustomer",
+          label: "Add Customer",
+          icon: "fa fa-user-plus",
+        },
+      ],
     };
   },
   computed: {
     isAuthenticated() {
-      return localStorage.username && this.$route.name !== 'login';
+      return localStorage.username && this.$route.name !== "login";
     },
     username() {
-      return localStorage.username || 'Admin';
+      return localStorage.username || "Admin";
     },
     userInitial() {
       return this.username.charAt(0).toUpperCase();
-    }
+    },
   },
   methods: {
     logout() {
       localStorage.clear();
-      this.$router.push('/login');
-    }
-  }
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 

@@ -123,7 +123,7 @@ export default {
         if (this.username === 'admin' && this.password === '1234') {
           localStorage.username = this.username;
           localStorage.password = this.password;
-          this.$router.push({ name: 'dashboard' });
+          this.$router.push({ name: 'homePage' });
         } else {
           this.errorMessage = 'Invalid username or password. Please try again.';
         }
