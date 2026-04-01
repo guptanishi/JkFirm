@@ -668,15 +668,22 @@ export default {
         getLastInvoiceNumber()
           .then((data) => {
             clearTimeout(timeoutId);
-            const isAprilFirst =
-              state.date.getDate() === 1 && state.date.getMonth() === 3;
-            if (data.length == 0 || isAprilFirst) {
-              this.invoiceNumber = this.generateInvoiceNumber1(1);
+            if (data.length == 0) {
+              const isAprilFirst =
+                state.date.getDate() === 1 && state.date.getMonth() === 3;
+              if (isAprilFirst) {
+                this.invoiceNumber = this.generateInvoiceNumber1(1);
+              } else {
+                this.invoiceNumber = this.generateInvoiceNumber(1);
+              }
             } else {
               let lastnumber = data[0].invoiceNumber;
-              let counter = Number(lastnumber.substring(7, lastnumber.length));
+              let dashIndex = lastnumber.lastIndexOf('-');
+              let prefix = lastnumber.substring(0, dashIndex);
+              let counter = Number(lastnumber.substring(dashIndex + 1));
               counter++;
-              this.invoiceNumber = this.generateInvoiceNumber(counter);
+              let nextCounter = String(counter).padStart(3, "0");
+              this.invoiceNumber = prefix + "-" + nextCounter;
             }
             this.isLoading = false;
           })
