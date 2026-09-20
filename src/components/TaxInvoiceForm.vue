@@ -646,9 +646,6 @@ export default {
     },
   },
   mounted() {
-    console.log("TaxInvoiceForm mounted");
-    console.log("localStorage.username:", localStorage.username);
-    console.log("Initial isLoading:", this.isLoading);
 
     EventBus.$on("hideContent", () => {
       document.getElementById("content").style.display = "none";
@@ -742,7 +739,7 @@ export default {
           payment: this.payment,
           paymentDate: this.customFormatter(this.paymentDate),
         };
-        console.log(this.rowData.id);
+        console.log(this.invoiceData);
         this.isInvoiceSaved = true;
       }
       if (this.action == "download") {
@@ -880,9 +877,6 @@ export default {
     },
     addCustomerDetail() {
       if (this.customerId !== undefined && this.customerId != "") {
-        const found = this.customerDetails.some(
-          (el) => el.customerId === this.customerId
-        );
         let data = {
           customerId: this.customerId,
           customerName: this.customerName,
@@ -894,16 +888,41 @@ export default {
           payment: this.payment,
           paymentDate: this.customFormatter(this.paymentDate),
         };
-        if (!found) {
-          this.customerDetails.push(data);
-        } else {
-          this.customerDetails = this.customerDetails.filter(
-            (el) => el.customerId != this.customerId
-          );
-          this.customerDetails.push(data);
-        }
+        // An invoice has exactly one customer. Replace the list instead of
+        // pushing, otherwise customerDetails[0] keeps pointing at the old customer
+        // when the customerId changes.
+        this.customerDetails = [data];
       }
       this.paymentOperation = "Add";
+    },
+    // Customer fields as they are in the form right now (never from cached state)
+    getCurrentCustomer() {
+      return {
+        customerId: this.customerId,
+        customerName: this.customerName,
+        state: this.state,
+        address: this.address,
+        contact: this.contact,
+        gstNumber: this.gstNumber,
+      };
+    },
+    // Single place that builds the invoice payload from the live form state
+    buildInvoiceData(overrides = {}) {
+      return {
+        invoiceNumber: this.invoiceNumber,
+        invoiceDate: this.invoiceDate,
+        delMode: this.del,
+        username: this.username,
+        products: this.products,
+        // Plain object, not an array: PdfGenerator reads info.customer["customerName"]
+        // and the create API reads req.body.customer.customerId
+        customer: this.getCurrentCustomer(),
+        paymentMode: this.mode,
+        totalAmount: this.grandTotal,
+        payment: this.payment,
+        paymentDate: this.customFormatter(this.paymentDate),
+        ...overrides,
+      };
     },
     saveInvoice() {
       if (
@@ -916,24 +935,18 @@ export default {
           getInvoices(this.serverParams)
             .then((data) => {
               this.invoiceList = data;
-              const found = this.invoiceList.some(
-                (el) => el.invoiceNumber === this.invoiceNumber
-              );
+              // getInvoices only returns one page, so an older invoice can be missing
+              // from the list. In edit mode we already know it's an update.
+              const isUpdate =
+                this.invoiceEditMode ||
+                this.invoiceList.some(
+                  (el) => el.invoiceNumber === this.invoiceNumber
+                );
 
-              let invoiceData = {
-                invoiceNumber: this.invoiceNumber,
-                invoiceDate: this.invoiceDate,
-                delMode: this.del,
-                username: this.username,
-                products: this.products,
-                customer: this.customerDetails[0],
-                paymentMode: this.mode,
-                totalAmount: this.grandTotal,
-                payment: this.payment,
-                paymentDate: this.customFormatter(this.paymentDate),
-              };
+              // Always built from the current form values
+              const invoiceData = this.buildInvoiceData();
 
-              if (!found) {
+              if (!isUpdate) {
                 createInvoice(invoiceData)
                   .then((data) => {
                     alert("Invoice is successfully created");
@@ -947,17 +960,20 @@ export default {
                   })
                   .catch((err) => alert("invoice not saved successfully"));
               } else {
-                console.log(this.rowData);
-
-                updateInvoice(invoiceData, this.id).then((data) => {
-                  // this.invoiceData = invoiceData;
-                  alert("Invoice is successfully updated");
-                  this.$nextTick(() => {
-                    this.products.forEach((element) => {
-                      this.updatePr(element);
+                updateInvoice(invoiceData, this.id)
+                  .then((data) => {
+                    // Replace the stale invoiceData that was set in mounted(),
+                    // otherwise PdfGenerator keeps receiving the old customer.
+                    this.invoiceData = invoiceData;
+                    alert("Invoice is successfully updated");
+                    this.$nextTick(() => {
+                      this.isInvoiceSaved = true;
+                      this.products.forEach((element) => {
+                        this.updatePr(element);
+                      });
                     });
-                  });
-                });
+                  })
+                  .catch((err) => alert("Invoice not updated"));
               }
             })
             .catch((err) => alert("Invoice not saved"));
@@ -976,18 +992,17 @@ export default {
                 memoNumber = this.generateCashMemoInvoiceNumber(counter);
               }
 
-              let invoiceData = {
+              const invoiceData = this.buildInvoiceData({
                 invoiceNumber: memoNumber,
-                invoiceDate: this.invoiceDate,
-                delMode: this.del,
-                username: this.username,
-                products: this.products,
-                customer: this.customerDetails[0],
-                paymentMode: this.mode,
-                totalAmount: this.grandTotal,
-                payment: this.payment,
-                paymentDate: this.customFormatter(this.paymentDate),
-              };
+                // same shape as before (object, incl. payment fields) but built
+                // from the live form instead of customerDetails[0]
+                customer: {
+                  ...this.getCurrentCustomer(),
+                  mode: this.mode,
+                  payment: this.payment,
+                  paymentDate: this.customFormatter(this.paymentDate),
+                },
+              });
 
               createCashInvoice(invoiceData)
                 .then((data) => {

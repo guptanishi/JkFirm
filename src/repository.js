@@ -156,23 +156,7 @@ export function getLastCashMemoInvoiceNumber() {
 }
 
 export function updateInvoice(data, id) {
-	return axios.post(`${BASE_URL}/api/invoices/${id}`, {
-		invoiceNumber: data.invoiceNumber,
-		invoiceDate: data.invoiceDate,
-		delMode: data.delMode,
-		userName: data.userName,
-		products: data.products,
-		customerId: data.customer.customerId,
-		customerName: data.customer.customerName,
-		address: data.customer.address,
-		state: data.customer.state,
-		contact: data.customer.contact,
-		gstNumber: data.customer.gstNumber,
-		paymentMode: data.paymentMode,
-		totalAmount: data.totalAmount,
-		payment: data.payment,
-		paymentDate: data.paymentDate,
-	})
+	return axios.post(`${BASE_URL}/api/invoices/${id}`, data)
 		.then(response => {
 			return response.data
 		})
