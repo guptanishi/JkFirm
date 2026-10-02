@@ -72,7 +72,7 @@
                   <div class="form-group-modern">
                     <label class="form-label-modern">
                       Street Address
-                      <span class="required">*</span>
+                    
                     </label>
                     <input
                       type="text"
@@ -119,7 +119,7 @@
                   <div class="form-group-modern">
                     <label class="form-label-modern">
                       Pincode
-                      <span class="required">*</span>
+                     
                     </label>
                     <input
                       type="text"
@@ -142,7 +142,7 @@
                   <div class="form-group-modern">
                     <label class="form-label-modern">
                       Contact Number
-                      <span class="required">*</span>
+                     
                     </label>
                     <div class="input-with-prefix">
                       <span class="input-prefix">+91</span>
@@ -346,11 +346,8 @@ export default {
       return (
         this.customerId &&
         this.customerName &&
-        this.address &&
         this.city &&
         this.state &&
-        this.pincode &&
-        this.contact &&
         this.gstNumber &&
         this.errors.length === 0
       );

@@ -51,7 +51,7 @@
         <div class="invoice-wizard">
           <!-- Step 1: Invoice Info & Customer -->
           <div v-show="currentStep === 1">
-            <div class="card-modern">
+            <div class="card-modern invoice-date-card">
               <div class="card-header-modern">
                 <i class="fa fa-info-circle"></i>
                 Invoice Information
@@ -1146,6 +1146,12 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem 2rem;
+}
+
+.invoice-date-card {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
 }
 
 /* Progress Steps */
