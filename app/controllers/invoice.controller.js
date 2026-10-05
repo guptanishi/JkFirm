@@ -130,6 +130,12 @@ exports.findAll = (req, res) => {
     },
 
     {
+      $addFields: {
+        id: { $toString: "$_id" }
+      }
+    },
+
+    {
       $project: {
         invoiceSeries: 0,
         invoiceSequence: 0,

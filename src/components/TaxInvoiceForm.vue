@@ -1,5 +1,6 @@
 <template>
   <div>
+   
     <!-- Debug info -->
     <div style="position: fixed; top: 0; right: 0; background: yellow; padding: 10px; z-index: 9999; font-size: 12px;">
       <div>Component Loaded!</div>
@@ -88,7 +89,9 @@
                 </div>
               </div>
             </div>
-
+          <div v-if="displayMessage" class="alert-message">
+                {{ displayMessage }}
+          </div>
             <div class="card-modern">
               <div class="card-header-modern">
                 <i class="fa fa-user"></i>
@@ -512,6 +515,7 @@ export default {
 
   data() {
     return {
+      displayMessage: "",
       customerDetails: [],
       paymentColumns: [
         {
@@ -743,7 +747,7 @@ export default {
         this.isInvoiceSaved = true;
       }
       if (this.action == "download") {
-        this.generatePdf("Triplicate");
+        this.generatePdf();
         this.$nextTick(() => {
           this.$router.push({
             name: "taxInvoiceList",
@@ -949,7 +953,7 @@ export default {
               if (!isUpdate) {
                 createInvoice(invoiceData)
                   .then((data) => {
-                    alert("Invoice is successfully created");
+                    this.displayMessage = "Invoice is successfully created";
                     this.invoiceData = invoiceData;
                     this.$nextTick(() => {
                       this.isInvoiceSaved = true;
@@ -958,14 +962,16 @@ export default {
                       });
                     });
                   })
-                  .catch((err) => alert("invoice not saved successfully"));
+                  .catch((err) => {
+                    this.displayMessage = "Error occurred while creating invoice";
+                  });
               } else {
                 updateInvoice(invoiceData, this.id)
                   .then((data) => {
                     // Replace the stale invoiceData that was set in mounted(),
                     // otherwise PdfGenerator keeps receiving the old customer.
                     this.invoiceData = invoiceData;
-                    alert("Invoice is successfully updated");
+                    this.displayMessage = "Invoice is successfully updated";
                     this.$nextTick(() => {
                       this.isInvoiceSaved = true;
                       this.products.forEach((element) => {
@@ -973,10 +979,10 @@ export default {
                       });
                     });
                   })
-                  .catch((err) => alert("Invoice not updated"));
+                  .catch((err) => this.displayMessage = "Error occurred while updating invoice");
               }
             })
-            .catch((err) => alert("Invoice not saved"));
+            .catch((err) => this.displayMessage = "Error occurred while fetching invoice");
         } else {
           let memoNumber = "";
           getLastCashMemoInvoiceNumber()
@@ -1006,7 +1012,7 @@ export default {
 
               createCashInvoice(invoiceData)
                 .then((data) => {
-                  alert("casMemo is successfully created");
+                  this.displayMessage = "Cash Memo is successfully created";
                   this.invoiceData = invoiceData;
                   this.$nextTick(() => {
                     this.isInvoiceSaved = true;
@@ -1015,9 +1021,13 @@ export default {
                     });
                   });
                 })
-                .catch((err) => alert("casMemo is not saved"));
+                .catch((err) => {
+                  this.displayMessage = "Error occurred while creating cash memo";
+                });
             })
-            .catch((err) => alert("can not fetch cash memo"));
+            .catch((err) => {
+              this.displayMessage = "Error occurred while fetching cash memo";
+            });
         }
       }
     },
@@ -1026,7 +1036,6 @@ export default {
     },
     generatePdf(type) {
       this.componentName = "PdfGenerator";
-      this.invoiceType = type;
       EventBus.$emit("showContent");
     },
     deleteRow(row) {
