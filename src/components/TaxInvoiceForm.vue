@@ -9,6 +9,18 @@
       <div>invoiceNumber: {{ invoiceNumber }}</div>
     </div>
 
+    <output
+      v-if="displayMessage"
+      class="invoice-toast"
+      :class="'invoice-toast--' + toastType"
+      aria-live="polite"
+    >
+      <span>{{ displayMessage }}</span>
+      <button type="button" aria-label="Dismiss notification" @click="clearToast">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+    </output>
+
     <div v-if="!isLoading">
       <!-- Modern Header -->
       <div class="page-header-invoice">
@@ -89,9 +101,6 @@
                 </div>
               </div>
             </div>
-          <div v-if="displayMessage" class="alert-message">
-                {{ displayMessage }}
-          </div>
             <div class="card-modern">
               <div class="card-header-modern">
                 <i class="fa fa-user"></i>
@@ -516,6 +525,8 @@ export default {
   data() {
     return {
       displayMessage: "",
+      toastType: "success",
+      toastTimeout: null,
       customerDetails: [],
       paymentColumns: [
         {
@@ -760,7 +771,25 @@ export default {
       });
     }
   },
+  beforeDestroy() {
+    clearTimeout(this.toastTimeout);
+  },
   methods: {
+    showToast(message, type = "success") {
+      const errorMessage = typeof message === "string" ? message : message && message.message;
+      this.displayMessage = errorMessage || "An unexpected error occurred";
+      this.toastType = type;
+      clearTimeout(this.toastTimeout);
+      this.toastTimeout = setTimeout(() => {
+        this.displayMessage = "";
+        this.toastTimeout = null;
+      }, 4000);
+    },
+    clearToast() {
+      clearTimeout(this.toastTimeout);
+      this.toastTimeout = null;
+      this.displayMessage = "";
+    },
     nextStep() {
       if (this.currentStep < 3) {
         // If moving from step 2 to step 3, ensure customer details are added
@@ -953,7 +982,7 @@ export default {
               if (!isUpdate) {
                 createInvoice(invoiceData)
                   .then((data) => {
-                    this.displayMessage = "Invoice is successfully created";
+                    this.showToast("Invoice is successfully created");
                     this.invoiceData = invoiceData;
                     this.$nextTick(() => {
                       this.isInvoiceSaved = true;
@@ -963,7 +992,7 @@ export default {
                     });
                   })
                   .catch((err) => {
-                    this.displayMessage = "Error occurred while creating invoice";
+                    this.showToast(err || "Error occurred while creating invoice", "error");
                   });
               } else {
                 updateInvoice(invoiceData, this.id)
@@ -971,7 +1000,7 @@ export default {
                     // Replace the stale invoiceData that was set in mounted(),
                     // otherwise PdfGenerator keeps receiving the old customer.
                     this.invoiceData = invoiceData;
-                    this.displayMessage = "Invoice is successfully updated";
+                    this.showToast("Invoice is successfully updated");
                     this.$nextTick(() => {
                       this.isInvoiceSaved = true;
                       this.products.forEach((element) => {
@@ -979,10 +1008,14 @@ export default {
                       });
                     });
                   })
-                  .catch((err) => this.displayMessage = "Error occurred while updating invoice");
+                  .catch((err) => {
+                    this.showToast(err || "Error occurred while updating invoice", "error");
+                  });
               }
             })
-            .catch((err) => this.displayMessage = "Error occurred while fetching invoice");
+            .catch((err) => {
+              this.showToast(err || "Error occurred while fetching invoice", "error");
+            });
         } else {
           let memoNumber = "";
           getLastCashMemoInvoiceNumber()
@@ -1012,7 +1045,7 @@ export default {
 
               createCashInvoice(invoiceData)
                 .then((data) => {
-                  this.displayMessage = "Cash Memo is successfully created";
+                  this.showToast("Cash Memo is successfully created");
                   this.invoiceData = invoiceData;
                   this.$nextTick(() => {
                     this.isInvoiceSaved = true;
@@ -1022,13 +1055,15 @@ export default {
                   });
                 })
                 .catch((err) => {
-                  this.displayMessage = "Error occurred while creating cash memo";
+                  this.showToast(err || "Error occurred while creating cash memo", "error");
                 });
             })
             .catch((err) => {
-              this.displayMessage = "Error occurred while fetching cash memo";
+              this.showToast(err || "Error occurred while fetching cash memo", "error");
             });
         }
+      } else {
+        this.showToast("Add an invoice number, customer, and at least one product before saving.", "error");
       }
     },
     getList() {
@@ -1051,6 +1086,7 @@ export default {
       this.vat = row.vat;
       this.quantity = row.quantity;
       this.unit = row.unit;
+      this.HSN = row.HSN;
     },
     deletePaymentRow(id) {
       this.customerDetails = this.customerDetails.filter((el) => el._id != id);
@@ -1139,6 +1175,58 @@ export default {
     -ms-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
+  }
+}
+
+.invoice-toast {
+  position: fixed;
+  top: 5rem;
+  left: 50%;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: max-content;
+  max-width: min(28rem, calc(100vw - 2rem));
+  padding: 0.875rem 1rem;
+  border: 1px solid;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.16);
+  transform: translateX(-50%);
+  animation: invoice-toast-in 180ms ease-out;
+}
+
+.invoice-toast--success {
+  color: #065f46;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.invoice-toast--error {
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.invoice-toast button {
+  flex: 0 0 auto;
+  padding: 0.25rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+@keyframes invoice-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 }
 
