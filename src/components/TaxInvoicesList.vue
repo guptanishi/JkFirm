@@ -27,7 +27,6 @@
         pageLabel: 'page', // for 'pages' mode
         allLabel: 'All',
       }"
-      @on-row-click="getRowIndex"
       @on-page-change="onPageChange"
       @on-per-page-change="onPerPageChange"
       :totalRows="totalRecords"
@@ -264,10 +263,6 @@ export default {
           this.listName = "show Cash Memos";
         })
         .catch((err) => alert(err));
-    },
-
-    getRowIndex(params) {
-      alert(params.pageIndex);
     },
   },
 };

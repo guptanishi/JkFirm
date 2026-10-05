@@ -60,7 +60,83 @@ exports.create = (req, res) => {
 
 //Retrieve all invoices from the database.
 exports.findAll = (req, res) => {
-  Invoice.find().sort({invoiceDate: -1, invoiceNumber: -1})
+  Invoice.aggregate([
+    {
+      $addFields: {
+        invoiceSeries: {
+          $arrayElemAt: [
+            { $split: ["$invoiceNumber", "-"] },
+            0
+          ]
+        },
+
+        invoiceSequence: {
+          $convert: {
+            input: {
+              $arrayElemAt: [
+                { $split: ["$invoiceNumber", "-"] },
+                1
+              ]
+            },
+            to: "int",
+            onError: 0,
+            onNull: 0
+          }
+        }
+      }
+    },
+
+    {
+      $addFields: {
+        seriesOrder: {
+          $switch: {
+            branches: [
+              {
+                case: { $eq: ["$invoiceSeries", "JK26"] },
+                then: 6
+              },
+              {
+                case: { $eq: ["$invoiceSeries", "JK2627"] },
+                then: 5
+              },
+              {
+                case: { $eq: ["$invoiceSeries", "JK2526"] },
+                then: 4
+              },
+              {
+                case: { $eq: ["$invoiceSeries", "JK2425"] },
+                then: 3
+              },
+              {
+                case: { $eq: ["$invoiceSeries", "JK2025"] },
+                then: 2
+              },
+              {
+                case: { $eq: ["$invoiceSeries", "JK2024"] },
+                then: 1
+              }
+            ],
+            default: 0
+          }
+        }
+      }
+    },
+
+    {
+      $sort: {
+        seriesOrder: -1,
+        invoiceSequence: -1
+      }
+    },
+
+    {
+      $project: {
+        invoiceSeries: 0,
+        invoiceSequence: 0,
+        seriesOrder: 0
+      }
+    }
+  ])
     .then(data => {
       console.log(data);
       res.send(data);
@@ -72,7 +148,6 @@ exports.findAll = (req, res) => {
       });
     });
 };
-
 exports.findLastIdRowInvoiceNumber = (req, res) => {
   Invoice.find().sort({invoiceDate: -1, invoiceNumber: -1}).limit(1).then(data => {
     res.send(data);
