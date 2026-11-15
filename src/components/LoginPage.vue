@@ -89,12 +89,12 @@
             </button>
           </form>
 
-          <div class="login-footer">
+          <!-- <div class="login-footer">
             <p class="demo-credentials">
               <i class="fa fa-info-circle"></i>
               Demo: <strong>admin</strong> / <strong>1234</strong>
             </p>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -120,7 +120,7 @@ export default {
 
       // Simulate API call with delay
       setTimeout(() => {
-        if (this.username === 'admin' && this.password === '1234') {
+        if (this.username === 'admin' && this.password === 'mahesh35') {
           localStorage.username = this.username;
           localStorage.password = this.password;
           this.$router.push({ name: 'homePage' });

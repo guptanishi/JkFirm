@@ -273,7 +273,7 @@
                   style="background: #f9fafb; padding: 1rem; border-radius: 8px; margin: 1rem 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                   <div>
                     <small style="color: #6b7280;">Amount:</small>
-                    <div style="font-weight: 600; font-size: 1.125rem; color: #111827;">₹{{ calculateAmount }}</div>
+                    <div style="font-weight: 600; font-size: 1.125rem; color: #111827;">₹{{ formatAmount(calculateAmount) }}</div>
                   </div>
                   <div>
                     <small style="color: #6b7280;">GST ({{ vat }}%):</small>
@@ -283,7 +283,7 @@
                   </div>
                   <div>
                     <small style="color: #6b7280;">Total:</small>
-                    <div style="font-weight: 600; font-size: 1.125rem; color: #3b82f6;">₹{{ calculateTotal }}</div>
+                    <div style="font-weight: 600; font-size: 1.125rem; color: #3b82f6;">₹{{ formatAmount(calculateTotal) }}</div>
                   </div>
                 </div>
 
@@ -313,7 +313,13 @@
                   </h3>
                   <vue-good-table :columns="productColumns" :rows="products">
                     <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field == 'last'">
+                    <span v-if="props.column.field == 'price'">
+                      {{ formatAmount(props.row.price) }}
+                    </span>
+                    <span v-else-if="props.column.field == 'total'">
+                      {{ formatAmount(props.row.total) }}
+                    </span>
+                    <span v-else-if="props.column.field == 'last'">
                       <button
                         style="margin-left: 10px; background: none; border: none; padding: 0.5rem; cursor: pointer; color: #ef4444;"
                         @click.stop="deleteRow(props.row)"
@@ -388,8 +394,8 @@
                       <div v-for="(product, index) in products" :key="index" class="product-summary-item">
                         <div class="product-name">{{ product.productName }}</div>
                         <div class="product-details">
-                          {{ product.quantity }} {{ product.unit }} × ₹{{ product.price }} (GST: {{ product.vat }}%)
-                          <span class="product-total">= ₹{{ product.total }}</span>
+                          {{ product.quantity }} {{ product.unit }} × ₹{{ formatAmount(product.price) }} (GST: {{ product.vat }}%)
+                          <span class="product-total">= ₹{{ formatAmount(product.total) }}</span>
                         </div>
                       </div>
                     </div>
@@ -413,7 +419,7 @@
                       </div>
                       <div class="total-row grand-total">
                         <span>Grand Total:</span>
-                        <span>₹{{ calculateGrandTotal }}</span>
+                        <span>₹{{ formatAmount(calculateGrandTotal) }}</span>
                       </div>
 
                       <!-- Payment Input -->
@@ -453,7 +459,7 @@
 
                       <div class="total-row payment-due">
                         <span>Payment Due:</span>
-                        <span>₹{{ calculatePaymentDue }}</span>
+                        <span>₹{{ formatAmount(calculatePaymentDue) }}</span>
                       </div>
                     </div>
                   </div>
@@ -775,6 +781,14 @@ export default {
     clearTimeout(this.toastTimeout);
   },
   methods: {
+    formatAmount(value) {
+      if (value === null || value === undefined || value === "") {
+        return "";
+      }
+
+      const amount = Number(value);
+      return Number.isFinite(amount) ? amount.toFixed(2) : value;
+    },
     showToast(message, type = "success") {
       const errorMessage = typeof message === "string" ? message : message && message.message;
       this.displayMessage = errorMessage || "An unexpected error occurred";

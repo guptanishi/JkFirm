@@ -40,6 +40,9 @@
         <span v-else-if="props.column.field == 'invoiceDate'">
           {{ props.row.invoiceDate | moment }}
         </span>
+        <span v-else-if="props.column.field == 'totalAmount'">
+          {{ formatAmount(props.row.totalAmount) }}
+        </span>
 
         <span v-else-if="props.column.field == 'last'">
           <button @click.stop="deleteRow(this, props.row.id)">
@@ -75,6 +78,16 @@ import {
   getCashMemos,
   deleteCashMemo,
 } from "../repository";
+
+function formatTotalAmount(value) {
+  if (value === null || value === undefined || value === "") {
+    return "";
+  }
+
+  const amount = Number(value);
+  return Number.isFinite(amount) ? amount.toFixed(2) : value;
+}
+
 export default {
   name: "taxInvoiceList",
   components: { VueGoodTable },
@@ -125,7 +138,10 @@ export default {
         state: "state",
         contact: "contact",
         "GST Number": "gstNumber",
-        totalAmount: "totalAmount",
+        totalAmount: {
+          field: "totalAmount",
+          callback: formatTotalAmount,
+        },
       },
 
       columns: [
@@ -200,6 +216,9 @@ export default {
   },
 
   methods: {
+    formatAmount(value) {
+      return formatTotalAmount(value);
+    },
     deleteRow(event, id) {
       if (this.listName == "show Cash Memos") {
         if (confirm("Are you sure you want to delete this invoice?")) {
