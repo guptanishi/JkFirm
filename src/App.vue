@@ -2,7 +2,9 @@
   <div id="app">
     <ModernSidebar v-if="showSidebar" />
     <div :class="['main-content', { 'with-sidebar': showSidebar }]">
-      <router-view></router-view>
+      <keep-alive include="taxInvoiceList">
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>

@@ -98,6 +98,8 @@ export default {
       isLoading: false,
 
       totalRecords: 0,
+      preserveRowsOnActivate: false,
+      skipNextActivation: true,
       allowedKeys: [
         "invoiceNumber",
         "invoiceDate",
@@ -213,6 +215,25 @@ export default {
         name: "login",
       });
     }
+  },
+
+  beforeRouteLeave(to, from, next) {
+    this.preserveRowsOnActivate =
+      to.name === "taxInvoice" && to.params.action === "download";
+    next();
+  },
+
+  activated() {
+    if (this.skipNextActivation) {
+      this.skipNextActivation = false;
+      return;
+    }
+
+    if (!this.preserveRowsOnActivate) {
+      this.isLoading = true;
+      this.loadItems();
+    }
+    this.preserveRowsOnActivate = false;
   },
 
   methods: {
